@@ -1,0 +1,65 @@
+#预生产环境配置
+spring:
+  datasource:
+    hikari:
+      mpdrivermaster:
+        name: pre
+        jdbc-url: jdbc:mysql://SJ-mysql-m-wr-car-mp-online-vip-db.01zhuanche.com:5370/mp_driver?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&connectTimeout=1000&socketTimeout=15000
+        username: mp_driver
+        password: mp_driver@01zhuanche.com
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: master_mpdriver_hikaricp
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+      mpdriverslave:
+        name: pre
+        jdbc-url: jdbc:mysql://SJ-mysql-s-ro-car-mp-online-f5-db.01zhuanche.com:5370/mp_driver?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&connectTimeout=1000&socketTimeout=15000
+        username: mp_driver
+        password: mp_driver@01zhuanche.com
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: slave_mpdriver_hikaricp
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+      rentcarmaster:
+        name: pre
+        jdbc-url: jdbc:mysql://SJ-mysql-m-wr-car-rentcar-online-order-vip-db.01zhuanche.com:5310/rentcar?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&connectTimeout=1000&socketTimeout=15000
+        username: sqhc_rentcar
+        password: BzkmQM%O^U7Dy8X3
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: master_rentcar_hikaricp
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+      rentcarslave:
+        name: pre
+        jdbc-url: jdbc:mysql://SJ-mysql-s-ro-car-rentcar-online-background-lvs-db.01zhuanche.com:5310/rentcar?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&connectTimeout=1000&socketTimeout=15000
+        username: sqhc_rentcar
+        password: BzkmQM%O^U7Dy8X3
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: slave_rentcar_hikaricp
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    pool:
+      max-active: 200
+      max-idle: 50
+    cluster:
+      nodes: SJ-redis-cluster-c1-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c3-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c5-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c2-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c4-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c6-ncds-online-db.01zhuanche.com:8002
+    password: ysBhqkYHDifB

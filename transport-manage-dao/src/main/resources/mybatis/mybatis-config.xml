@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 开启自动映射java驼峰 -->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="useActualParamName" value="true"/>
+    </settings>
+
+    <!-- 配置mybatis的分页插件PageHelper -->
+    <plugins>
+     <!-- com.github.pagehelper为PageHelper类所在包名 -->
+     <plugin interceptor="com.github.pagehelper.PageInterceptor">
+      <!-- 设置数据库类型Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 -->
+      <!--PageHelper5.1.0以上版本已经自动开启识别数据库<property name="dialect" value="mysql"/>-->
+     </plugin>
+    </plugins>
+</configuration>

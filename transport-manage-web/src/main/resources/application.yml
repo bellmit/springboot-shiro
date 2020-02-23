@@ -1,0 +1,44 @@
+spring:
+    profiles.active: dev
+    application.name: union-manage-web
+ribbon:
+  eureka:
+    enabled: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*/*/*.xml,classpath:mapper/*/*.xml
+  #可以使mybatispojo映射到这个包下
+  type-aliases-package: com.sq.transportmanage.gateway.dao.entity
+  check-config-location: true
+  config-location: classpath:mybatis/mybatis-config.xml
+
+management:
+    contextPath: /union-manage-web
+    add-application-context-header: false
+    security:
+        enabled: false
+    port: 8899
+
+info:
+    name: ${spring.application.name}
+    description: union-manage-web
+    environment: ${spring.profiles.active}
+    version: 1.0.0
+server:
+  port: 8899
+  tomcat:
+    accept-count: 2000
+    max-connections: 3000
+    max-threads: 1000
+    accesslog:
+      directory: /u01/union-manage-web/log
+      buffered: true
+      file-date-format: .yyyy-MM-dd
+      pattern: "%{X-Request-Id}i %{X-Forwarded-For}i %l %u %t %r %s %b %{Referer}i %{User-Agent}i %T (%D ms)"
+      prefix: access_log
+      rename-on-rotate: true
+      request-attributes-enabled: true
+      rotate: true
+      suffix: .log
+      enabled: true
+
