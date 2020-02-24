@@ -6,7 +6,7 @@ MAINTAINER zhaojingwei@01zhuanche.com
 RUN mkdir -p /u01/transport-manage-web
 
 # add code
-ADD transport-manage-web/run.sh trans/target/transport-manage-web.jar /u01/transport-manage-web/
+ADD transport-manage-web/run.sh transport-manage-web/target/transport-manage-web.jar /u01/transport-manage-web/
 
 # chmod
 RUN chmod 775 /u01/transport-manage-web/run.sh && \
