@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.dao.entity.mdbcarmanage;
+package com.sq.transportmanage.gateway.dao.entity.driverspark;
 
 public class SaasRolePermissionRalation {
     private Long id;

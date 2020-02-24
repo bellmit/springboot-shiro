@@ -1,6 +1,6 @@
 package com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex;
 
-import com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.SaasUserRoleRalation;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

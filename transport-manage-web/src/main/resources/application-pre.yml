@@ -54,6 +54,32 @@ spring:
         max-lifetime: 1800000
         connection-timeout: 30000
         connection-test-query: SELECT 1
+      driversparkmaster:
+        name: dev
+        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        username: dev_sqhc_rentcar
+        password: dev_BzkmQM%O^U7Dy8X3
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: master_driverSpark_HikariCP
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+      driversparkslave:
+        name: dev
+        jdbc-url: jdbc:mysql://mysql-s-ro-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        username: dev_sqhc_rentcar
+        password: dev_BzkmQM%O^U7Dy8X3
+        minimum-idle: 5
+        idle-timeout: 300000
+        maximum-pool-size: 50
+        auto-commit: true
+        pool-name: slave_driverSpark_HikariCP
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
   redis:

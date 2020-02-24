@@ -1,6 +1,6 @@
-package com.sq.transportmanage.gateway.dao.mapper.mdbcarmanage.ex;
+package com.sq.transportmanage.gateway.dao.mapper.driverspark.ex;
 
-import com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

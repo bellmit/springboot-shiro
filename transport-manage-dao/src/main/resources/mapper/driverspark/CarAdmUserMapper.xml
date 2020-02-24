@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.mdbcarmanage.CarAdmUserMapper" >
-  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     <id column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="account" property="account" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -18,10 +18,14 @@
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="group_ids" property="groupIds" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
-    create_date, cities, suppliers, team_id, phone, group_ids, level
+    create_date, cities, suppliers, team_id, phone, group_ids, level, email, update_date, 
+    update_user
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -29,33 +33,28 @@
     from car_adm_user
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from car_adm_user
-    where user_id = #{userId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser" >
-    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into car_adm_user (account, user_name, password, 
-      role_id, account_type, status, 
-      remark, create_user, create_date, 
-      cities, suppliers, team_id, 
-      phone, group_ids, level
-      )
-    values (#{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{roleId,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{cities,jdbcType=VARCHAR}, #{suppliers,jdbcType=VARCHAR}, #{teamId,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}
-      )
+  <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
+    insert into car_adm_user (user_id, account, user_name, 
+      password, role_id, account_type, 
+      status, remark, create_user, 
+      create_date, cities, suppliers, 
+      team_id, phone, group_ids, 
+      level, email, update_date, 
+      update_user)
+    values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{cities,jdbcType=VARCHAR}, #{suppliers,jdbcType=VARCHAR}, 
+      #{teamId,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, 
+      #{level,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser" >
-    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
+  <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     insert into car_adm_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
       <if test="account != null" >
         account,
       </if>
@@ -101,8 +100,20 @@
       <if test="level != null" >
         level,
       </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
       <if test="account != null" >
         #{account,jdbcType=VARCHAR},
       </if>
@@ -148,9 +159,18 @@
       <if test="level != null" >
         #{level,jdbcType=INTEGER},
       </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     update car_adm_user
     <set >
       <if test="account != null" >
@@ -198,10 +218,19 @@
       <if test="level != null" >
         level = #{level,jdbcType=INTEGER},
       </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser" >
+  <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     update car_adm_user
     set account = #{account,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
@@ -217,7 +246,10 @@
       team_id = #{teamId,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       group_ids = #{groupIds,jdbcType=VARCHAR},
-      level = #{level,jdbcType=INTEGER}
+      level = #{level,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>

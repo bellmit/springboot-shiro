@@ -23,6 +23,8 @@ public final class AjaxLoginUserDTO implements Serializable{
 	
 	//---------------------------------------------------------------------------------------------------------用户的菜单信息BEGIN
 	private List<ConferencePermissionDTO> menus = new ArrayList<ConferencePermissionDTO>();
+
+	private List<SaasPermissionDTO> permissionDTOS = new ArrayList<>();
 	//---------------------------------------------------------------------------------------------------------用户的菜单信息END
 	//---------------------------------------------------------------------------------------------------------用户的权限信息BEGIN
 	private Set<String> holdPerms = new HashSet<String>();
@@ -32,6 +34,9 @@ public final class AjaxLoginUserDTO implements Serializable{
 	//---------------------------------------------------------------------------------------------------------用户的数据权限BEGIN
 	/**此用户可以管理的城市ID**/
 	private Set<Integer> cityIds = new HashSet<Integer>();
+
+	/**此用户可以管理的供应商ID**/
+	private Set<Integer> supplierIds = new HashSet<Integer>();
 	//---------------------------------------------------------------------------------------------------------用户的数据权限END
 
 	private Map<String, Object > configs = new HashMap<String,Object>();//配置信息
@@ -123,5 +128,20 @@ public final class AjaxLoginUserDTO implements Serializable{
 	public void setConfigs(Map<String, Object> configs) {
 		this.configs = configs;
 	}
-	
+
+	public List<SaasPermissionDTO> getPermissionDTOS() {
+		return permissionDTOS;
+	}
+
+	public void setPermissionDTOS(List<SaasPermissionDTO> permissionDTOS) {
+		this.permissionDTOS = permissionDTOS;
+	}
+
+	public Set<Integer> getSupplierIds() {
+		return supplierIds;
+	}
+
+	public void setSupplierIds(Set<Integer> supplierIds) {
+		this.supplierIds = supplierIds;
+	}
 }

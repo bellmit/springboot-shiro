@@ -1,8 +1,9 @@
 package com.sq.transportmanage.gateway.service.service.authc;
 
 
-import com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser;
-import com.sq.transportmanage.gateway.dao.mapper.mdbcarmanage.ex.CarAdmUserExMapper;
+
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;

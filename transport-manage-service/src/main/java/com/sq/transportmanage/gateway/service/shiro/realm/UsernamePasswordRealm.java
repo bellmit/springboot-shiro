@@ -1,6 +1,6 @@
 package com.sq.transportmanage.gateway.service.shiro.realm;
 
-import com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.service.service.authc.MyDataSourceService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;

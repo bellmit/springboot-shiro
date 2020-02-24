@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.dao.entity.mdbcarmanage;
+package com.sq.transportmanage.gateway.dao.entity.driverspark;
 
 public class SaasRole {
     private Integer roleId;
@@ -8,6 +8,8 @@ public class SaasRole {
     private String roleName;
 
     private Boolean valid;
+
+    private String permissionIds;
 
     public Integer getRoleId() {
         return roleId;
@@ -39,5 +41,13 @@ public class SaasRole {
 
     public void setValid(Boolean valid) {
         this.valid = valid;
+    }
+
+    public String getPermissionIds() {
+        return permissionIds;
+    }
+
+    public void setPermissionIds(String permissionIds) {
+        this.permissionIds = permissionIds;
     }
 }

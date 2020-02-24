@@ -49,8 +49,16 @@ public class DataSourceConfig {
         DataSource mdbcarmanage_slave = dbProperties.getMdbcarmanageslave();
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>mdbcarmanage_master,pool-name:{}",dbProperties.getMdbcarmanageslave().getPoolName());
 
+        DataSource driver_spark_master = dbProperties.getDriversparkmaster();
+        logger.info(">>>>>>>>>>>>>>>>>>>>>>>driver_spark_master,pool-name:{}",dbProperties.getDriversparkmaster().getPoolName());
+
+        DataSource driver_spark_slave = dbProperties.getDriversparkslave();
+        logger.info(">>>>>>>>>>>>>>>>>>>>>>>driver_spark_slave,pool-name:{}",dbProperties.getDriversparkslave().getPoolName());
+
+
+
         //设置默认数据源
-        dynamicDataSource.setDefaultTargetDataSource(mdbcarmanage_master);
+        dynamicDataSource.setDefaultTargetDataSource(driver_spark_master);
         //配置多数据源
         Map<Object,Object> map = new HashMap<>();
         //key需要跟ThreadLocal中的值对应
@@ -60,6 +68,9 @@ public class DataSourceConfig {
         //mdbcarmanage库
         map.put(DataSourceType.MDBCARMANAGER_MASTER.getName(), mdbcarmanage_master);
         map.put(DataSourceType.MDBCARMANAGER_SLAVE.getName(), mdbcarmanage_slave);
+        //driverspark库
+        map.put(DataSourceType.MPDRIVER_MASTER,driver_spark_master);
+        map.put(DataSourceType.MPDRIVER_SLAVE,driver_spark_slave);
 
         dynamicDataSource.setTargetDataSources(map);
         return dynamicDataSource;

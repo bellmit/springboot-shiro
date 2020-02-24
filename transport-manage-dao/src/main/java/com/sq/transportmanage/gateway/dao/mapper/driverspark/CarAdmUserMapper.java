@@ -1,11 +1,8 @@
-package com.sq.transportmanage.gateway.dao.mapper.mdbcarmanage;
+package com.sq.transportmanage.gateway.dao.mapper.driverspark;
 
-
-import com.sq.transportmanage.gateway.dao.entity.mdbcarmanage.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 
 public interface CarAdmUserMapper {
-    int deleteByPrimaryKey(Integer userId);
-
     int insert(CarAdmUser record);
 
     int insertSelective(CarAdmUser record);

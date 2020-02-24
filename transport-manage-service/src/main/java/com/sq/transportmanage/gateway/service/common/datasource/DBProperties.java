@@ -29,6 +29,16 @@ public class DBProperties {
      */
     private HikariDataSource mdbcarmanageslave;
 
+    /**
+     * driversparkmaster 主库
+     */
+    private HikariDataSource driversparkmaster;
+
+    /**
+     * driversparkslave从库
+     */
+    private HikariDataSource driversparkslave;
+
     public HikariDataSource getMpdrivermaster() {
         return mpdrivermaster;
     }
@@ -61,4 +71,19 @@ public class DBProperties {
         this.mdbcarmanageslave = mdbcarmanageslave;
     }
 
+    public HikariDataSource getDriversparkmaster() {
+        return driversparkmaster;
+    }
+
+    public void setDriversparkmaster(HikariDataSource driversparkmaster) {
+        this.driversparkmaster = driversparkmaster;
+    }
+
+    public HikariDataSource getDriversparkslave() {
+        return driversparkslave;
+    }
+
+    public void setDriversparkslave(HikariDataSource driversparkslave) {
+        this.driversparkslave = driversparkslave;
+    }
 }

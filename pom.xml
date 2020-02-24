@@ -40,7 +40,7 @@
         <sq.okhttp.version>1.3.5</sq.okhttp.version>
         <poi-oom.version>4.0.1</poi-oom.version>
         <zip4j.version>1.3.2</zip4j.version>
-        <mp-util-version>1.0.3-SNAPSHOT</mp-util-version>
+        <!--<mp-util-version>1.0.3-SNAPSHOT</mp-util-version>-->
         <!--<config-dict.version>1.3.1</config-dict.version>-->
         <!--<config-client.version>0.1.5</config-client.version>-->
         <!--<config-manager.version>1.0.8</config-manager.version>-->
@@ -81,6 +81,15 @@
                 <version>2.4</version>
                 <classifier>jdk15</classifier>
             </dependency>
+
+
+            <dependency>
+                <groupId>com.zhuanche</groupId>
+                <artifactId>mp-util</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 

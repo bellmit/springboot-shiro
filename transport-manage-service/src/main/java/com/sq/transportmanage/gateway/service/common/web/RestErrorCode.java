@@ -44,6 +44,59 @@ public final class RestErrorCode{
 	@ResultMessage("记录操作失败")
 	public static final int RECORD_DEAL_FAILURE                   = 501;
 
+
+
+	//-----------------------------------------------用户
+	@ResultMessage("获取验证码太频繁,请{0}分钟后重试")
+	public static final int GET_MSGCODE_EXCEED           = 1000;
+	@ResultMessage("用户名或密码错误")
+	public static final int USER_NOT_EXIST                      = 1001;
+	@ResultMessage("用户名或密码错误")
+	public static final int USER_PASSWORD_WRONG      = 1002;
+	@ResultMessage("用户已被禁用")
+	public static final int USER_INVALID                          = 1003;
+	@ResultMessage("登录失败")
+	public static final int USER_LOGIN_FAILED                = 1004;
+	@ResultMessage("短信验证码已经失效")
+	public static final int MSG_CODE_INVALID                = 1005;
+	@ResultMessage("短信验证码不正确")
+	public static final int MSG_CODE_WRONG                = 1006;
+	@ResultMessage("账号已经存在")
+	public static final int ACCOUNT_EXIST                      = 1007;
+	@ResultMessage("短信验证码发送失败")
+	public static final int MSG_CODE_FAIL                      = 1011;
+	@ResultMessage("短信验证码{0}秒内不能重复发送")
+	public static final int MSG_CODE_REPEAT_SEND                      = 1012;
+	@ResultMessage("登录太频繁，请{0}分钟后重新登录")
+	public static final int DO_LOGIN_FREQUENTLY           = 1013;
+	@ResultMessage("手机号已存在")
+	public static final int PHONE_EXIST                          = 1014;
+
+	//----------------------------------------------权限管理
+	@ResultMessage("父权限不存在")
+	public static final int PARENT_PERMISSION_NOT_EXIST           = 10001;
+	@ResultMessage("权限代码已经存在")
+	public static final int PERMISSION_CODE_EXIST                        = 10002;
+	@ResultMessage("权限类型不合法")
+	public static final int PERMISSION_TYPE_WRONG                     = 10003;
+	@ResultMessage("权限不存在")
+	public static final int PERMISSION_NOT_EXIST                          = 10004;
+	@ResultMessage("存在已经生效的子权限，请先禁用子权限")
+	public static final int PERMISSION_DISABLE_CANT                    = 10005;
+	@ResultMessage("父权限已经被禁用，请先启用父权限")
+	public static final int PERMISSION_ENABLE_CANT                     = 10006;
+	@ResultMessage("{0}为系统预置权限，不能禁用、修改")
+	public static final int SYSTEM_PERMISSION_CANOT_CHANGE  = 10007;
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------角色管理
+	@ResultMessage("角色不存在")
+	public static final int ROLE_NOT_EXIST                                      = 10100;
+	@ResultMessage("角色代码已经存在")
+	public static final int ROLE_CODE_EXIST                                    = 10101;
+	@ResultMessage("{0}为系统预置角色，不能禁用、修改")
+	public static final int SYSTEM_ROLE_CANOT_CHANGE              = 10102;
+
 	static{
 		try {
 			Field[] fields = RestErrorCode.class.getDeclaredFields();

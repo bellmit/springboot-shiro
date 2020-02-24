@@ -81,7 +81,7 @@ public class RedisSessionDAO extends CachingSessionDAO{
 		redisTemplate.opsForValue().set(KEY_PREFIX_OF_SESSIONID+loginAccount, (Serializable)allSessionIds, 24, TimeUnit.HOURS);
 	}
 	/**二、当权限信息、角色信息、用户信息发生变化时，同时清理与之相关联的会话**/
-	@MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
+	@MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
 	public void clearRelativeSession( final Integer permissionId, final  Integer roleId, final  Integer userId ) {
 		final Cache<Serializable, Session> cache = super.getActiveSessionsCache();
 //		new Thread(new Runnable() {

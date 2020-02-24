@@ -16,7 +16,13 @@ public enum DataSourceType {
     // mdbcarmanage主库
     MDBCARMANAGER_MASTER("mdbcarmanage_master"),
     // mdbcarmanage从库
-    MDBCARMANAGER_SLAVE("mdbcarmanage_slave");
+    MDBCARMANAGER_SLAVE("mdbcarmanage_slave"),
+
+
+    // driver_spark主库
+    DRIVERSPARK_MASTER("mdbcarmanage_master"),
+    // driver_spark从库
+    DRIVERSPARK_SLAVE("mdbcarmanage_slave");
 
     private String name;
 
