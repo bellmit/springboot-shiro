@@ -87,6 +87,12 @@
                 <groupId>com.zhuanche</groupId>
                 <artifactId>mp-util</artifactId>
                 <version>1.0.3-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>sq-okHttp</artifactId>
+                        <groupId>sq-arch</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 
