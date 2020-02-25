@@ -6,9 +6,10 @@
     <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid
+    role_id, role_code, role_name, valid,uuid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -37,6 +38,9 @@
       <if test="valid != null" >
         valid,
       </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="roleId != null" >
@@ -50,6 +54,9 @@
       </if>
       <if test="valid != null" >
         #{valid,jdbcType=BIT},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=varchar},
       </if>
     </trim>
   </insert>

@@ -6,9 +6,10 @@
     <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid
+    role_id, role_code, role_name, valid,uuid
   </sql>
   
   <!-- 查询角色列表 -->
@@ -31,6 +32,9 @@
     </if>
     <if test="valid!=null">
     	and valid = #{valid}
+    </if>
+    <if test="uuid!=null">
+      and uuid = #{uuid}
     </if>
     order by role_id
   </select>

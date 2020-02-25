@@ -41,6 +41,9 @@ public class CarAdmUser {
 
     private String updateUser;
 
+
+    private String uuid;
+
     public Integer getUserId() {
         return userId;
     }
@@ -191,5 +194,13 @@ public class CarAdmUser {
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser == null ? null : updateUser.trim();
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

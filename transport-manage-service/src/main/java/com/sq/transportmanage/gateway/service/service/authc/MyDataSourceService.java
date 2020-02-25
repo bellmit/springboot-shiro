@@ -4,6 +4,10 @@ package com.sq.transportmanage.gateway.service.service.authc;
 
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferencePermissionExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceRoleExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceRolePermissionExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceUserRoleExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
@@ -24,28 +28,28 @@ import java.util.Set;
 public class MyDataSourceService {
 
     private static final Logger logger = LoggerFactory.getLogger(MyDataSourceService.class);
-//    @Autowired
-//    private ConferenceRoleExMapper conferenceRoleExMapper;
-//    @Autowired
-//    private ConferenceUserRoleExMapper conferenceUserRoleExMapper;
+    @Autowired
+    private ConferenceRoleExMapper conferenceRoleExMapper;
+    @Autowired
+    private ConferenceUserRoleExMapper conferenceUserRoleExMapper;
     @Autowired
     private CarAdmUserExMapper carAdmUserExMapper;
-//    @Autowired
-//    private ConferencePermissionExMapper conferencePermissionExMapper;
-//    @Autowired
-//    private ConferenceRolePermissionExMapper conferenceRolePermissionExMapper;
+    @Autowired
+    private ConferencePermissionExMapper conferencePermissionExMapper;
+    @Autowired
+    private ConferenceRolePermissionExMapper conferenceRolePermissionExMapper;
 
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<Integer> queryRoleIdsOfPermission(Integer permissionId) {
-//        return conferenceRolePermissionExMapper.queryRoleIdsOfPermission(permissionId);
-//    }
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
+    public List<Integer> queryRoleIdsOfPermission(Integer permissionId) {
+        return conferenceRolePermissionExMapper.queryRoleIdsOfPermission(permissionId);
+    }
 
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<Integer> queryUserIdsOfRole(List<Integer> roleIds) {
-//        return conferenceUserRoleExMapper.queryUserIdsOfRole(roleIds);
-//    }
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
+    public List<Integer> queryUserIdsOfRole(List<Integer> roleIds) {
+        return conferenceUserRoleExMapper.queryUserIdsOfRole(roleIds);
+    }
 
-    @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public List<String> queryAccountsOfUsers(List<Integer> userIds) {
         return carAdmUserExMapper.queryAccountsOfUsers(userIds);
     }
@@ -60,9 +64,10 @@ public class MyDataSourceService {
 //        return conferenceRoleExMapper.queryRoleCodesOfUser(userId);
 //    }
 
-    @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public CarAdmUser queryByAccount(String account) {
-        return carAdmUserExMapper.queryByAccount(account);
+        //todo 此处uuid取值有问题，但是不知道怎么获取uuid
+        return carAdmUserExMapper.queryByAccount(account,null);
     }
 
 //    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
@@ -82,10 +87,10 @@ public class MyDataSourceService {
      * @return
      */
     @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
-    public SSOLoginUser getSSOLoginUser(String loginName) {
-        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={}" + loginName);
+    public SSOLoginUser getSSOLoginUser(String loginName,String uuid) {
+        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},uuid={}" + loginName,uuid);
         try {
-            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName);
+            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,uuid);
             SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
             loginUser.setId(adMUser.getUserId());                //用户ID
             loginUser.setLoginName(adMUser.getAccount());//登录名
@@ -96,6 +101,7 @@ public class MyDataSourceService {
             loginUser.setStatus(adMUser.getStatus());           //状态
             loginUser.setAccountType(adMUser.getAccountType());   //自有的帐号类型：[100 普通用户]、[900 管理员]
             loginUser.setLevel(adMUser.getLevel());
+            loginUser.setUuid(adMUser.getUuid()); //uuid,用户区别每个商户
             //---------------------------------------------------------------------------------------------------------数据权限BEGIN
             /**此用户可以管理的城市ID**/
             if (StringUtils.isNotEmpty(adMUser.getCities())) {

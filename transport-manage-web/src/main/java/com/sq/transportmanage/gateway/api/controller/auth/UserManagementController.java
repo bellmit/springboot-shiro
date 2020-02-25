@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 
@@ -45,40 +46,30 @@ public class UserManagementController {
 	public AjaxResponse addUser(
 			@Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
 			@Verify(param="userName",rule="required") String userName, 
-			@Verify(param="phone",rule="required|mobile") String phone, 
-			@Verify(param="cityIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String cityIds, 
+			@Verify(param="phone",rule="required|mobile") String phone,
+			@Verify(param = "email",rule = "required|email")String email
+/*			@Verify(param="cityIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String cityIds,
 			@Verify(param="supplierIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String supplierIds, 
 			@Verify(param="teamIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String teamIds,
 			@Verify(param="groupIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String groupIds,
-			Integer addTelescope) {
+			Integer addTelescope*/) {
 		CarAdmUser user  = new CarAdmUser();
 		user.setAccount(account.trim());
 		user.setUserName(userName.trim());
 		user.setPhone(phone);
-		user.setCities( cityIds );
-		user.setSuppliers( supplierIds );
-		user.setTeamId( teamIds );
-		user.setGroupIds(groupIds);
-		if (StringUtils.isNotBlank(groupIds)){
-			user.setLevel(PermissionLevelEnum.GROUP.getCode());
-		}
-		else if (StringUtils.isNotBlank(teamIds)){
-			user.setLevel(PermissionLevelEnum.TEAM.getCode());
-		}
-		else if (StringUtils.isNotBlank(supplierIds)){
-			user.setLevel(PermissionLevelEnum.SUPPLIER.getCode());
-		}
-		else if (StringUtils.isNotBlank(cityIds)){
-			user.setLevel(PermissionLevelEnum.CITY.getCode());
-		}
-		else {
-			user.setLevel(PermissionLevelEnum.ALL.getCode());
+		user.setEmail(email);
+		user.setCities( null );
+		user.setSuppliers( null );
+		user.setTeamId( null );
+		user.setGroupIds(null);
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		if(StringUtils.isNotEmpty(loginUser.getUuid())){
+			user.setUuid(loginUser.getUuid());
+		}else {
+			//为空表示为我方人员
+			user.setUuid(System.currentTimeMillis()+ UUID.randomUUID().toString());
 		}
 		// 暂时不用
-//		boolean phoneExist = userManagementService.userPhoneExist(phone);
-//		if(phoneExist){
-//			return AjaxResponse.fail(RestErrorCode.PHONE_EXIST );
-//		}
 		AjaxResponse ajaxResponse = userManagementService.addUser(user);
 
 
@@ -114,20 +105,16 @@ public class UserManagementController {
 	public 	AjaxResponse changeUser( 
 			@Verify(param="userId",rule="required|min(1)") Integer userId, 
 			@Verify(param="userName",rule="required") String userName, 
-			@Verify(param="phone",rule="required|mobile") String phone,
-			@RequestParam("cityIds") String cityIds,
-			@RequestParam("supplierIds") String supplierIds,
-			@RequestParam("teamIds") String teamIds,
-			@RequestParam("groupIds") String groupIds) {//去掉了未使用的参数addTelescope
-
+			@Verify(param="phone",rule="required|mobile") String phone
+  		) {
 		CarAdmUser newUser = new CarAdmUser();
 		newUser.setUserId(userId);
 		newUser.setUserName(userName.trim());
 		newUser.setPhone(phone);
-		newUser.setCities( cityIds );
+/*		newUser.setCities( cityIds );
 		newUser.setSuppliers( supplierIds );
 		newUser.setTeamId( teamIds );
-		newUser.setGroupIds(groupIds);
+		newUser.setGroupIds(groupIds);*/
 		return userManagementService.changeUser(newUser);
 	}
 	

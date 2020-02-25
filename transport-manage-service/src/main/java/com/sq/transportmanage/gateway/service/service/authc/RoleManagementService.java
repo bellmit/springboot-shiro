@@ -15,13 +15,14 @@ import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
 import com.sq.transportmanage.gateway.service.common.dto.SaasRoleDTO;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
+import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
+import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,8 @@ public class RoleManagementService{
 	/**一、增加一个角色**/
 	public AjaxResponse addSaasRole(SaasRole role ) {
 		//角色代码已经存在
-		List<SaasRole> roles = saasRoleExMapper.queryRoles(null, role.getRoleCode(), null, null);
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getUuid(),null, role.getRoleCode(), null, null);
 		if(roles!=null && roles.size()>0) {
 			return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
 		}
@@ -101,7 +103,8 @@ public class RoleManagementService{
 		}
 		//角色代码已经存在   (如果发生变化时 )
 		if( newrole.getRoleCode()!=null && newrole.getRoleCode().length()>0 && !newrole.getRoleCode().equalsIgnoreCase(rawrole.getRoleCode())   ) {
-			List<SaasRole> roles = saasRoleExMapper.queryRoles(null, newrole.getRoleCode(), null, null);
+			SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+			List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getUuid(),null, newrole.getRoleCode(), null, null);
 			if(roles!=null && roles.size()>0) {
 				return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
 			}
@@ -229,7 +232,8 @@ public class RoleManagementService{
     	List<SaasRole> roles = null;
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
-    		roles = saasRoleExMapper.queryRoles(null, roleCode, roleName, valid);
+    		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+    		roles = saasRoleExMapper.queryRoles(loginUser.getUuid(),null, roleCode, roleName, valid);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -260,7 +264,7 @@ public class RoleManagementService{
 		try {Thread.sleep(3000);} catch (InterruptedException e) {	}//目的是等待一会儿，因会话清理也要查表的
 		saasRolePermissionRalationExMapper.deletePermissionIdsOfRole(roleId);
 		saasRoleMapper.deleteByPrimaryKey(roleId);
-		return AjaxResponse.success( null );
+		return AjaxResponse.success(null);
 	}
 
 	public List<String> getAllRoleName(Integer userId) {

@@ -35,6 +35,8 @@ public final class SSOLoginUser implements Serializable{
 	private Set<Integer> groupIds = new HashSet<Integer>();
 	/**此用户数据权限等级(参考PermissionLevelEnum枚举类型 1全国 2城市 4供应商 8小队 16班组) **/
 	private Integer level;
+
+	private String uuid;
 	//---------------------------------------------------------------------------------------------------------数据权限END
 	public Integer getId() {
 		return id;
@@ -119,10 +121,31 @@ public final class SSOLoginUser implements Serializable{
 		this.groupIds = groupIds;
 	}
 
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 	@Override
 	public String toString() {
-		return "SSOLoginUser [id=" + id + ", loginName=" + loginName + ", mobile=" + mobile + ", name=" + name
-				+ ", email=" + email + ", type=" + type + ", status=" + status + ", accountType=" + accountType
-				+ ", cityIds=" + cityIds + ", supplierIds=" + supplierIds + ", teamIds=" + teamIds + ", level=" + level + "]";
+		return "SSOLoginUser{" +
+				"id=" + id +
+				", loginName='" + loginName + '\'' +
+				", mobile='" + mobile + '\'' +
+				", name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", type=" + type +
+				", status=" + status +
+				", accountType=" + accountType +
+				", cityIds=" + cityIds +
+				", supplierIds=" + supplierIds +
+				", teamIds=" + teamIds +
+				", groupIds=" + groupIds +
+				", level=" + level +
+				", uuid='" + uuid + '\'' +
+				'}';
 	}
 }

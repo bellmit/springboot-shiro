@@ -61,7 +61,7 @@ public class UserManagementService{
 	public AjaxResponse addUser(CarAdmUser user ) {
 		user.setUserId(null);
 		//账号已经存在
-		CarAdmUser po = carAdmUserExMapper.queryByAccount(user.getAccount());
+		CarAdmUser po = carAdmUserExMapper.queryByAccount(user.getAccount(),user.getUuid());
 		if(po!=null) {
 			return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
 		}
@@ -250,7 +250,8 @@ public class UserManagementService{
     	List<CarAdmUser> users = null;
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
-    		users = carAdmUserExMapper.queryUsers( userIds ,  account, userName, phone, status );
+    		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+    		users = carAdmUserExMapper.queryUsers(loginUser.getUuid(), userIds ,  account, userName, phone, status );
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -292,7 +293,8 @@ public class UserManagementService{
     	return new PageDTO( page, pageSize, total , roledtos);
 	}
 	private Map<Integer,String> searchRoleIdNameMappings(){//获得角色ID与角色名称的映射MAP
-		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(null, null, null, null);
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(loginUser.getUuid(),null, null, null, null);
 		Map<Integer,String> result = new HashMap<Integer,String>( allRoles.size() * 2 );
 		for( SaasRole role : allRoles ) {
 			result.put(role.getRoleId(), role.getRoleName());
@@ -335,10 +337,10 @@ public class UserManagementService{
 
 
 	/**八、查询用户列表**/
-	public boolean userPhoneExist(String phone) {
+	/*public boolean userPhoneExist(String phone) {
 		List<CarAdmUser> users = carAdmUserExMapper.queryUsers( null ,  null, null, phone, null );
 		return (null!=users && users.size()>0);
-	}
+	}*/
 
 	/**查询用户千里眼关联关系**/
 	/*public DriverTelescopeUser selectTelescopeUserByUserId(Integer userId) {

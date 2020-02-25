@@ -19,10 +19,11 @@
     <result column="group_ids" property="groupIds" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+      <result column="uuid" property="uuid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
-    create_date, cities, suppliers, team_id, phone, group_ids,level,email
+    create_date, cities, suppliers, team_id, phone, group_ids,level,email,uuid
   </sql>
   
   <!-- 根据账户查询 -->
@@ -30,7 +31,10 @@
     select 
     <include refid="Base_Column_List" />
     from car_adm_user
-    where account = #{account} 
+    where account = #{account}
+      <if test="uuid!=null">
+          and uuid = #{uuid}
+      </if>
     limit 1
   </select>
   
@@ -57,6 +61,9 @@
     </if>
     <if test="status!=null">
     	and status = #{status}
+    </if>
+    <if test="uuid!=null">
+       and uuid = #{uuid}
     </if>
     order by user_id
   </select>

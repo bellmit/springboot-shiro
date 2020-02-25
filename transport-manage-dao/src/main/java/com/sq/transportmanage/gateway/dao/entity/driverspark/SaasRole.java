@@ -11,6 +11,8 @@ public class SaasRole {
 
     private String permissionIds;
 
+    private String uuid;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -49,5 +51,13 @@ public class SaasRole {
 
     public void setPermissionIds(String permissionIds) {
         this.permissionIds = permissionIds;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

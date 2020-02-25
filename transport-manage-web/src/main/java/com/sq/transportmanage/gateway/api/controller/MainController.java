@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -193,7 +194,8 @@ public class MainController {
 //			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED);
 //		}
 		//B:查询用户信息
-		CarAdmUser user = carAdmUserExMapper.queryByAccount(username);
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getUuid());
 		if(user==null){
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
@@ -244,7 +246,7 @@ public class MainController {
 			}
 		}
 		//B:查询用户信息
-		CarAdmUser user = carAdmUserExMapper.queryByAccount(username);
+		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,null);
 		if(user==null){
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
