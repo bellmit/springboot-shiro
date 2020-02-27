@@ -13,5 +13,8 @@ public interface SaasRoleExMapper{
 	List<Integer> queryRoleIdsOfUser(@Param("userId") Integer userId);
 	/**根据用户ID，查询其拥有的所有有效的角色代码**/
 	List<String> queryRoleCodesOfUser(@Param("userId") Integer userId);
-	
+    /**插入并获取主键id**/
+	int insert(SaasRole record);
+	/**根据uuid获取角色id**/
+	Integer getRoleId(String uuid);
 }

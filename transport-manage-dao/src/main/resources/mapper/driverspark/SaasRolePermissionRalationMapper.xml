@@ -12,21 +12,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from saas_role_permission_ralation
+    from auth_saas_role_permission_ralation
     where id = #{id,jdbcType=BIGINT}
   </select>
   <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRolePermissionRalation" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into saas_role_permission_ralation (role_id, permission_id)
+    insert into auth_saas_role_permission_ralation (role_id, permission_id)
     values (#{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRolePermissionRalation" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into saas_role_permission_ralation
+    insert into auth_saas_role_permission_ralation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="roleId != null" >
         role_id,
@@ -45,7 +45,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRolePermissionRalation" >
-    update saas_role_permission_ralation
+    update auth_saas_role_permission_ralation
     <set >
       <if test="roleId != null" >
         role_id = #{roleId,jdbcType=INTEGER},
@@ -57,7 +57,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRolePermissionRalation" >
-    update saas_role_permission_ralation
+    update auth_saas_role_permission_ralation
     set role_id = #{roleId,jdbcType=INTEGER},
       permission_id = #{permissionId,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}

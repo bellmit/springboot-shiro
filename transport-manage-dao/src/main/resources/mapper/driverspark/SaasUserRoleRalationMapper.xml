@@ -12,21 +12,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from saas_user_role_ralation
+    from auth_saas_user_role_ralation
     where id = #{id,jdbcType=BIGINT}
   </select>
   <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into saas_user_role_ralation (user_id, role_id)
+    insert into auth_saas_user_role_ralation (user_id, role_id)
     values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into saas_user_role_ralation
+    insert into auth_saas_user_role_ralation
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
         user_id,
@@ -45,7 +45,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation" >
-    update saas_user_role_ralation
+    update auth_saas_user_role_ralation
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -57,7 +57,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation" >
-    update saas_user_role_ralation
+    update auth_saas_user_role_ralation
     set user_id = #{userId,jdbcType=INTEGER},
       role_id = #{roleId,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}

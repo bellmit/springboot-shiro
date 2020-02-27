@@ -1,4 +1,4 @@
-//package com.sq.mp.carmanage.api.interceptor;
+package com.sq.transportmanage.gateway.api.web.interceptor;//package com.sq.mp.carmanage.api.interceptor;
 //
 //import com.alibaba.fastjson.JSON;
 //import org.apache.commons.logging.Log;

@@ -11,15 +11,15 @@
   <sql id="Base_Column_List" >
     role_id, role_code, role_name, valid,uuid
   </sql>
-  
+
   <!-- 查询角色列表 -->
   <select id="queryRoles" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
-    from saas_role
+    from auth_saas_role
     where 1=1
     <if test="roleIds!=null and roleIds.size()>0">
-	    and role_id in 
+	    and role_id in
 	    <foreach collection="roleIds" open="(" close=")" separator="," item="id">
 	    	#{id}
 	    </foreach>
@@ -28,7 +28,7 @@
     	and role_code = #{roleCode}
     </if>
     <if test="roleName!=null">
-    	and  role_name like #{roleName} ESCAPE '/' 
+    	and  role_name like #{roleName} ESCAPE '/'
     </if>
     <if test="valid!=null">
     	and valid = #{valid}
@@ -42,16 +42,62 @@
    <!-- 根据用户ID，查询其拥有的所有有效的角色ID -->
   <select id="queryRoleIdsOfUser" resultType="java.lang.Integer">
 		select DISTINCT r.role_id 
-		from saas_role r, saas_user_role_ralation ur 
+		from auth_saas_role r, auth_saas_user_role_ralation ur
 		where r.role_id=ur.role_id
 		and r.valid=1 and ur.user_id=#{userId}
   </select>
   <!-- 根据用户ID，查询其拥有的所有有效的角色代码 -->
   <select id="queryRoleCodesOfUser" resultType="java.lang.String">
 		select DISTINCT r.role_code 
-		from saas_role r, saas_user_role_ralation ur 
+		from auth_saas_role r, auth_saas_user_role_ralation ur
 		where r.role_id=ur.role_id
 		and r.valid=1 and ur.user_id=#{userId}
   </select>
- 
+
+
+    <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole"
+      useGeneratedKeys="true"  keyProperty="role_id">
+        insert into auth_saas_role
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="roleCode != null" >
+                role_code,
+            </if>
+            <if test="roleName != null" >
+                role_name,
+            </if>
+            <if test="valid != null" >
+                valid,
+            </if>
+            <if test="uuid != null" >
+                uuid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="roleId != null" >
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="roleCode != null" >
+                #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null" >
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="valid != null" >
+                #{valid,jdbcType=BIT},
+            </if>
+            <if test="uuid != null" >
+                #{uuid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 查询角色列表 -->
+    <select id="getRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select role_id FROM  auth_saas_role  WHERE  uuid = #{uuid} limit 1
+    </select>
+
 </mapper>

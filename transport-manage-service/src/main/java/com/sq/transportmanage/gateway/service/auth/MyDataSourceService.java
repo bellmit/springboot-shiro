@@ -1,7 +1,4 @@
 package com.sq.transportmanage.gateway.service.auth;
-
-
-
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissionRalationExMapper;
@@ -14,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,15 +23,12 @@ public class MyDataSourceService {
 
     private static final Logger logger = LoggerFactory.getLogger(MyDataSourceService.class);
 
-/*    @Autowired
-    private ConferenceUserRoleExMapper conferenceUserRoleExMapper;*/
-
     @Autowired
     private SaasUserRoleRalationExMapper saasUserRoleRalationExMapper;
+
     @Autowired
     private CarAdmUserExMapper carAdmUserExMapper;
-/*    @Autowired
-    private ConferenceRolePermissionExMapper conferenceRolePermissionExMapper;*/
+
     @Autowired
     private SaasRolePermissionRalationExMapper saasRolePermissionRalationExMapper;
 
@@ -54,15 +47,6 @@ public class MyDataSourceService {
         return carAdmUserExMapper.queryAccountsOfUsers(userIds);
     }
 
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<String> queryPermissionCodesOfUser(Integer userId) {
-//        return conferencePermissionExMapper.queryPermissionCodesOfUser(userId);
-//    }
-
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<String> queryRoleCodesOfUser(Integer userId) {
-//        return conferenceRoleExMapper.queryRoleCodesOfUser(userId);
-//    }
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public CarAdmUser queryByAccount(String account) {
@@ -70,15 +54,6 @@ public class MyDataSourceService {
         return carAdmUserExMapper.queryByAccount(account,null);
     }
 
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<Integer> queryPermissionIdsOfUser(Integer userId) {
-//        return conferencePermissionExMapper.queryPermissionIdsOfUser(userId);
-//    }
-
-//    @MyDataSource(value = DataSourceType.MPDRIVER_MASTER)
-//    public List<ConferencePermission> queryPermissions(List<Integer> permissionIds, Integer parentId, String permissionCode, List<Byte> permissionTypes, String permissionName, Byte valid) {
-//        return conferencePermissionExMapper.queryPermissions(permissionIds, parentId, permissionCode, permissionTypes, permissionName, valid);
-//    }
 
     /**
      * 获取用户的身份认证信息

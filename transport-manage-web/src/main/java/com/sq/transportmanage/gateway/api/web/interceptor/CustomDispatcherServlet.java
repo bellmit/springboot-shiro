@@ -1,8 +1,8 @@
-package com.sq.transportmanage.gateway.api.interceptor;
+package com.sq.transportmanage.gateway.api.web.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.api.common.ResponseResult;
+import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

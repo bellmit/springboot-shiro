@@ -30,7 +30,7 @@
   <select id="queryByAccount" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
-    from car_adm_user
+    from auth_car_adm_user
     where 1=1
       <if test="account!=null">
           and account = #{account}
@@ -45,13 +45,13 @@
     <select id="verifyRepeat" resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List" />
-        from car_adm_user
+        from auth_car_adm_user
         where account = #{account}
         <if test="email!=null">
-            and email = #{email}
+            or email = #{email}
         </if>
         <if test="phone!=null">
-            and phone = #{phone}
+            or phone = #{phone}
         </if>
         limit 1
     </select>
@@ -60,7 +60,7 @@
   <select id="queryUsers" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
-    from car_adm_user
+    from auth_car_adm_user
     where 1=1 
     <if test="userIds!=null and userIds.size()>0">
 	    and user_id in 
@@ -88,7 +88,7 @@
   
   <!-- 查询所有的登录账号名称 -->
   <select id="queryAccountsOfUsers" resultType="java.lang.String">
-    select account from car_adm_user where account is not null 
+    select account from auth_car_adm_user where account is not null
     and user_id in 
 	<foreach collection="userIds" open="(" close=")" separator="," item="uid">
 		#{uid}
@@ -98,7 +98,7 @@
   <select id="selectUsersByIdList" resultMap="BaseResultMap" parameterType="java.util.List">
     select
     user_id,user_name
-    from car_adm_user
+    from auth_car_adm_user
     where
     user_id in
     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
@@ -118,14 +118,14 @@
 	  group_ids,
 	  LEVEL
     FROM
-	car_adm_user
+	auth_car_adm_user
 	where user_id = #{userId}
   </select>
 
 
    <select id="selectUsersByLevel" resultMap="BaseResultMap" parameterType="java.util.List">
         select user_id,user_name,cities, suppliers, team_id, phone
-        from car_adm_user
+        from auth_car_adm_user
         where 1=1
         <if test="level!=null">
             and level = #{level}
@@ -136,22 +136,22 @@
 
     <select id="queryIdListByName" resultType="java.lang.Integer" parameterType="java.lang.String">
         select user_id
-        from car_adm_user
+        from auth_car_adm_user
         where 1=1
         <if test="userName!=null">
-            and locate (#{userName} , car_adm_user.user_name) > 0
+            and locate (#{userName} , auth_car_adm_user.user_name) > 0
         </if>
 
     </select>
 
     <select id="queryNameById" resultType="string" parameterType="integer">
         select user_name
-          from car_adm_user
+          from auth_car_adm_user
         where user_id = #{userId}
     </select>
 
     <update id="updateEmail" >
-        update car_adm_user  SET  email = #{email}
+        update auth_car_adm_user  SET  email = #{email}
 
         where user_id = #{userId,jdbcType=INTEGER}
     </update>

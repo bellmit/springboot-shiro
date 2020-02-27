@@ -3,15 +3,15 @@
 <mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRalationExMapper" >
   <!-- 查询一个用户的所有角色ID -->
   <select id="queryRoleIdsOfUser" resultType="java.lang.Integer">
-  		select DISTINCT role_id from saas_user_role_ralation where user_id = #{userId}
+  		select DISTINCT role_id from auth_saas_user_role_ralation where user_id = #{userId}
   </select>
   <!-- 删除一个用户的所有角色ID -->
   <delete id="deleteRoleIdsOfUser">
-  		delete from saas_user_role_ralation where user_id = #{userId}
+  		delete from auth_saas_user_role_ralation where user_id = #{userId}
   </delete>
   <!-- 保存一个用户的所有角色ID(批量插入) -->
   <insert id="insertBatch">
-    insert into saas_user_role_ralation (user_id, role_id)
+    insert into auth_saas_user_role_ralation (user_id, role_id)
     values 
     <foreach collection="records" open="" close="" separator=","  item="record">
 	    (#{record.userId,jdbcType=INTEGER}, #{record.roleId,jdbcType=INTEGER})
@@ -21,7 +21,7 @@
 
   <!-- 查询多个角色所对应的用户ID -->
   <select id="queryUserIdsOfRole" resultType="java.lang.Integer">
-  		select DISTINCT user_id from saas_user_role_ralation where role_id in 
+  		select DISTINCT user_id from auth_saas_user_role_ralation where role_id in
   		<foreach collection="roleIds" open="(" close=")" separator="," item="rid">
   			#{rid}
   		</foreach>

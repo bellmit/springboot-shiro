@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.config;
+package com.sq.transportmanage.gateway.api.web.config;
 
 //import com.sq.mp.carmanage.api.interceptor.CharacterValidInterceptors;
 //import com.sq.mp.carmanage.api.interceptor.HttpParamVerifyInterceptor;

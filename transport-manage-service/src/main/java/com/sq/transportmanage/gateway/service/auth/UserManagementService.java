@@ -69,7 +69,14 @@ public class UserManagementService{
 			//账号已经存在
 			CarAdmUser po = carAdmUserExMapper.verifyRepeat(user.getAccount(),user.getEmail(),user.getPhone());
 			if(po!=null) {
-                return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
+				//邮箱、账号、手机号都不能重复
+				if(user.getAccount().equals(po.getAccount())){
+					return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
+				}else if(user.getPhone().equals(po.getPhone())){
+					return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
+				}else {
+					return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
+				}
             }
 			if( StringUtils.isEmpty(user.getUserName()) ) {
                 user.setUserName("");
@@ -88,7 +95,9 @@ public class UserManagementService{
             }
             logger.info("用户名：" + user.getAccount() + ",password:" + initPassword);
 			user.setPassword( PasswordUtil.md5( initPassword, user.getAccount())  );
-			user.setRoleId(0);
+			if(user.getRoleId() == null ){
+				user.setRoleId(0);
+			}
 			if(user.getAccountType() == null){
 				user.setAccountType(100);
 			}
@@ -108,8 +117,6 @@ public class UserManagementService{
             }
 			//保存
 			Integer uId = carAdmUserMapper.insertSelective(user);
-
-
 
 			//短信通知
 			String text = user.getUserName() + "，您好！已为您成功开通“首约加盟商服务平台”管理员账号。登录账号为："+user.getAccount()+"，初始密码为："+initPassword+"（为保障账户安全，请您登录后进行密码修改）";

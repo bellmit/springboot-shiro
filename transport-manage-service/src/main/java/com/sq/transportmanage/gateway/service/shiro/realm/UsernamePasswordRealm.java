@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**认证  与  权限  **/
+
+/**
+ * 这个就是shiro SSOLogin 的用户获取的属性配置
+ */
 @Component
 public class UsernamePasswordRealm extends AuthorizingRealm {
     private static final Logger logger = LoggerFactory.getLogger(UsernamePasswordRealm.class);
@@ -36,6 +40,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setStatus( adMUser.getStatus() );           //状态
 			loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
 			loginUser.setLevel(adMUser.getLevel());
+			loginUser.setUuid(adMUser.getUuid());
 			//---------------------------------------------------------------------------------------------------------数据权限BEGIN
 
 			logger.info( "[获取用户的身份认证信息]="+loginUser);

@@ -1,19 +1,13 @@
 package com.sq.transportmanage.gateway.api.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.api.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
-import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasRoleMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
-import com.sq.transportmanage.gateway.service.auth.*;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisCacheUtil;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
@@ -84,12 +78,6 @@ public class MainController {
 	@Autowired
 	private RedisTemplate<String, Serializable> redisTemplate;
 
-	@Autowired
-	private SaasRoleExMapper saasRoleExMapper;
-
-	@Autowired
-	private SaasRoleMapper saasRoleMapper;
-
 
     /**运维监控心跳检测 **/
     @RequestMapping("/nginx")
@@ -102,7 +90,6 @@ public class MainController {
     @RequestMapping("/index")
     public String index(HttpServletRequest request , HttpServletResponse response, Model model) throws Exception {
 		logger.info(">>>>>>>>>>>>>>>>>跳转至首页（log4j桥接至logback成功！）");
-//        return "index";
 		response.sendRedirect(homepageUrl);
 		return null;
     }
@@ -129,7 +116,6 @@ public class MainController {
 			this.outJson(response, ajaxResponse);
 		}else {
 			response.sendRedirect(homepageUrl);
-			//return "unauthorized_content";//------------返回禁止访问的错误页
 		}
 		return null;
     }

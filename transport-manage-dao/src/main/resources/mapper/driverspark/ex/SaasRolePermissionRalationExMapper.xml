@@ -4,19 +4,19 @@
 
   <!-- 查询一个角色的所有权限ID -->
   <select id="queryPermissionIdsOfRole" resultType="java.lang.Integer">
-  		select DISTINCT permission_id from saas_role_permission_ralation where role_id = #{roleId}
+  		select DISTINCT permission_id from auth_saas_role_permission_ralation where role_id = #{roleId}
   </select>
   <!-- 删除一个角色的所有权限ID -->
   <delete id="deletePermissionIdsOfRole">
-  		delete from saas_role_permission_ralation where role_id = #{roleId}
+  		delete from auth_saas_role_permission_ralation where role_id = #{roleId}
   </delete>
   <!-- 删除一个权限的所有角色ID -->
   <delete id="deleteRoleIdsOfPermission">
-  		delete from saas_role_permission_ralation where permission_id = #{permissionId}
+  		delete from auth_saas_role_permission_ralation where permission_id = #{permissionId}
   </delete>
   <!-- 保存一个角色的所有权限ID(批量插入) -->
   <insert id="insertBatch">
-    insert into saas_role_permission_ralation (role_id, permission_id)
+    insert into auth_saas_role_permission_ralation (role_id, permission_id)
     values
     <foreach collection="records" open="" close="" separator=","  item="record">
      (#{record.roleId,jdbcType=INTEGER}, #{record.permissionId,jdbcType=INTEGER})
@@ -25,20 +25,20 @@
   
   <!-- 查询一个权限的所有角色ID -->
   <select id="queryRoleIdsOfPermission" resultType="java.lang.Integer">
-  		select DISTINCT role_id from saas_role_permission_ralation where permission_id = #{permissionId}
+  		select DISTINCT role_id from auth_saas_role_permission_ralation where permission_id = #{permissionId}
   </select>
 
   <select id="queryRoleNameList" resultType="java.lang.String">
       SELECT sr.role_name
       FROM
-        saas_user_role_ralation surr
+        auth_saas_user_role_ralation surr
         LEFT JOIN saas_role sr ON surr.role_id = sr.role_id
         WHERE sr.valid = 1 and user_id = #{userId}
   </select>
   <select id="queryRoleCodeList" resultType="java.lang.String">
     SELECT sr.role_code
     FROM
-    saas_user_role_ralation surr
+    auth_saas_user_role_ralation surr
     LEFT JOIN saas_role sr ON surr.role_id = sr.role_id
     WHERE sr.valid = 1 and user_id = #{userId}
   </select>

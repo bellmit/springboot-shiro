@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.config;
+package com.sq.transportmanage.gateway.api.web.config;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;

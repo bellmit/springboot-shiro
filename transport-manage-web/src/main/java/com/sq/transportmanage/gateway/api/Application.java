@@ -1,6 +1,6 @@
 package com.sq.transportmanage.gateway.api;
 
-import com.sq.transportmanage.gateway.api.filter.AccessFilter;
+import com.sq.transportmanage.gateway.api.web.filter.AccessFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

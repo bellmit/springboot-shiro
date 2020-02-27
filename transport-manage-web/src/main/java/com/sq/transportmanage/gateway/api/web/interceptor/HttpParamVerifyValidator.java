@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.interceptor;
+package com.sq.transportmanage.gateway.api.web.interceptor;
 
 import com.sq.transportmanage.gateway.api.common.VerifyConst;
 import com.sq.transportmanage.gateway.api.util.IdNumberUtil;
@@ -30,7 +30,7 @@ public class HttpParamVerifyValidator {
 			return null;
 		}
 		if( new BigDecimal(value).compareTo(new BigDecimal(threadHold))==1  ) {
-			return "传入值"+value+"，大于最大值"+threadHold ;
+			return "传入值"+value+"，大于最大值"+threadHold;
 		}
 		return null;
 	}

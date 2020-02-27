@@ -1,12 +1,10 @@
-package com.sq.transportmanage.gateway.api.filter;
+package com.sq.transportmanage.gateway.api.web.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

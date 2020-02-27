@@ -20,11 +20,11 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from saas_permission
+    from auth_saas_permission
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </select>
   <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
-    insert into saas_permission (permission_id, parent_permission_id, 
+    insert into auth_saas_permission (permission_id, parent_permission_id,
       permission_code, permission_type, permission_name, 
       menu_url, menu_open_mode, valid, 
       sort_seq,uuid)
@@ -34,7 +34,7 @@
       #{sortSeq,jdbcType=INTEGER},#{uuid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
-    insert into saas_permission
+    insert into auth_saas_permission
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="permissionId != null" >
         permission_id,
@@ -101,7 +101,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
-    update saas_permission
+    update auth_saas_permission
     <set >
       <if test="parentPermissionId != null" >
         parent_permission_id = #{parentPermissionId,jdbcType=INTEGER},
@@ -131,7 +131,7 @@
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
-    update saas_permission
+    update auth_saas_permission
     set parent_permission_id = #{parentPermissionId,jdbcType=INTEGER},
       permission_code = #{permissionCode,jdbcType=VARCHAR},
       permission_type = #{permissionType,jdbcType=TINYINT},

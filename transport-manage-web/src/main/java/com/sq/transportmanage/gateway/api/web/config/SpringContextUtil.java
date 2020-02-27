@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.config;
+package com.sq.transportmanage.gateway.api.web.config;
 
 
 import org.springframework.beans.BeansException;

@@ -5,6 +5,7 @@ import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasRoleMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
@@ -67,11 +68,9 @@ public class OperateManageController {
     @Autowired
     private RoleManagementService roleManagementService;
 
-    @Autowired
-    private SaasRoleExMapper saasRoleExMapper;
 
     @Autowired
-    private SaasRoleMapper saasRoleMapper;
+    private SaasRoleService saasRoleService;
 
     @Autowired
     private SaasRolePermissionRalationService saasRolePermissionRalationService;
@@ -107,6 +106,7 @@ public class OperateManageController {
             user.setUserName(userName.trim());
             user.setPhone(phone);
             user.setEmail(email);
+            user.setRoleId(1);
             ////管理员
             user.setAccountType(AuthEnum.MANAGE.getAuthId());
             String uuid = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
@@ -118,21 +118,25 @@ public class OperateManageController {
             }
             logger.info("========创建商户成功=========" + ajaxResponse);
             if(ajaxResponse.getCode() == 0 && ajaxResponse.getData() != null ){
+                CarAdmUser admUser = (CarAdmUser) ajaxResponse.getData();
                 SaasRole role = new SaasRole();
                 role.setRoleCode("manage_"+System.currentTimeMillis());
                 role.setRoleName("系统管理员");
                 role.setValid(true);
                 role.setUuid(uuid);
 
-                List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getUuid(),null, role.getRoleCode(), null, null);
+
+                List<SaasRole> roles = saasRoleService.queryRoles(loginUser.getUuid(),null, role.getRoleCode(), null, null);
                 if(roles!=null && roles.size()>0) {
                     return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
                 }
                 //保存
                 role.setValid(true);
-                int roleId = saasRoleMapper.insertSelective(role);
-                if(roleId > 0){
+                int code = saasRoleService.insert(role);
+                if(code > 0){
+                    logger.info(">============给用户赋权============start");
                     //默认为树形
+                    Integer roleId = saasRoleService.getRoleId(uuid);
                     List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.TREE);
                     List<Integer> permissions = new ArrayList<>();
                     if(!CollectionUtils.isEmpty(allDtos)){
@@ -140,6 +144,13 @@ public class OperateManageController {
                             permissions.add(all.getPermissionId());
                         });
                     }
+                    //角色和账号添加关系
+                    List<SaasUserRoleRalation> records = new ArrayList<>();
+                    SaasUserRoleRalation saasUserRoleRalation = new SaasUserRoleRalation();
+                    saasUserRoleRalation.setRoleId(roleId);
+                    saasUserRoleRalation.setUserId(admUser.getUserId());
+                    records.add(saasUserRoleRalation);
+                    saasUserRoleRalationService.insertBatch(records);
                     logger.info(">===================赋权限成功==============" + JSONObject.toJSONString(permissions));
                     return  roleManagementService.savePermissionIds(roleId, permissions);
                 }

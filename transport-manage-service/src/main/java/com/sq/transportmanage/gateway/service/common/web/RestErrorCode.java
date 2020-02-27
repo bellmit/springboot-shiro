@@ -63,6 +63,8 @@ public final class RestErrorCode{
 	public static final int MSG_CODE_WRONG                = 1006;
 	@ResultMessage("账号已经存在")
 	public static final int ACCOUNT_EXIST                      = 1007;
+	@ResultMessage("邮箱已存在")
+	public static final int EMAIL_EXIST                      = 1009;
 	@ResultMessage("短信验证码发送失败")
 	public static final int MSG_CODE_FAIL                      = 1011;
 	@ResultMessage("短信验证码{0}秒内不能重复发送")

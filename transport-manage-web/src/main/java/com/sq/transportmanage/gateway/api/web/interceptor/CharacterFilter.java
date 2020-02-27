@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.interceptor;
+package com.sq.transportmanage.gateway.api.web.interceptor;
 
 
 import java.util.Map;
