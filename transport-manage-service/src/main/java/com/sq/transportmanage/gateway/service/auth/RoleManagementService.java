@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.service.service.authc;
+package com.sq.transportmanage.gateway.service.auth;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

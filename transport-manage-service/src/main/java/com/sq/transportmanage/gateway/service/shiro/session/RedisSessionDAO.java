@@ -2,7 +2,7 @@ package com.sq.transportmanage.gateway.service.shiro.session;
 
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
-import com.sq.transportmanage.gateway.service.service.authc.MyDataSourceService;
+import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.realm.UsernamePasswordRealm;
 import org.apache.shiro.cache.Cache;

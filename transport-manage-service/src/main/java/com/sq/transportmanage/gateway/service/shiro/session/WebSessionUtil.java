@@ -2,7 +2,7 @@ package com.sq.transportmanage.gateway.service.shiro.session;
 
 
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
-import com.sq.transportmanage.gateway.service.service.authc.MyDataSourceService;
+import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;

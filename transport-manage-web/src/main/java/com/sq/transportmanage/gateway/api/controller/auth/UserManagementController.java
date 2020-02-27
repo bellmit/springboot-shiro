@@ -1,38 +1,41 @@
 package com.sq.transportmanage.gateway.api.controller.auth;
 
-import com.alibaba.fastjson.JSONObject;
-
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
-import com.sq.transportmanage.gateway.service.common.enums.PermissionLevelEnum;
-import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
-import com.sq.transportmanage.gateway.service.common.web.RequestFunction;
-import com.sq.transportmanage.gateway.service.common.web.SysLogAnn;
-import com.sq.transportmanage.gateway.service.common.web.Verify;
-import com.sq.transportmanage.gateway.service.service.authc.UserManagementService;
+import com.sq.transportmanage.gateway.service.common.web.*;
+import com.sq.transportmanage.gateway.service.auth.UserManagementService;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 
 
-/**用户管理**/
+/**
+ * @Author fanht
+ * @Description
+ * @Date 2020/2/26 下午5:55
+ * @Version 1.0
+ */
 @RestController
 public class UserManagementController {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private UserManagementService userManagementService;
+
+
+
 
 
 /*	@Resource(name = "userOperationLogMongoTemplate")
@@ -67,7 +70,7 @@ public class UserManagementController {
 			user.setUuid(loginUser.getUuid());
 		}else {
 			//为空表示为我方人员
-			user.setUuid(System.currentTimeMillis()+ UUID.randomUUID().toString());
+			user.setUuid(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
 		}
 		// 暂时不用
 		AjaxResponse ajaxResponse = userManagementService.addUser(user);
@@ -151,29 +154,6 @@ public class UserManagementController {
 			}
 		}
 		AjaxResponse rep = userManagementService.saveRoleIds(userId, newroleIds);
-
-
-		/*if(rep.getCode() == 0){
-			JSONObject jsonParam = new JSONObject();
-			jsonParam.put("userId",userId);
-			jsonParam.put("roleIds",roleIds);
-
-			SSOLoginUser user = WebSessionUtil.getCurrentLoginUser();
-			sysLog.setUsername(user.getName());
-			sysLog.setModule("CarAdmUser");
-			sysLog.setMethod("saveRoleIds");
-			sysLog.setOperateParams(jsonParam.toJSONString());
-			sysLog.setLogKey(userId+"");
-			sysLog.setEndTime(new Date());
-			sysLog.setResultMsg("成功");
-			sysLog.setResultStatus(1);
-
-
-			mongoTemplate.insert(sysLog);
-		}*/
-
-
-
 		return rep;
 	}
 	

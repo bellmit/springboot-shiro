@@ -1,13 +1,11 @@
-package com.sq.transportmanage.gateway.service.service.authc;
+package com.sq.transportmanage.gateway.service.auth;
 
 
 
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferencePermissionExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceRoleExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceRolePermissionExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.mpdriver.ex.ConferenceUserRoleExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissionRalationExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRalationExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
@@ -28,25 +26,27 @@ import java.util.Set;
 public class MyDataSourceService {
 
     private static final Logger logger = LoggerFactory.getLogger(MyDataSourceService.class);
+
+/*    @Autowired
+    private ConferenceUserRoleExMapper conferenceUserRoleExMapper;*/
+
     @Autowired
-    private ConferenceRoleExMapper conferenceRoleExMapper;
-    @Autowired
-    private ConferenceUserRoleExMapper conferenceUserRoleExMapper;
+    private SaasUserRoleRalationExMapper saasUserRoleRalationExMapper;
     @Autowired
     private CarAdmUserExMapper carAdmUserExMapper;
+/*    @Autowired
+    private ConferenceRolePermissionExMapper conferenceRolePermissionExMapper;*/
     @Autowired
-    private ConferencePermissionExMapper conferencePermissionExMapper;
-    @Autowired
-    private ConferenceRolePermissionExMapper conferenceRolePermissionExMapper;
+    private SaasRolePermissionRalationExMapper saasRolePermissionRalationExMapper;
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public List<Integer> queryRoleIdsOfPermission(Integer permissionId) {
-        return conferenceRolePermissionExMapper.queryRoleIdsOfPermission(permissionId);
+        return saasRolePermissionRalationExMapper.queryRoleIdsOfPermission(permissionId);
     }
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public List<Integer> queryUserIdsOfRole(List<Integer> roleIds) {
-        return conferenceUserRoleExMapper.queryUserIdsOfRole(roleIds);
+        return saasUserRoleRalationExMapper.queryUserIdsOfRole(roleIds);
     }
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)

@@ -28,4 +28,9 @@ public interface CarAdmUserExMapper {
 
     int updateEmail(@Param("email") String email, @Param("userId") Integer userId);
 
+    CarAdmUser verifyRepeat(@Param("account") String account,
+                            @Param("email")String email,
+                            @Param("phone")String phone
+    );
+
 }

@@ -5,7 +5,7 @@ import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RequestFunction;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
-import com.sq.transportmanage.gateway.service.service.authc.PermissionManagementService;
+import com.sq.transportmanage.gateway.service.auth.PermissionManagementService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

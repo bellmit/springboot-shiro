@@ -31,12 +31,30 @@
     select 
     <include refid="Base_Column_List" />
     from car_adm_user
-    where account = #{account}
+    where 1=1
+      <if test="account!=null">
+          and account = #{account}
+      </if>
       <if test="uuid!=null">
           and uuid = #{uuid}
       </if>
     limit 1
   </select>
+
+
+    <select id="verifyRepeat" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from car_adm_user
+        where account = #{account}
+        <if test="email!=null">
+            and email = #{email}
+        </if>
+        <if test="phone!=null">
+            and phone = #{phone}
+        </if>
+        limit 1
+    </select>
   
   <!-- 查询用户列表 -->
   <select id="queryUsers" resultMap="BaseResultMap" >

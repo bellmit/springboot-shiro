@@ -110,6 +110,9 @@
       <if test="updateUser != null" >
         update_user,
       </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -168,6 +171,9 @@
       </if>
       <if test="updateUser != null" >
         #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

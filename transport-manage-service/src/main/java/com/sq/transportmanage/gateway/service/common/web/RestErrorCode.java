@@ -72,6 +72,12 @@ public final class RestErrorCode{
 	@ResultMessage("手机号已存在")
 	public static final int PHONE_EXIST                          = 1014;
 
+	@ResultMessage("当前用户不是系统管理员，不能创建商户")
+	public static final int IS_NOT_SYS_ROLE                          = 1200;
+	@ResultMessage("当前用户不是系统管理员，不能移动权限菜单")
+	public static final int CAN_NOT_CHANGE_MENU                          = 1201;
+
+
 	//----------------------------------------------权限管理
 	@ResultMessage("父权限不存在")
 	public static final int PARENT_PERMISSION_NOT_EXIST           = 10001;

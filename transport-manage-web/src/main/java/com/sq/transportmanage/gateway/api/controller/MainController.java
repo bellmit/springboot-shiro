@@ -1,13 +1,19 @@
 package com.sq.transportmanage.gateway.api.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.api.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasRoleMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
+import com.sq.transportmanage.gateway.service.auth.*;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisCacheUtil;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
@@ -35,13 +41,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -52,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 public class MainController {
-	private static final Logger log = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @Value(value="${loginpage.url}")
     private String loginpageUrl;  //前端UI登录页面
 	@Value("${homepage.url}")
@@ -80,6 +84,13 @@ public class MainController {
 	@Autowired
 	private RedisTemplate<String, Serializable> redisTemplate;
 
+	@Autowired
+	private SaasRoleExMapper saasRoleExMapper;
+
+	@Autowired
+	private SaasRoleMapper saasRoleMapper;
+
+
     /**运维监控心跳检测 **/
     @RequestMapping("/nginx")
     public String nginx(HttpServletResponse response ) throws IOException{
@@ -90,7 +101,7 @@ public class MainController {
 	/**显示首页**/
     @RequestMapping("/index")
     public String index(HttpServletRequest request , HttpServletResponse response, Model model) throws Exception {
-		log.info(">>>>>>>>>>>>>>>>>跳转至首页（log4j桥接至logback成功！）");
+		logger.info(">>>>>>>>>>>>>>>>>跳转至首页（log4j桥接至logback成功！）");
 //        return "index";
 		response.sendRedirect(homepageUrl);
 		return null;
@@ -183,9 +194,9 @@ public class MainController {
 		long count = redisTemplate.opsForZSet().count(redis_getmsgcode_key, min, max);
 
 		int countLimit = 5;
-		log.info("获取验证码-用户"+username+"在"+statistics+"分钟内第"+count+"次进行获取验证码操作");
+		logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内第"+count+"次进行获取验证码操作");
 		if(count  > countLimit) {
-			log.info("获取验证码-用户"+username+"在"+statistics+"分钟内进行获取验证码"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
+			logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内进行获取验证码"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED,statistics);
 		}
 
@@ -272,9 +283,9 @@ public class MainController {
 			long count = redisTemplate.opsForZSet().count(redis_login_key, min, max);
 
 			int countLimit = 5;
-			log.info("登录-用户"+username+"在"+statistics+"分钟内第"+count+"次登录");
+			logger.info("登录-用户"+username+"在"+statistics+"分钟内第"+count+"次登录");
 			if(count  > countLimit) {
-				log.info("登录-用户"+username+"在"+statistics+"分钟内登录"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
+				logger.info("登录-用户"+username+"在"+statistics+"分钟内登录"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
 				return AjaxResponse.fail(RestErrorCode.DO_LOGIN_FREQUENTLY,statistics);
 			}
 			//验证验证码是否正确
@@ -496,5 +507,8 @@ public class MainController {
 		return authCityIdSet;*/
 		return null;
 	}
+
+
+
 
 }

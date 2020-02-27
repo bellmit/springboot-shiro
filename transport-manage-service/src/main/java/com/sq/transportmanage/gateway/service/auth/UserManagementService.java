@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.service.service.authc;
+package com.sq.transportmanage.gateway.service.auth;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -21,7 +21,10 @@ import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
+import okhttp3.internal.http2.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,8 @@ import java.util.stream.Stream;
 /**用户管理功能**/
 @Service
 public class UserManagementService{
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 //	@Autowired
 //	private SaasRoleMapper     saasRoleMapper;
 	@Autowired
@@ -59,57 +64,67 @@ public class UserManagementService{
 	
 	/**一、增加一个用户**/
 	public AjaxResponse addUser(CarAdmUser user ) {
-		user.setUserId(null);
-		//账号已经存在
-		CarAdmUser po = carAdmUserExMapper.queryByAccount(user.getAccount(),user.getUuid());
-		if(po!=null) {
-			return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
-		}
-		if( StringUtils.isEmpty(user.getUserName()) ) {
-			user.setUserName("");
-		}
-		//用户初始密码
-		String initPassword = null;
-		if(indexOfPhone!=null && indexOfPhone.length()>0) {
-			List<Integer> indexes = Stream.of(indexOfPhone.split(",")).mapToInt( s -> Integer.parseInt(s) ).boxed().collect(Collectors.toList());
-			StringBuffer password = new StringBuffer();
-			for( Integer index : indexes ) {
-				password.append(user.getPhone().charAt((index)));
+		try {
+			user.setUserId(null);
+			//账号已经存在
+			CarAdmUser po = carAdmUserExMapper.verifyRepeat(user.getAccount(),user.getEmail(),user.getPhone());
+			if(po!=null) {
+                return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
+            }
+			if( StringUtils.isEmpty(user.getUserName()) ) {
+                user.setUserName("");
+            }
+			//用户初始密码
+			String initPassword = null;
+			if(indexOfPhone!=null && indexOfPhone.length()>0) {
+                List<Integer> indexes = Stream.of(indexOfPhone.split(",")).mapToInt( s -> Integer.parseInt(s) ).boxed().collect(Collectors.toList());
+                StringBuffer password = new StringBuffer();
+                for( Integer index : indexes ) {
+                    password.append(user.getPhone().charAt((index)));
+                }
+                initPassword = password.toString();
+            }else {
+                initPassword = SaasConst.INITIAL_PASSWORD;
+            }
+            logger.info("用户名：" + user.getAccount() + ",password:" + initPassword);
+			user.setPassword( PasswordUtil.md5( initPassword, user.getAccount())  );
+			user.setRoleId(0);
+			if(user.getAccountType() == null){
+				user.setAccountType(100);
 			}
-			initPassword = password.toString();
-		}else {
-			initPassword = SaasConst.INITIAL_PASSWORD;
-		}
-		user.setPassword( PasswordUtil.md5( initPassword, user.getAccount())  );
-		user.setRoleId(0);
-		user.setAccountType(100);
-		user.setStatus(200);
-		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
-		user.setRemark( ssoLoginUser.getLoginName() );
-		user.setCreateUser( ssoLoginUser.getName()  );
-		user.setCreateDate(new Date());
-		if( StringUtils.isEmpty(user.getCities()) ) {
-			user.setCities("");
-		}
-		if( StringUtils.isEmpty(user.getSuppliers()) ) {
-			user.setSuppliers("");
-		}
-		if( StringUtils.isEmpty(user.getTeamId()) ) {
-			user.setTeamId("");
-		}
-		//保存
-		carAdmUserMapper.insertSelective(user);
-		
-		//短信通知
-		String text = user.getUserName() + "，您好！已为您成功开通“首约加盟商服务平台”管理员账号。登录账号为："+user.getAccount()+"，初始密码为："+initPassword+"（为保障账户安全，请您登录后进行密码修改）";
-		//SmsSendUtil.send( user.getPhone() , text);
+			user.setStatus(200);
+			SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+			user.setRemark( ssoLoginUser.getLoginName() );
+			user.setCreateUser( ssoLoginUser.getName()  );
+			user.setCreateDate(new Date());
+			if( StringUtils.isEmpty(user.getCities()) ) {
+                user.setCities("");
+            }
+			if( StringUtils.isEmpty(user.getSuppliers()) ) {
+                user.setSuppliers("");
+            }
+			if( StringUtils.isEmpty(user.getTeamId()) ) {
+                user.setTeamId("");
+            }
+			//保存
+			Integer uId = carAdmUserMapper.insertSelective(user);
 
 
-		//兼容增加用户时要使用log,但是原来成功时返回值的data为null.这里适当改造了下。
 
-		return AjaxResponse.success( null );
+			//短信通知
+			String text = user.getUserName() + "，您好！已为您成功开通“首约加盟商服务平台”管理员账号。登录账号为："+user.getAccount()+"，初始密码为："+initPassword+"（为保障账户安全，请您登录后进行密码修改）";
+			//SmsSendUtil.send( user.getPhone() , text);
 
-		//return AjaxResponse.success( this.findByPrimaryKeyV2(user.getUserId()) );
+
+			//兼容增加用户时要使用log,但是原来成功时返回值的data为null.这里适当改造了下。
+
+			//return AjaxResponse.success( null );
+
+			return AjaxResponse.success( this.findByUuid(user.getUuid()) );
+		} catch (Exception e) {
+			logger.error("创建用户异常" + e);
+			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	/**二、禁用一个用户**/
@@ -352,18 +367,8 @@ public class UserManagementService{
 		return carAdmUserMapper.selectByPrimaryKey(id);
 	}
 
-	/*public CarAdmUserDto findByPrimaryKeyV2 (Integer id ){
-		CarAdmUser dbEntity = carAdmUserMapper.selectByPrimaryKey(id);
-		if(dbEntity == null){
-			return null;
-		}
-		CarAdmUserDto entity = new CarAdmUserDto();
-		BeanUtils.copyProperties(dbEntity,entity);
-		entity.setCityIds(dbEntity.getCities());
-		entity.setSupplierIds(dbEntity.getSuppliers());
-		entity.setTeamIds(dbEntity.getTeamId());
-		return entity;
+	public CarAdmUser findByUuid (String uuid){
+		return carAdmUserExMapper.queryByAccount(null,uuid);
 	}
-*/
 
 }
