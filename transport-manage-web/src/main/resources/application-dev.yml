@@ -134,6 +134,9 @@ zuul:
     orderapi:
       path: /api/orderapi/**
       url: http://dev-inside-orderapi.01zhuanche.com
+    mpapi:
+      path: /api/mpapi/**
+      url: http://127.0.0.1:8080
 
 #钉钉报警开关
 ding.ding.switch: false
