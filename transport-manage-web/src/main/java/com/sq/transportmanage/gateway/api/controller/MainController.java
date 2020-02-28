@@ -28,6 +28,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -38,6 +39,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
@@ -108,6 +110,7 @@ public class MainController {
 	}
 
     /**显示无权限页面**/
+    @ExceptionHandler(UnauthenticatedException.class)
 	@RequestMapping("/unauthorized")
     public String unauthorized(HttpServletRequest request , HttpServletResponse response) throws Exception{
 		Boolean isAjax = (Boolean) request.getAttribute("X_IS_AJAX");

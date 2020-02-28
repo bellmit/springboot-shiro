@@ -4,9 +4,12 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author wuhui
@@ -26,4 +29,13 @@ public class DefaultExceptionHandler {
         mv.setViewName("unauthorized");
         return mv;
     }
+
+
+    /*@ExceptionHandler(UnauthorizedException.class)
+    @ResponseBody
+    public String defaultExceptionHandler(HttpServletRequest req, Exception e){
+
+        return "对不起，你没有访问权限！";
+    }*/
+
 }

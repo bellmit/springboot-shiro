@@ -50,12 +50,7 @@ public class UserManagementController {
 			@Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
 			@Verify(param="userName",rule="required") String userName, 
 			@Verify(param="phone",rule="required|mobile") String phone,
-			@Verify(param = "email",rule = "required|email")String email
-/*			@Verify(param="cityIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String cityIds,
-			@Verify(param="supplierIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String supplierIds, 
-			@Verify(param="teamIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String teamIds,
-			@Verify(param="groupIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String groupIds,
-			Integer addTelescope*/) {
+			@Verify(param = "email",rule = "required|email")String email) {
 		CarAdmUser user  = new CarAdmUser();
 		user.setAccount(account.trim());
 		user.setUserName(userName.trim());
@@ -108,16 +103,16 @@ public class UserManagementController {
 	public 	AjaxResponse changeUser( 
 			@Verify(param="userId",rule="required|min(1)") Integer userId, 
 			@Verify(param="userName",rule="required") String userName, 
-			@Verify(param="phone",rule="required|mobile") String phone
+			@Verify(param="phone",rule="required|mobile") String phone,
+			@Verify(param="merchantIds",rule="required") String merchantIds,
+			@Verify(param="level",rule="required") Integer level
   		) {
 		CarAdmUser newUser = new CarAdmUser();
 		newUser.setUserId(userId);
 		newUser.setUserName(userName.trim());
 		newUser.setPhone(phone);
-/*		newUser.setCities( cityIds );
-		newUser.setSuppliers( supplierIds );
-		newUser.setTeamId( teamIds );
-		newUser.setGroupIds(groupIds);*/
+		newUser.setMerchantIds(merchantIds);
+		newUser.setLevel(level);
 		return userManagementService.changeUser(newUser);
 	}
 	

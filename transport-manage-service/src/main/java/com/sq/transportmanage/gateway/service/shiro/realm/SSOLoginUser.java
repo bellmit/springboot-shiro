@@ -1,7 +1,10 @@
 package com.sq.transportmanage.gateway.service.shiro.realm;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**当前的登录用户信息**/
@@ -37,6 +40,10 @@ public final class SSOLoginUser implements Serializable{
 	private Integer level;
 
 	private String uuid;
+
+	private List<String> menuUrlList;
+
+	private String merchentIds;
 	//---------------------------------------------------------------------------------------------------------数据权限END
 	public Integer getId() {
 		return id;
@@ -129,6 +136,23 @@ public final class SSOLoginUser implements Serializable{
 		this.uuid = uuid;
 	}
 
+	public List<String> getMenuUrlList() {
+		return menuUrlList;
+	}
+
+	public void setMenuUrlList(List<String> menuUrlList) {
+		this.menuUrlList = menuUrlList;
+	}
+
+	public String getMerchentIds() {
+		return merchentIds;
+	}
+
+	public void setMerchentIds(String merchentIds) {
+		this.merchentIds = merchentIds;
+	}
+
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -146,6 +170,8 @@ public final class SSOLoginUser implements Serializable{
 				", groupIds=" + groupIds +
 				", level=" + level +
 				", uuid='" + uuid + '\'' +
+				", menuUrlList=" + JSONObject.toJSONString(menuUrlList) +
+				", merchentIds='" + merchentIds + '\'' +
 				'}';
 	}
 }

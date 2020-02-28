@@ -177,7 +177,7 @@ public class UserManagementService{
 		if( StringUtils.isEmpty(newUser.getUserName()) ) {
 			newUser.setUserName("");
 		}
-		if( StringUtils.isEmpty(newUser.getCities()) ) {
+		/*if( StringUtils.isEmpty(newUser.getCities()) ) {
 			newUser.setCities("");
 		}
 		if( StringUtils.isEmpty(newUser.getSuppliers()) ) {
@@ -199,7 +199,7 @@ public class UserManagementService{
             newUser.setLevel(PermissionLevelEnum.CITY.getCode());
         }else {
             newUser.setLevel(PermissionLevelEnum.ALL.getCode());
-        }
+        }*/
 
 		//执行
 		carAdmUserMapper.updateByPrimaryKeySelective(newUser);

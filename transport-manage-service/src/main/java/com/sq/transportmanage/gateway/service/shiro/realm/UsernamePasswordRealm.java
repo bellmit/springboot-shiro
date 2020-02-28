@@ -1,15 +1,22 @@
 package com.sq.transportmanage.gateway.service.shiro.realm;
 
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
 import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**认证  与  权限  **/
 
@@ -22,6 +29,12 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 
 	@Autowired
 	private MyDataSourceService myDataSourceService;
+
+	@Autowired
+	private SaasPermissionExMapper saasPermissionExMapper;
+
+	@Autowired
+	private SaasRoleExMapper saasRoleExMapper;
 	
     /**重写：获取用户的身份认证信息**/
 	@Override
@@ -41,6 +54,10 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
 			loginUser.setLevel(adMUser.getLevel());
 			loginUser.setUuid(adMUser.getUuid());
+			loginUser.setMerchentIds(adMUser.getMerchantIds());
+			List<String> menuUrlList = saasPermissionExMapper.queryPermissionMenussOfUser(adMUser.getUserId());
+			loginUser.setMenuUrlList(menuUrlList);
+
 			//---------------------------------------------------------------------------------------------------------数据权限BEGIN
 
 			logger.info( "[获取用户的身份认证信息]="+loginUser);
@@ -52,9 +69,28 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 	}
 
 
+	/**
+	 * 查询角色登录进来所拥有的菜单时候shiro实现
+	 * @param principalCollection
+	 * @return
+	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-		return null;
+		SSOLoginUser loginUser = (SSOLoginUser) principalCollection.getPrimaryPrincipal();
+		String account = loginUser.getLoginName(); //登录名
+
+		List<String> perms_string = saasPermissionExMapper.queryPermissionCodesOfUser(  loginUser.getId() );
+		List<String> roles_string   = saasRoleExMapper.queryRoleCodesOfUser( loginUser.getId() );
+
+		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+		Set<String> roles = new HashSet<String>( roles_string );
+		authorizationInfo.setRoles( roles );
+		logger.info( "[获取用户授权信息(角色)] "+account+"="+roles);
+
+		Set<String> perms = new HashSet<String>( perms_string );
+		authorizationInfo.setStringPermissions(perms);
+		logger.info( "[获取用户授权信息(权限)] "+account+"="+perms);
+		return authorizationInfo;
 	}
 
 	@Override

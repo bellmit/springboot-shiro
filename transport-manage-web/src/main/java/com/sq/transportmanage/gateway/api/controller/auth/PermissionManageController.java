@@ -6,6 +6,8 @@ import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RequestFunction;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.auth.PermissionManagementService;
+import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
+import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ public class PermissionManageController {
 			@Verify(param="permissionType",rule="required") Byte permissionType, 
 			String menuUrl, 
 			Byte menuOpenMode ) {
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		SaasPermission pemission =  new SaasPermission();
 		pemission.setParentPermissionId(parentPermissionId);
 		pemission.setPermissionName(permissionName);
@@ -38,6 +41,7 @@ public class PermissionManageController {
 		pemission.setPermissionType(permissionType);
 		pemission.setMenuUrl(menuUrl==null? "": menuUrl.trim());
 		pemission.setMenuOpenMode(menuOpenMode);
+		pemission.setUuid(ssoLoginUser.getUuid());
 		return permissionManagementService.addSaasPermission(pemission);
 	}
 	

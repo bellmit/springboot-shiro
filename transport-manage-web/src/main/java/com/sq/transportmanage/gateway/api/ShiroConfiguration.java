@@ -7,6 +7,8 @@ import com.sq.transportmanage.gateway.service.shiro.cache.RedisCacheManager;
 import com.sq.transportmanage.gateway.service.shiro.realm.UsernamePasswordRealm;
 import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.shiro.session.UuIdSessionIdGenerator;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -77,7 +79,10 @@ public class ShiroConfiguration {
     public UsernamePasswordRealm shiroRealm() {
         UsernamePasswordRealm shiroRealm = new UsernamePasswordRealm();
         shiroRealm.setName("ConferenceUsernamePasswordRealm");
-        shiroRealm.setAuthenticationCachingEnabled(true);
+        //<!-- 是否启用授权缓存（生产环境可调节此参数进行调优） -->
+        //此属性如果设置为true，为用shiro默认的30min缓存，退出或者修改角色权限导致
+        //的删除缓存不生效 fht 2020-02-28
+        shiroRealm.setAuthenticationCachingEnabled(false);
         return shiroRealm;
     }
 
@@ -150,7 +155,7 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl(loginUrl);
         shiroFilterFactoryBean.setSuccessUrl("${homepage.url}");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized.json");
+       // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 
 //        Map<String, Filter> filters = new HashMap<>();
 //        //filters.put("casFilter", casFilter);
@@ -174,5 +179,20 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
+
+    /**
+     * 开启shiro注解
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor shiroPermisson(DefaultWebSecurityManager securityManager){
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
+
+
+
 }
 

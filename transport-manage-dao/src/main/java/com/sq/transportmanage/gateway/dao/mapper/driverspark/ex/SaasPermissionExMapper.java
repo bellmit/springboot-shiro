@@ -15,5 +15,8 @@ public interface SaasPermissionExMapper{
 	List<Integer> queryPermissionIdsOfUser(@Param("userId") Integer userId);
 	/**根据用户ID，查询其拥有的所有有效的权限代码**/
 	List<String> queryPermissionCodesOfUser(@Param("userId") Integer userId);
+
+	/**根据用户ID，查询其拥有的所有有效的权限菜单url**/
+	List<String> queryPermissionMenussOfUser(@Param("userId") Integer userId);
 	
 }
