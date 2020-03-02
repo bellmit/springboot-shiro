@@ -154,9 +154,9 @@ resetpassword.msgnotify.switch: false
 user.password.indexOfPhone: 9,5,3,7,1,4,8,2
 login.checkMsgCode.switch: false
 
-loginpage.url: http://dev-inside-car-manage.01zhuanche.com/
+loginpage.url: https://dev-saas.guobindui.cn/
 
-homepage.url: https://dev-xxx.01zhuanche.com/#/Manage
+homepage.url: https://dev-saas.guobindui.cn/#/Manage
 
 login.url: https://dev-saas-spark.guobindui.cn/login
 
