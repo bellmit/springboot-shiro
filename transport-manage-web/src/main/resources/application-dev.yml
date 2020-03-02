@@ -132,11 +132,11 @@ zuul:
       path: /api/restapi/**
       url: http://dev-inside-mp-restapi.01zhuanche.com
     orderapi:
-      path: /api/orderapi/**
+      path: /order/orderapi/**
       url: http://dev-inside-orderapi.01zhuanche.com
     mpapi:
-      path: /api/mpapi/**
-      url: http://127.0.0.1:8080
+      path: /mp/**
+      url: http://dev-inside-mp-spark-manage.guobindui.cn/
 
 #钉钉报警开关
 ding.ding.switch: false
