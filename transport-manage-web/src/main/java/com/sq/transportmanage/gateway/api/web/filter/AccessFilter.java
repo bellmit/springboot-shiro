@@ -47,7 +47,7 @@ public class AccessFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
         logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-        logger.info(String.format("%s loginUser %s", loginUser.getName()));
+        logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
         /**用户是否有权限**/
         boolean bl = false;
         //如果是管理员 直接通过
