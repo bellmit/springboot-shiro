@@ -21,7 +21,6 @@ import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
-import okhttp3.internal.http2.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

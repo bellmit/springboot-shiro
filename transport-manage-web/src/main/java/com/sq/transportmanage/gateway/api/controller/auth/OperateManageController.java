@@ -8,11 +8,6 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasRoleMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
 import com.sq.transportmanage.gateway.service.auth.*;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
@@ -20,21 +15,16 @@ import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
-import com.sq.transportmanage.gateway.service.shiro.realm.UsernamePasswordRealm;
-import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.MD5Utils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +43,9 @@ public class OperateManageController {
     private static final Logger logger = LoggerFactory.getLogger(OperateManageController.class);
 
 
-    @Autowired
-    private CarAdmUserMapper carAdmUserMapper;
-    @Autowired
-    private CarAdmUserExMapper carAdmUserExMapper;
-    @Autowired
-    private SaasPermissionExMapper saasPermissionExMapper;
-    @Autowired
-    private UsernamePasswordRealm usernamePasswordRealm;
-    @Autowired
-    private RedisSessionDAO redisSessionDAO;
-    @Autowired
-    private UserManagementService userManagementService;
 
     @Autowired
-    private RedisTemplate<String, Serializable> redisTemplate;
+    private UserManagementService userManagementService;
 
 
     @Autowired
@@ -147,6 +125,7 @@ public class OperateManageController {
                     Integer roleId = saasRoleService.getRoleId(uuid);
                     List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.LIST);
                     //初始化时候不能拥有菜单权限
+                    allDtos = this.removeMenuPermission(allDtos);
                     List<Integer> permissions = new ArrayList<>();
                     if(!CollectionUtils.isEmpty(allDtos)){
                         allDtos.forEach(all ->{
@@ -186,7 +165,7 @@ public class OperateManageController {
             @Verify(param="permissionId",rule="required") Integer permissionId,
             @Verify(param="newParentPermessionId",rule="required") Integer newParentPermessionId) {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-        if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())|| StringUtils.isNotEmpty(loginUser.getUuid())){
+        if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
             String md5= null;
             try {
                 md5 = MD5Utils.getMD5DigestBase64(loginUser.getUuid());
@@ -197,7 +176,6 @@ public class OperateManageController {
                 logger.info("当前用户不是系统管理员，不能移动菜单权限");
                 return AjaxResponse.fail(RestErrorCode.CAN_NOT_CHANGE_MENU);
             }
-
         }
         try {
             //查询有哪些角色有当前的菜单权限，之后找出哪些用户是这些角色。找出该菜单以及上级上菜，
@@ -221,20 +199,26 @@ public class OperateManageController {
         }
     }
 
+    /**
+     * 去掉添加、修改、禁用菜单的权限功能
+     * @param saasPermissionDTOList
+     * @return
+     */
     private List<SaasPermissionDTO> removeMenuPermission(List<SaasPermissionDTO> saasPermissionDTOList){
         Map<String,SaasPermissionDTO> map = Maps.newHashMap();
         saasPermissionDTOList.forEach(list ->{
             map.put(list.getPermissionCode(),list);
         });
+        Map<String,SaasPermissionDTO> mapContain = Maps.newHashMap();
         for(String permissionCode : map.keySet()){
-            if(SaasConst.MENU_PERMISSION.contains(permissionCode)){
-                map.remove(permissionCode);
+            if(!SaasConst.MENU_PERMISSION.contains(permissionCode)){
+                mapContain.put(permissionCode,map.get(permissionCode));
             }
         }
 
         List<SaasPermissionDTO> list = new ArrayList<>();
-        for(String permissionCode : map.keySet()){
-            list.add(map.get(permissionCode));
+        for(String permissionCode : mapContain.keySet()){
+            list.add(mapContain.get(permissionCode));
         }
         return list;
     }

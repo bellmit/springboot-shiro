@@ -29,23 +29,15 @@ import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 @RestController
 public class UserManagementController {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserManagementService userManagementService;
 
-
-
-
-
-/*	@Resource(name = "userOperationLogMongoTemplate")
-	private MongoTemplate mongoTemplate;*/
 	
 	/**一、增加一个用户**/
 	@RequestMapping("/addUser")
 	@RequiresPermissions(value = { "ADD_USER" } )
 	@RequestFunction(menu = USER_ADD)
-	//@SysLogAnn(module="CarAdmUser",methods="addUser",parameterType="Integer",parameterKey="userId",objClass= CarAdmUserDto.class )
 	public AjaxResponse addUser(
 			@Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
 			@Verify(param="userName",rule="required") String userName, 
@@ -99,8 +91,7 @@ public class UserManagementController {
 	@RequestMapping("/changeUser")
 	@RequiresPermissions(value = { "CHANGE_USER" } )
 	@RequestFunction(menu = USER_UPDATE)
-	//@SysLogAnn(module="CarAdmUser",methods="changeUser",parameterType="Integer",parameterKey="userId",objClass= CarAdmUserDto.class ,serviceClass="userManagementService",queryMethod="findByPrimaryKeyV2")
-	public 	AjaxResponse changeUser( 
+	public 	AjaxResponse changeUser(
 			@Verify(param="userId",rule="required|min(1)") Integer userId, 
 			@Verify(param="userName",rule="required") String userName, 
 			@Verify(param="phone",rule="required|mobile") String phone,
@@ -130,8 +121,6 @@ public class UserManagementController {
 	@RequiresPermissions(value = { "SAVE_ROLEIDS_OF_USER" } )
 	@RequestFunction(menu = USER_ROLE_SAVE)
 	public AjaxResponse saveRoleIds( @Verify(param="userId",rule="required|min(1)") Integer userId,  @Verify(param="roleIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String roleIds) {
-/*		SysSaveOrUpdateLog sysLog = new SysSaveOrUpdateLog();
-		sysLog.setStartTime(new Date());*/
 
 		List<Integer> newroleIds = new ArrayList<Integer>();
 		if(roleIds!=null) {
