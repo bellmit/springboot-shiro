@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**当前的登录用户信息**/
@@ -43,7 +44,13 @@ public final class SSOLoginUser implements Serializable{
 
 	private List<String> menuUrlList;
 
+	private Map<Integer,String> menuPermissionMap;
+
 	private String merchentIds;
+
+	private Boolean isSuper;
+
+
 	//---------------------------------------------------------------------------------------------------------数据权限END
 	public Integer getId() {
 		return id;
@@ -153,6 +160,23 @@ public final class SSOLoginUser implements Serializable{
 	}
 
 
+	public Boolean getSuper() {
+		return isSuper;
+	}
+
+	public void setSuper(Boolean aSuper) {
+		isSuper = aSuper;
+	}
+
+
+	public Map<Integer, String> getMenuPermissionMap() {
+		return menuPermissionMap;
+	}
+
+	public void setMenuPermissionMap(Map<Integer, String> menuPermissionMap) {
+		this.menuPermissionMap = menuPermissionMap;
+	}
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -172,6 +196,7 @@ public final class SSOLoginUser implements Serializable{
 				", uuid='" + uuid + '\'' +
 				", menuUrlList=" + JSONObject.toJSONString(menuUrlList) +
 				", merchentIds='" + merchentIds + '\'' +
+				", isSuper=" + isSuper +
 				'}';
 	}
 }

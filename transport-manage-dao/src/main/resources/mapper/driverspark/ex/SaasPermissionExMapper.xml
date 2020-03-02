@@ -79,4 +79,16 @@
     and p.valid=1 and p.menu_url != ''  and r.valid=1 and  ur.user_id=#{userId}
   </select>
 
+  <!--查询模块权限 -->
+  <select id="queryModularPermissions" resultMap="BaseResultMap" >
+  select  permission_id,permission_name
+  from auth_saas_permission
+    where parent_permission_id = 0
+    <if test="permissionIds !=null and permissionIds.size()>0">
+    and permission_id in
+    <foreach collection="permissionIds" open="(" close=")" separator="," item="pid">
+      #{pid}
+    </foreach>
+    </if>
+  </select>
 </mapper>

@@ -40,7 +40,7 @@ public final class SaasConst {
 	}
 
 	/**系统预置角色**/
-	public static String           SYSTEM_ROLE             = "super_admin";
+	public static String           SYSTEM_ROLE             = "mp_driver_spark_super_admin";
 	/**系统预置权限**/
 	public static Set<String> SYSTEM_PERMISSIONS  = new HashSet<>( 64 );
 	static{
@@ -72,10 +72,12 @@ public final class SaasConst {
 		SYSTEM_PERMISSIONS.add("PERMISSION_MANAGENT");
 		SYSTEM_PERMISSIONS.add("GET_ALL_PERMISSIONS_INFO");  //查询所有的权限信息, 功能列表
 		SYSTEM_PERMISSIONS.add("CammelCase_look");                          //查看
-		SYSTEM_PERMISSIONS.add("ADD_PERMISSION");                 //增加一个权限
-		SYSTEM_PERMISSIONS.add("DISABLE_PERMISSION");            //禁用一个权限
-		SYSTEM_PERMISSIONS.add("ENABLE_PERMISSION");             //启用一个权限
-		SYSTEM_PERMISSIONS.add("CHANGE_PERMISSION");           //修改一个权限
+
+		//权限只有超级管理员才有
+		//SYSTEM_PERMISSIONS.add("ADD_PERMISSION");                 //增加一个权限
+		//SYSTEM_PERMISSIONS.add("DISABLE_PERMISSION");            //禁用一个权限
+		//SYSTEM_PERMISSIONS.add("ENABLE_PERMISSION");             //启用一个权限
+		//SYSTEM_PERMISSIONS.add("CHANGE_PERMISSION");           //修改一个权限
 	}
 
 	

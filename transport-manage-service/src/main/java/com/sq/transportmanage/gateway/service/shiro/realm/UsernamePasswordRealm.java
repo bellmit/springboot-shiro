@@ -1,9 +1,13 @@
 package com.sq.transportmanage.gateway.service.shiro.realm;
 
+import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
 import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
+import com.sq.transportmanage.gateway.service.common.constants.Constants;
+import com.sq.transportmanage.gateway.service.util.MD5Utils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -13,10 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 /**认证  与  权限  **/
 
@@ -49,14 +53,36 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setMobile( adMUser.getPhone() );         //手机号码
 			loginUser.setName( adMUser.getUserName() );    //真实姓名
 			loginUser.setEmail(adMUser.getEmail()); //邮箱地址
-			loginUser.setType( null );   //
+			loginUser.setType(null);   //
 			loginUser.setStatus( adMUser.getStatus() );           //状态
 			loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
 			loginUser.setLevel(adMUser.getLevel());
 			loginUser.setUuid(adMUser.getUuid());
 			loginUser.setMerchentIds(adMUser.getMerchantIds());
+			String md5= null;
+			try {
+				md5 = MD5Utils.getMD5DigestBase64(loginUser.getUuid());
+			} catch (NoSuchAlgorithmException e) {
+				logger.info("sign error" + e);
+			}
+			if(Constants.MANAGE_MD5.equals(md5)){
+				loginUser.setSuper(true);
+			}else {
+				loginUser.setSuper(false);
+			}
 			List<String> menuUrlList = saasPermissionExMapper.queryPermissionMenussOfUser(adMUser.getUserId());
 			loginUser.setMenuUrlList(menuUrlList);
+
+			List<Integer> permissionIds = saasPermissionExMapper.queryPermissionIdsOfUser(adMUser.getUserId());
+
+			if(!CollectionUtils.isEmpty(permissionIds)){
+				List<SaasPermission> permissionList = saasPermissionExMapper.queryModularPermissions(permissionIds);
+				Map<Integer,String> map = Maps.newHashMap();
+				permissionList.forEach(list ->{
+					map.put(list.getPermissionId(),list.getPermissionName());
+				});
+				loginUser.setMenuPermissionMap(map);
+			}
 
 			//---------------------------------------------------------------------------------------------------------数据权限BEGIN
 
