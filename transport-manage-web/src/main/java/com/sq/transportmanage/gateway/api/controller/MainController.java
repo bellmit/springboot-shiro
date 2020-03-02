@@ -508,7 +508,15 @@ public class MainController {
 	public AjaxResponse queryModularPermissions(){
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		if(ssoLoginUser != null){
-			return AjaxResponse.success(ssoLoginUser.getMenuPermissionMap());
+			Map<Integer,String> map = ssoLoginUser.getMenuPermissionMap();
+			JSONArray jsonArray = new JSONArray();
+			for(Integer key : map.keySet()){
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("permissionId",key);
+				jsonObject.put("permissionName",map.get(key));
+				jsonArray.add(jsonObject);
+			}
+			return AjaxResponse.success(jsonArray);
 		}
 		return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 	}
