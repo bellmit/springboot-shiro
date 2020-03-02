@@ -1,6 +1,7 @@
 package com.sq.transportmanage.gateway.api.controller.auth;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.api.common.Constants;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
@@ -37,6 +38,7 @@ import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -144,6 +146,7 @@ public class OperateManageController {
                     //默认为树形,获取的是父菜单 此处为全部 添加的是list类型
                     Integer roleId = saasRoleService.getRoleId(uuid);
                     List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.LIST);
+                    //初始化时候不能拥有菜单权限
                     List<Integer> permissions = new ArrayList<>();
                     if(!CollectionUtils.isEmpty(allDtos)){
                         allDtos.forEach(all ->{
@@ -216,5 +219,23 @@ public class OperateManageController {
             logger.error("修改菜单异常" + e);
             return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
         }
+    }
+
+    private List<SaasPermissionDTO> removeMenuPermission(List<SaasPermissionDTO> saasPermissionDTOList){
+        Map<String,SaasPermissionDTO> map = Maps.newHashMap();
+        saasPermissionDTOList.forEach(list ->{
+            map.put(list.getPermissionCode(),list);
+        });
+        for(String permissionCode : map.keySet()){
+            if(SaasConst.MENU_PERMISSION.contains(permissionCode)){
+                map.remove(permissionCode);
+            }
+        }
+
+        List<SaasPermissionDTO> list = new ArrayList<>();
+        for(String permissionCode : map.keySet()){
+            list.add(map.get(permissionCode));
+        }
+        return list;
     }
 }
