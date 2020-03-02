@@ -2,6 +2,7 @@ package com.sq.transportmanage.gateway.api.controller.auth;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
+import com.sq.transportmanage.gateway.api.common.Constants;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
@@ -21,6 +22,7 @@ import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.realm.UsernamePasswordRealm;
 import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
+import com.sq.transportmanage.gateway.service.util.MD5Utils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -94,11 +97,14 @@ public class OperateManageController {
             @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
             @Verify(param="userName",rule="required") String userName,
             @Verify(param="phone",rule="required|mobile") String phone,
-            @Verify(param = "email",rule = "required|email")String email) {
+            @Verify(param = "email",rule = "required|email")String email) throws NoSuchAlgorithmException {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-        if(loginUser == null ||  !AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())|| StringUtils.isNotEmpty(loginUser.getUuid())){
-            logger.info("当前用户不是系统管理员，不能创建商户");
-            return AjaxResponse.fail(RestErrorCode.IS_NOT_SYS_ROLE);
+        if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
+            String md5=MD5Utils.getMD5DigestBase64(loginUser.getUuid());
+            if(!Constants.MANAGE_MD5.equals(md5)){
+                logger.info("当前用户不是系统管理员，不能创建商户");
+                return AjaxResponse.fail(RestErrorCode.IS_NOT_SYS_ROLE);
+            }
         }
         try {
             CarAdmUser user  = new CarAdmUser();
@@ -135,9 +141,9 @@ public class OperateManageController {
                 int code = saasRoleService.insert(role);
                 if(code > 0){
                     logger.info(">============给用户赋权============start");
-                    //默认为树形
+                    //默认为树形,获取的是父菜单 此处为全部 添加的是list类型
                     Integer roleId = saasRoleService.getRoleId(uuid);
-                    List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.TREE);
+                    List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.LIST);
                     List<Integer> permissions = new ArrayList<>();
                     if(!CollectionUtils.isEmpty(allDtos)){
                         allDtos.forEach(all ->{
@@ -177,9 +183,18 @@ public class OperateManageController {
             @Verify(param="permessionId",rule="required") Integer permissionId,
             @Verify(param="newParentPermessionId",rule="required") Integer newParentPermessionId) {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-        if(loginUser == null ||  !AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())|| StringUtils.isNotEmpty(loginUser.getUuid())){
-            logger.info("当前用户不是系统管理员，不能移动菜单权限");
-            return AjaxResponse.fail(RestErrorCode.CAN_NOT_CHANGE_MENU);
+        if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())|| StringUtils.isNotEmpty(loginUser.getUuid())){
+            String md5= null;
+            try {
+                md5 = MD5Utils.getMD5DigestBase64(loginUser.getUuid());
+            } catch (NoSuchAlgorithmException e) {
+                logger.error("获取md5加密异常" + e);
+            }
+            if(!Constants.MANAGE_MD5.equals(md5)){
+                logger.info("当前用户不是系统管理员，不能移动菜单权限");
+                return AjaxResponse.fail(RestErrorCode.CAN_NOT_CHANGE_MENU);
+            }
+
         }
         try {
             //查询有哪些角色有当前的菜单权限，之后找出哪些用户是这些角色。找出该菜单以及上级上菜，
