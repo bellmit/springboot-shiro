@@ -9,6 +9,7 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasRoleMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissionRalationExMapper;
+import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
@@ -19,10 +20,13 @@ import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
+import com.sq.transportmanage.gateway.service.util.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,7 +237,8 @@ public class RoleManagementService{
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-    		roles = saasRoleExMapper.queryRoles(loginUser.getUuid(),null, roleCode, roleName, valid);
+
+			roles = saasRoleExMapper.queryRoles(loginUser.getSuper()== true ? null:loginUser.getUuid(),null, roleCode, roleName, valid);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();

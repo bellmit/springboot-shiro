@@ -40,7 +40,7 @@ public final class SaasConst {
 	}
 
 	/**系统预置角色**/
-	public static String           SYSTEM_ROLE             = "super_admin";
+	public static String           SYSTEM_ROLE             = "mp_driver_spark_super_admin";
 	/**系统预置权限**/
 	public static Set<String> SYSTEM_PERMISSIONS  = new HashSet<>( 64 );
 	static{

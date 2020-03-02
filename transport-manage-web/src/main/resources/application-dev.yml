@@ -158,7 +158,7 @@ loginpage.url: http://dev-inside-car-manage.01zhuanche.com/
 
 homepage.url: https://dev-xxx.01zhuanche.com/#/Manage
 
-login.url: https://dev-inside-xxx.01zhuanche.com/login.json
+login.url: https://dev-saas-spark.guobindui.cn/login
 
 #短信发送相关
 short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/send

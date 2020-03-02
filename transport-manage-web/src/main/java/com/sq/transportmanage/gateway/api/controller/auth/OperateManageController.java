@@ -180,7 +180,7 @@ public class OperateManageController {
      */
     @RequestMapping(value = "/changeMenu",method = RequestMethod.POST)
     public AjaxResponse changeMenu(
-            @Verify(param="permessionId",rule="required") Integer permissionId,
+            @Verify(param="permissionId",rule="required") Integer permissionId,
             @Verify(param="newParentPermessionId",rule="required") Integer newParentPermessionId) {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
         if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())|| StringUtils.isNotEmpty(loginUser.getUuid())){

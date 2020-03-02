@@ -1,6 +1,8 @@
 package com.sq.transportmanage.gateway.api.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.api.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
@@ -498,6 +500,18 @@ public class MainController {
 	}
 
 
+
+	@RequestMapping("/queryModularPermissions")
+	@ResponseBody
+	@SuppressWarnings("unchecked")
+	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+	public AjaxResponse queryModularPermissions(){
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+		if(ssoLoginUser != null){
+			return AjaxResponse.success(ssoLoginUser.getMenuPermissionMap());
+		}
+		return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
+	}
 
 
 }
