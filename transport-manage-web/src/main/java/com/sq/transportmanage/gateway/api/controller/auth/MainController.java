@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.api.controller;
+package com.sq.transportmanage.gateway.api.controller.auth;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -44,6 +44,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -191,10 +192,10 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED,statistics);
 		}
 
-//		String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
-//		if(flag!=null ) {
-//			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED);
-//		}
+		String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
+		if(flag!=null ) {
+			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED);
+		}
 		//B:查询用户信息
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
 		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getUuid());
@@ -215,7 +216,6 @@ public class MainController {
 		String content  = "登录验证码为："+msgcode+"，请在"+msgcodeTimeoutMinutes+"分钟内进行登录。";
 		SmsSendUtil.send(mobile, content);
 		//E: 写入缓存
-//		RedisCacheUtil.set(CACHE_PREFIX_MSGCODE_CONTROL+username, "Y",  60 );
 		RedisCacheUtil.set(CACHE_PREFIX_MSGCODE+username, msgcode,  msgcodeTimeoutMinutes * 60 );
 		//返回结果
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -413,7 +413,6 @@ public class MainController {
 		//四、用户的数据权限
 		ajaxLoginUserDTO.setCityIds( ssoLoginUser.getCityIds()  );
 		ajaxLoginUserDTO.setSupplierIds( ssoLoginUser.getSupplierIds() );
-		//ajaxLoginUserDTO.setTeamIds( ssoLoginUser.getTeamIds() );
 
 		//五、配置信息
 		Map<String, Object > configs = new HashMap<String,Object>();
@@ -500,10 +499,12 @@ public class MainController {
 	}
 
 
-
+    /**
+     * 查询当前用户所拥有的模块
+	 * @return
+     */
 	@RequestMapping("/queryModularPermissions")
 	@ResponseBody
-	@SuppressWarnings("unchecked")
 	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
 	public AjaxResponse queryModularPermissions(){
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
