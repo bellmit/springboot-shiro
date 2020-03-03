@@ -136,7 +136,7 @@ zuul:
       url: http://dev-inside-order-spark.guobindui.cn/order/
     dispatchapi:
       path: /dispatch/**
-      url: http://dev-inside-spark-dispatch-cms.guobindui.cn/dispatch/
+      url: http://dev-inside-spark-dispatch-cms.guobindui.cn/
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
