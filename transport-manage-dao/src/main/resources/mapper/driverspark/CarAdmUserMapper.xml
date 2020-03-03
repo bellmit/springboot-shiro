@@ -21,12 +21,12 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
-    <result column="merchantIds" property="merchantIds" jdbcType="VARCHAR" />
+    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
     create_date, cities, suppliers, team_id, phone, group_ids, level, email, update_date, 
-    update_user,merchantIds
+    update_user,merchantId
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -41,14 +41,14 @@
       create_date, cities, suppliers, 
       team_id, phone, group_ids, 
       level, email, update_date, 
-      update_user,merchantIds)
+      update_user,merchantId)
     values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{cities,jdbcType=VARCHAR}, #{suppliers,jdbcType=VARCHAR}, 
       #{teamId,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, 
       #{level,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=VARCHAR},#{merchantIds,jdbcType=VARCHAR})
+      #{updateUser,jdbcType=VARCHAR},#{merchantId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     insert into auth_car_adm_user
@@ -110,8 +110,8 @@
       <if test="updateUser != null" >
         update_user,
       </if>
-      <if test="merchantIds != null" >
-        merchantIds,
+      <if test="merchantId != null" >
+        merchantId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -172,8 +172,8 @@
       <if test="updateUser != null" >
         #{updateUser,jdbcType=VARCHAR},
       </if>
-      <if test="merchantIds != null" >
-        #{merchantIds,jdbcType=VARCHAR},
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -234,8 +234,8 @@
       <if test="updateUser != null" >
         update_user = #{updateUser,jdbcType=VARCHAR},
       </if>
-      <if test="merchantIds != null" >
-        merchantIds = #{merchantIds,jdbcType=VARCHAR},
+      <if test="merchantId != null" >
+        merchantId = #{merchantId,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}

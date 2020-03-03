@@ -198,7 +198,7 @@ public class MainController {
 		}
 		//B:查询用户信息
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getMerchantIds());
+		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getMerchantId());
 		if(user==null){
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}

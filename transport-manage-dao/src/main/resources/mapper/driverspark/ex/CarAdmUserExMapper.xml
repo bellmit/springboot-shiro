@@ -19,11 +19,11 @@
     <result column="group_ids" property="groupIds" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="merchantIds" property="merchantIds" jdbcType="VARCHAR" />
+    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
-    create_date, cities, suppliers, team_id, phone, group_ids,level,email,merchantIds
+    create_date, cities, suppliers, team_id, phone, group_ids,level,email,merchantId
   </sql>
   
   <!-- 根据账户查询 -->
@@ -35,8 +35,8 @@
       <if test="account!=null">
           and account = #{account}
       </if>
-      <if test="merchantIds!=null">
-          and merchantIds = #{merchantIds}
+      <if test="merchantId!=null">
+          and merchantId = #{merchantId}
       </if>
     limit 1
   </select>
@@ -80,8 +80,8 @@
     <if test="status!=null">
     	and status = #{status}
     </if>
-    <if test="merchantIds!=null">
-       and merchantIds = #{merchantIds}
+    <if test="merchantId!=null">
+       and merchantId = #{merchantId}
     </if>
     order by user_id
   </select>

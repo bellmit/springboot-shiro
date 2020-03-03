@@ -53,11 +53,11 @@ public class UserManagementController {
 		user.setTeamId( null );
 		user.setGroupIds(null);
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		if(StringUtils.isNotEmpty(loginUser.getMerchantIds())){
-			user.setMerchantIds(loginUser.getMerchantIds());
+		if(StringUtils.isNotEmpty(loginUser.getMerchantId())){
+			user.setMerchantId(loginUser.getMerchantId());
 		}else {
 			//为空表示为我方人员
-			user.setMerchantIds(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
+			user.setMerchantId(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
 		}
 		// 暂时不用
 		AjaxResponse ajaxResponse = userManagementService.addUser(user);

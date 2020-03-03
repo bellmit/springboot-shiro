@@ -36,7 +36,7 @@ public class RolemanagementController{
 		SaasRole role = new SaasRole();
 		role.setRoleCode(roleCode.trim());
 		role.setRoleName(roleName.trim());
-		role.setMerchantIds(WebSessionUtil.getCurrentLoginUser().getMerchantIds());
+		role.setMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
 		role.setValid(true);
 		return roleManagementService.addSaasRole(role);
 	}

@@ -11,11 +11,11 @@
     <result column="menu_open_mode" property="menuOpenMode" jdbcType="TINYINT" />
     <result column="valid" property="valid" jdbcType="BIT" />
     <result column="sort_seq" property="sortSeq" jdbcType="INTEGER" />
-    <result column="merchantIds" property="merchantIds" jdbcType="VARCHAR" />
+    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     permission_id, parent_permission_id, permission_code, permission_type, permission_name, 
-    menu_url, menu_open_mode, valid, sort_seq,merchantIds
+    menu_url, menu_open_mode, valid, sort_seq,merchantId
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -27,11 +27,11 @@
     insert into auth_saas_permission (permission_id, parent_permission_id,
       permission_code, permission_type, permission_name, 
       menu_url, menu_open_mode, valid, 
-      sort_seq,merchantIds)
+      sort_seq,merchantId)
     values (#{permissionId,jdbcType=INTEGER}, #{parentPermissionId,jdbcType=INTEGER}, 
       #{permissionCode,jdbcType=VARCHAR}, #{permissionType,jdbcType=TINYINT}, #{permissionName,jdbcType=VARCHAR}, 
       #{menuUrl,jdbcType=VARCHAR}, #{menuOpenMode,jdbcType=TINYINT}, #{valid,jdbcType=BIT}, 
-      #{sortSeq,jdbcType=INTEGER},#{merchantIds,jdbcType=VARCHAR})
+      #{sortSeq,jdbcType=INTEGER},#{merchantId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
     insert into auth_saas_permission
@@ -63,8 +63,8 @@
       <if test="sortSeq != null" >
         sort_seq,
       </if>
-      <if test="merchantIds != null" >
-        merchantIds,
+      <if test="merchantId != null" >
+        merchantId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -95,8 +95,8 @@
       <if test="sortSeq != null" >
         #{sortSeq,jdbcType=INTEGER},
       </if>
-      <if test="merchantIds != null" >
-        #{merchantIds,jdbcType=VARCHAR},
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
