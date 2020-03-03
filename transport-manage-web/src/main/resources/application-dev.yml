@@ -130,13 +130,13 @@ zuul:
   routes:
     chargeapi:
       path: /charge/**
-      url: http://dev-inside-saas-charge.guobindui.cn
+      url: http://dev-inside-saas-charge.guobindui.cn/charge
     orderapi:
       path: /order/**
-      url: http://dev-inside-order-spark.guobindui.cn
+      url: http://dev-inside-order-spark.guobindui.cn/order
     dispatchapi:
       path: /dispatch/**
-      url: http://dev-inside-spark-dispatch-cms.guobindui.cn
+      url: http://dev-inside-spark-dispatch-cms.guobindui.cn/dispatch
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
