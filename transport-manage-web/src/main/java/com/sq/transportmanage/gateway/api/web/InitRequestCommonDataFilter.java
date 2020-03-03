@@ -56,7 +56,7 @@ public class InitRequestCommonDataFilter extends OncePerRequestFilter {
 
         /***************是否为AJAX请求BEGIN******************/
         String XMLHttpRequest = request.getHeader("X-Requested-With");
-        if ((XMLHttpRequest != null && XMLHttpRequest.trim().length() > 0) || request.getRequestURI().endsWith(".json")) {
+        if ((XMLHttpRequest != null && XMLHttpRequest.trim().length() > 0)) {
             request.setAttribute("X_IS_AJAX", true);
         } else {
             request.setAttribute("X_IS_AJAX", false);
