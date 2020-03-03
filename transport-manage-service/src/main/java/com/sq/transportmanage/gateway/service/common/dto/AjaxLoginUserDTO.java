@@ -36,7 +36,7 @@ public final class AjaxLoginUserDTO implements Serializable{
 	private Set<Integer> cityIds = new HashSet<Integer>();
 
 	/**此用户可以管理的供应商ID**/
-	private Set<Integer> supplierIds = new HashSet<Integer>();
+	private String supplierIds ;
 	//---------------------------------------------------------------------------------------------------------用户的数据权限END
 
 	private Map<String, Object > configs = new HashMap<String,Object>();//配置信息
@@ -137,11 +137,12 @@ public final class AjaxLoginUserDTO implements Serializable{
 		this.permissionDTOS = permissionDTOS;
 	}
 
-	public Set<Integer> getSupplierIds() {
+
+	public String getSupplierIds() {
 		return supplierIds;
 	}
 
-	public void setSupplierIds(Set<Integer> supplierIds) {
+	public void setSupplierIds(String supplierIds) {
 		this.supplierIds = supplierIds;
 	}
 }

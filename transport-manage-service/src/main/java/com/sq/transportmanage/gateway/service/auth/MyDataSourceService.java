@@ -62,10 +62,10 @@ public class MyDataSourceService {
      * @return
      */
     @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
-    public SSOLoginUser getSSOLoginUser(String loginName,String uuid) {
-        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},uuid={}" + loginName,uuid);
+    public SSOLoginUser getSSOLoginUser(String loginName,String merchantIds) {
+        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},merchantIds={}" + loginName,merchantIds);
         try {
-            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,uuid);
+            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,merchantIds);
             SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
             loginUser.setId(adMUser.getUserId());                //用户ID
             loginUser.setLoginName(adMUser.getAccount());//登录名
@@ -76,22 +76,8 @@ public class MyDataSourceService {
             loginUser.setStatus(adMUser.getStatus());           //状态
             loginUser.setAccountType(adMUser.getAccountType());   //自有的帐号类型：[100 普通用户]、[900 管理员]
             loginUser.setLevel(adMUser.getLevel());
-            loginUser.setUuid(adMUser.getUuid()); //uuid,用户区别每个商户
+            loginUser.setMerchantIds(adMUser.getMerchantIds()); //merchantIds,用户区别每个商户
             //---------------------------------------------------------------------------------------------------------数据权限BEGIN
-            /**此用户可以管理的城市ID**/
-            if (StringUtils.isNotEmpty(adMUser.getCities())) {
-                String[] idStrs = adMUser.getCities().trim().split(",");
-                Set<Integer> ids = new HashSet<Integer>(idStrs.length * 2 + 2);
-                for (String id : idStrs) {
-                    if (StringUtils.isNotEmpty(id)) {
-                        try {
-                            ids.add(Integer.valueOf(id.trim()));
-                        } catch (Exception e) {
-                        }
-                    }
-                }
-                loginUser.setCityIds(ids);
-            }
             //---------------------------------------------------------------------------------------------------------数据权限END
             logger.info("[WebSessionUtil获取用户的身份认证信息]=" + loginUser);
             return loginUser;

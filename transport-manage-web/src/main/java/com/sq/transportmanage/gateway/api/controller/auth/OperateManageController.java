@@ -80,7 +80,7 @@ public class OperateManageController {
             @Verify(param = "email",rule = "required|email")String email) throws NoSuchAlgorithmException {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
         if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
-            String md5=MD5Utils.getMD5DigestBase64(loginUser.getUuid());
+            String md5=MD5Utils.getMD5DigestBase64(loginUser.getMerchantIds());
             if(!Constants.MANAGE_MD5.equals(md5)){
                 logger.info("当前用户不是系统管理员，不能创建商户");
                 return AjaxResponse.fail(RestErrorCode.IS_NOT_SYS_ROLE);
@@ -95,8 +95,8 @@ public class OperateManageController {
             user.setRoleId(1);
             ////管理员
             user.setAccountType(AuthEnum.MANAGE.getAuthId());
-            String uuid = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
-            user.setUuid(uuid);
+            String merchantIds = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
+            user.setMerchantIds(merchantIds);
             //创建商户后获取uuid并创建商户的系统用户，赋予默认权限
             AjaxResponse ajaxResponse = userManagementService.addUser(user);
             if(ajaxResponse == null || ajaxResponse.getCode() != 0){
@@ -109,10 +109,10 @@ public class OperateManageController {
                 role.setRoleCode("manage_"+System.currentTimeMillis());
                 role.setRoleName("系统管理员");
                 role.setValid(true);
-                role.setUuid(uuid);
+                role.setMerchantIds(merchantIds);
 
 
-                List<SaasRole> roles = saasRoleService.queryRoles(loginUser.getUuid(),null, role.getRoleCode(), null, null);
+                List<SaasRole> roles = saasRoleService.queryRoles(loginUser.getMerchantIds(),null, role.getRoleCode(), null, null);
                 if(roles!=null && roles.size()>0) {
                     return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
                 }
@@ -122,7 +122,7 @@ public class OperateManageController {
                 if(code > 0){
                     logger.info(">============给用户赋权============start");
                     //默认为树形,获取的是父菜单 此处为全部 添加的是list类型
-                    Integer roleId = saasRoleService.getRoleId(uuid);
+                    Integer roleId = saasRoleService.getRoleId(merchantIds);
                     List<SaasPermissionDTO> allDtos = permissionManagementService.getAllPermissions(SaasConst.PermissionDataFormat.LIST);
                     //初始化时候不能拥有菜单权限
                     allDtos = this.removeMenuPermission(allDtos);
@@ -168,7 +168,7 @@ public class OperateManageController {
         if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
             String md5= null;
             try {
-                md5 = MD5Utils.getMD5DigestBase64(loginUser.getUuid());
+                md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantIds());
             } catch (NoSuchAlgorithmException e) {
                 logger.error("获取md5加密异常" + e);
             }

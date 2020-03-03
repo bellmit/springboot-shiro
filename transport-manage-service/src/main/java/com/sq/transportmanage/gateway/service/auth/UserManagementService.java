@@ -126,7 +126,7 @@ public class UserManagementService{
 
 			//return AjaxResponse.success( null );
 
-			return AjaxResponse.success( this.findByUuid(user.getUuid()) );
+			return AjaxResponse.success( this.findByUuid(user.getMerchantIds()) );
 		} catch (Exception e) {
 			logger.error("创建用户异常" + e);
 			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
@@ -272,7 +272,7 @@ public class UserManagementService{
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-    		users = carAdmUserExMapper.queryUsers(loginUser.getUuid(), userIds ,  account, userName, phone, status );
+    		users = carAdmUserExMapper.queryUsers(loginUser.getMerchantIds(), userIds ,  account, userName, phone, status );
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -315,7 +315,7 @@ public class UserManagementService{
 	}
 	private Map<Integer,String> searchRoleIdNameMappings(){//获得角色ID与角色名称的映射MAP
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(loginUser.getUuid(),null, null, null, null);
+		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(loginUser.getMerchantIds(),null, null, null, null);
 		Map<Integer,String> result = new HashMap<Integer,String>( allRoles.size() * 2 );
 		for( SaasRole role : allRoles ) {
 			result.put(role.getRoleId(), role.getRoleName());
@@ -373,8 +373,8 @@ public class UserManagementService{
 		return carAdmUserMapper.selectByPrimaryKey(id);
 	}
 
-	public CarAdmUser findByUuid (String uuid){
-		return carAdmUserExMapper.queryByAccount(null,uuid);
+	public CarAdmUser findByUuid (String merchantIds){
+		return carAdmUserExMapper.queryByAccount(null,merchantIds);
 	}
 
 }
