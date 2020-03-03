@@ -6,10 +6,10 @@
     <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
-    <result column="merchantIds" property="merchantIds" jdbcType="VARCHAR" />
+    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid,merchantIds
+    role_id, role_code, role_name, valid,merchantId
   </sql>
 
   <!-- 查询角色列表 -->
@@ -33,8 +33,8 @@
     <if test="valid!=null">
     	and valid = #{valid}
     </if>
-    <if test="merchantIds!=null">
-      and merchantIds = #{merchantIds}
+    <if test="merchantId!=null">
+      and merchantId = #{merchantId}
     </if>
     order by role_id
   </select>
@@ -71,8 +71,8 @@
             <if test="valid != null" >
                 valid,
             </if>
-            <if test="merchantIds != null" >
-                merchantIds,
+            <if test="merchantId != null" >
+                merchantId,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -88,8 +88,8 @@
             <if test="valid != null" >
                 #{valid,jdbcType=BIT},
             </if>
-            <if test="merchantIds != null" >
-                #{merchantIds,jdbcType=VARCHAR},
+            <if test="merchantId != null" >
+                #{merchantId,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -97,7 +97,7 @@
 
     <!-- 查询角色列表 -->
     <select id="getRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select role_id FROM  auth_saas_role  WHERE  merchantIds = #{merchantIds} limit 1
+        select role_id FROM  auth_saas_role  WHERE  merchantId = #{merchantId} limit 1
     </select>
 
 </mapper>

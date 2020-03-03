@@ -126,7 +126,7 @@ public class UserManagementService{
 
 			//return AjaxResponse.success( null );
 
-			return AjaxResponse.success( this.findByUuid(user.getMerchantIds()) );
+			return AjaxResponse.success( this.findByUuid(user.getMerchantId()) );
 		} catch (Exception e) {
 			logger.error("创建用户异常" + e);
 			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
@@ -176,30 +176,9 @@ public class UserManagementService{
 		if( StringUtils.isEmpty(newUser.getUserName()) ) {
 			newUser.setUserName("");
 		}
-		/*if( StringUtils.isEmpty(newUser.getCities()) ) {
-			newUser.setCities("");
-		}
 		if( StringUtils.isEmpty(newUser.getSuppliers()) ) {
 			newUser.setSuppliers("");
 		}
-		if( StringUtils.isEmpty(newUser.getTeamId()) ) {
-			newUser.setTeamId("");
-		}
-        if( StringUtils.isEmpty(newUser.getGroupIds()) ) {
-            newUser.setGroupIds("");
-        }
-        if (StringUtils.isNotBlank(newUser.getGroupIds())){
-		    newUser.setLevel(PermissionLevelEnum.GROUP.getCode());
-        }else if (StringUtils.isNotBlank(newUser.getTeamId())){
-		    newUser.setLevel(PermissionLevelEnum.TEAM.getCode());
-        }else if(StringUtils.isNotBlank(newUser.getSuppliers())){
-            newUser.setLevel(PermissionLevelEnum.SUPPLIER.getCode());
-        }else if(StringUtils.isNotBlank(newUser.getCities())){
-            newUser.setLevel(PermissionLevelEnum.CITY.getCode());
-        }else {
-            newUser.setLevel(PermissionLevelEnum.ALL.getCode());
-        }*/
-
 		//执行
 		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
 		redisSessionDAO.clearRelativeSession(null, null , newUser.getUserId() );//自动清理用户会话
@@ -272,7 +251,7 @@ public class UserManagementService{
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-    		users = carAdmUserExMapper.queryUsers(loginUser.getMerchantIds(), userIds ,  account, userName, phone, status );
+    		users = carAdmUserExMapper.queryUsers(loginUser.getMerchantId(), userIds ,  account, userName, phone, status );
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -315,7 +294,7 @@ public class UserManagementService{
 	}
 	private Map<Integer,String> searchRoleIdNameMappings(){//获得角色ID与角色名称的映射MAP
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(loginUser.getMerchantIds(),null, null, null, null);
+		List<SaasRole> allRoles =   saasRoleExMapper.queryRoles(loginUser.getMerchantId(),null, null, null, null);
 		Map<Integer,String> result = new HashMap<Integer,String>( allRoles.size() * 2 );
 		for( SaasRole role : allRoles ) {
 			result.put(role.getRoleId(), role.getRoleName());
@@ -358,23 +337,18 @@ public class UserManagementService{
 
 
 	/**八、查询用户列表**/
-	/*public boolean userPhoneExist(String phone) {
-		List<CarAdmUser> users = carAdmUserExMapper.queryUsers( null ,  null, null, phone, null );
+	public boolean userPhoneExist(String phone) {
+		List<CarAdmUser> users = carAdmUserExMapper.queryUsers( null,null ,  null, null, phone, null );
 		return (null!=users && users.size()>0);
-	}*/
+	}
 
-	/**查询用户千里眼关联关系**/
-	/*public DriverTelescopeUser selectTelescopeUserByUserId(Integer userId) {
-		DriverTelescopeUser driverTelescopeUser = driverTelescopeUserExMapper.selectTelescopeUserByUserId(userId);
-		return driverTelescopeUser;
-	}*/
 
 	public CarAdmUser findByPrimaryKey(Integer id ){
 		return carAdmUserMapper.selectByPrimaryKey(id);
 	}
 
-	public CarAdmUser findByUuid (String merchantIds){
-		return carAdmUserExMapper.queryByAccount(null,merchantIds);
+	public CarAdmUser findByUuid (String merchantId){
+		return carAdmUserExMapper.queryByAccount(null,merchantId);
 	}
 
 }

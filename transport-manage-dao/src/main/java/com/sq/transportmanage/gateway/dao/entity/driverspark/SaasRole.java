@@ -11,7 +11,7 @@ public class SaasRole {
 
     private String permissionIds;
 
-    private String merchantIds;
+    private String merchantId;
 
     public Integer getRoleId() {
         return roleId;
@@ -53,11 +53,12 @@ public class SaasRole {
         this.permissionIds = permissionIds;
     }
 
-    public String getMerchantIds() {
-        return merchantIds;
+
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerchantIds(String merchantIds) {
-        this.merchantIds = merchantIds;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 }

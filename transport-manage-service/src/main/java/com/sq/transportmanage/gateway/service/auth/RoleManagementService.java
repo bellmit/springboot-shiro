@@ -48,7 +48,7 @@ public class RoleManagementService{
 	public AjaxResponse addSaasRole(SaasRole role ) {
 		//角色代码已经存在
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantIds(),null, role.getRoleCode(), null, null);
+		List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantId(),null, role.getRoleCode(), null, null);
 		if(roles!=null && roles.size()>0) {
 			return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
 		}
@@ -108,7 +108,7 @@ public class RoleManagementService{
 		//角色代码已经存在   (如果发生变化时 )
 		if( newrole.getRoleCode()!=null && newrole.getRoleCode().length()>0 && !newrole.getRoleCode().equalsIgnoreCase(rawrole.getRoleCode())   ) {
 			SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-			List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantIds(),null, newrole.getRoleCode(), null, null);
+			List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantId(),null, newrole.getRoleCode(), null, null);
 			if(roles!=null && roles.size()>0) {
 				return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
 			}
@@ -238,7 +238,7 @@ public class RoleManagementService{
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
 
-			roles = saasRoleExMapper.queryRoles(loginUser.getSuper()== true ? null:loginUser.getMerchantIds(),null, roleCode, roleName, valid);
+			roles = saasRoleExMapper.queryRoles(loginUser.getSuper()== true ? null:loginUser.getMerchantId(),null, roleCode, roleName, valid);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();

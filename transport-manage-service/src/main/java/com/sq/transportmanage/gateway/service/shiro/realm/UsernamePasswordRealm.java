@@ -57,11 +57,11 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setStatus( adMUser.getStatus() );           //状态
 			loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
 			loginUser.setLevel(adMUser.getLevel());
-			loginUser.setMerchantIds(adMUser.getMerchantIds());
+			loginUser.setMerchantId(adMUser.getMerchantId());
 			loginUser.setSupplierIds(adMUser.getSuppliers());
 			String md5= null;
 			try {
-				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantIds());
+				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId());
 			} catch (NoSuchAlgorithmException e) {
 				logger.info("sign error" + e);
 			}

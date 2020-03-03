@@ -62,10 +62,10 @@ public class MyDataSourceService {
      * @return
      */
     @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
-    public SSOLoginUser getSSOLoginUser(String loginName,String merchantIds) {
-        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},merchantIds={}" + loginName,merchantIds);
+    public SSOLoginUser getSSOLoginUser(String loginName,String merchantId) {
+        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},merchantId={}" + loginName,merchantId);
         try {
-            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,merchantIds);
+            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,merchantId);
             SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
             loginUser.setId(adMUser.getUserId());                //用户ID
             loginUser.setLoginName(adMUser.getAccount());//登录名
@@ -76,7 +76,7 @@ public class MyDataSourceService {
             loginUser.setStatus(adMUser.getStatus());           //状态
             loginUser.setAccountType(adMUser.getAccountType());   //自有的帐号类型：[100 普通用户]、[900 管理员]
             loginUser.setLevel(adMUser.getLevel());
-            loginUser.setMerchantIds(adMUser.getMerchantIds()); //merchantIds,用户区别每个商户
+            loginUser.setMerchantId(adMUser.getMerchantId()); //merchantId,用户区别每个商户
             //---------------------------------------------------------------------------------------------------------数据权限BEGIN
             //---------------------------------------------------------------------------------------------------------数据权限END
             logger.info("[WebSessionUtil获取用户的身份认证信息]=" + loginUser);

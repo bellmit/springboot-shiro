@@ -19,8 +19,7 @@ public class SaasPermission {
 
     private Integer sortSeq;
 
-    private String merchantIds;
-
+    private String merchantId;
     public Integer getPermissionId() {
         return permissionId;
     }
@@ -93,12 +92,11 @@ public class SaasPermission {
         this.sortSeq = sortSeq;
     }
 
-
-    public String getMerchantIds() {
-        return merchantIds;
+    public String getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerchantIds(String merchantIds) {
-        this.merchantIds = merchantIds;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 }
