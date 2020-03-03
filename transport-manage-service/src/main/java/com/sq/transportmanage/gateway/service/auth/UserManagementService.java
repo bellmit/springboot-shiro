@@ -12,12 +12,11 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRala
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.CarAdmUserDTO;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
-import com.sq.transportmanage.gateway.service.common.enums.PermissionLevelEnum;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
+import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
-import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
-import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
-import com.sq.transportmanage.gateway.service.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;

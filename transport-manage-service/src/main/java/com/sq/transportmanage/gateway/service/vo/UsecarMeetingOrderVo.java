@@ -1,7 +1,7 @@
 package com.sq.transportmanage.gateway.service.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sq.transportmanage.gateway.service.enums.CancelStatusEnum;
+import com.sq.transportmanage.gateway.service.common.enums.CancelStatusEnum;
 import com.sq.transportmanage.gateway.service.common.enums.ServiceTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,5 +1,7 @@
 package com.sq.transportmanage.gateway.service.util;
 
+import com.sq.transportmanage.gateway.service.common.constants.CheckConstants;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
@@ -174,7 +176,7 @@ public class Check {
     public static String replaceBlank(String str) {
         String dest = "";
         if (str!=null) {
-            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+        	Pattern p = CheckConstants.p;
             Matcher m = p.matcher(str);
             dest = m.replaceAll("").toUpperCase();
         }

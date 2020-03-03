@@ -566,7 +566,7 @@ public class DateUtils {
      * @return
      */
     @SuppressWarnings("deprecation")
-    public static boolean isToday(Date date) {
+   /* public static boolean isToday(Date date) {
         Date now = new Date();
         if (now.getDate() != date.getDate()) {
             return false;
@@ -578,7 +578,7 @@ public class DateUtils {
             return false;
         }
         return true;
-    }
+    }*/
 
     /**
      * 将时间转换成milliseconds
@@ -595,13 +595,14 @@ public class DateUtils {
 
 
     public static Timestamp getCurrentTime() {
-        return new Timestamp(new Date().getTime());
+        return new Timestamp(System.currentTimeMillis());
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends Date> T parse(String dateString, String dateFormat, Class<T> targetResultType) {
-        if (StringUtils.isEmpty(dateString))
+        if (StringUtils.isEmpty(dateString)){
             return null;
+        }
         DateFormat df = new SimpleDateFormat(dateFormat);
         try {
             long time = df.parse(dateString).getTime();
