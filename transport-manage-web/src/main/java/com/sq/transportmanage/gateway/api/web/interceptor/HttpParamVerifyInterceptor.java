@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 拦截器：参数合法性验证
  *
- * @author fht
+ * @author
  **/
 @Component
 public class HttpParamVerifyInterceptor implements HandlerInterceptor {

@@ -8,7 +8,9 @@ package com.sq.transportmanage.gateway.api.common;
  */
 public enum AuthEnum {
 
+    //管理员
     MANAGE(900),
+    //普通用户
     COMMON(100);
 
     AuthEnum(Integer authId) {

@@ -6,7 +6,6 @@ import org.apache.http.HttpStatus;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +36,7 @@ import java.util.stream.Collectors;
  **/
 @ControllerAdvice
 public class CustomExceptionAdvice {
-	private static final Random random = new SecureRandom();
+	private static final Random RANDOM = new SecureRandom();
 	private static final Logger logger = LoggerFactory.getLogger(CustomExceptionAdvice.class);
     @Value(value="${loginpage.url}")
     private String loginpageUrl;  //前端UI登录页面
@@ -101,8 +99,8 @@ public class CustomExceptionAdvice {
 	/**出现其它业务异常时**/
 	@ExceptionHandler( Exception.class)
 	public ModelAndView handleException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-		int ExceptionId = random.nextInt(2100000000);
-		String exceptionMessage = ex.getMessage() + " (ExceptionId: "+ExceptionId+")";
+		int exceptionId = RANDOM.nextInt(2100000000);
+		String exceptionMessage = ex.getMessage() + " (ExceptionId: "+exceptionId+")";
 		logger.error(exceptionMessage, ex );
 
        /*		int dingding_alerm_switch = Dicts.getInt("dingding_alerm_switch", 0);
@@ -130,7 +128,7 @@ public class CustomExceptionAdvice {
 		//2.根据不同的请求类型，分别返回不同的结果
 		if(isAjax){
 			AjaxResponse ajaxResponse = AjaxResponse.fail(RestErrorCode.HTTP_SYSTEM_ERROR);
-			ajaxResponse.setMsg("系统发生异常，异常ID："+ExceptionId+"，请联系管理员。");
+			ajaxResponse.setMsg("系统发生异常，异常ID："+exceptionId+"，请联系管理员。");
 			this.outJson(response, ajaxResponse);
 			return null;
 		}else{

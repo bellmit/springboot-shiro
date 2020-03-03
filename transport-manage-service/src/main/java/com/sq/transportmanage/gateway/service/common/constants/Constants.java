@@ -25,4 +25,11 @@ public final class Constants {
      */
     public static final Integer SC_JEECG_NO_AUTHZ = 510;
 
+
+    /**
+     * 管理员MD5机密
+     */
+    public static String MANAGE_MD5 = "YujxVDA8w4uA5c9eIGv/QA==";
+
+
 }

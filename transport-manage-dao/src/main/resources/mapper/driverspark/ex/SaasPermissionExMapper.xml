@@ -11,11 +11,11 @@
     <result column="menu_open_mode" property="menuOpenMode" jdbcType="TINYINT" />
     <result column="valid" property="valid" jdbcType="BIT" />
     <result column="sort_seq" property="sortSeq" jdbcType="INTEGER" />
-    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     permission_id, parent_permission_id, permission_code, permission_type, permission_name, 
-    menu_url, menu_open_mode, valid, sort_seq,uuid
+    menu_url, menu_open_mode, valid, sort_seq,merchantId
   </sql>
   
   <!-- 查询父权限下所有子权限的最大排序序号 -->
@@ -79,4 +79,16 @@
     and p.valid=1 and p.menu_url != ''  and r.valid=1 and  ur.user_id=#{userId}
   </select>
 
+  <!--查询模块权限 -->
+  <select id="queryModularPermissions" resultMap="BaseResultMap" >
+  select  permission_id,permission_name
+  from auth_saas_permission
+    where parent_permission_id = 0
+    <if test="permissionIds !=null and permissionIds.size()>0">
+    and permission_id in
+    <foreach collection="permissionIds" open="(" close=")" separator="," item="pid">
+      #{pid}
+    </foreach>
+    </if>
+  </select>
 </mapper>

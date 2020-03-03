@@ -7,9 +7,9 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionEx
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissionRalationExMapper;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
-import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

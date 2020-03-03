@@ -5,15 +5,12 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissi
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRalationExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
-import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
-import org.apache.commons.lang3.StringUtils;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 用于设置方法数据源
@@ -62,10 +59,10 @@ public class MyDataSourceService {
      * @return
      */
     @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
-    public SSOLoginUser getSSOLoginUser(String loginName,String uuid) {
-        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},uuid={}" + loginName,uuid);
+    public SSOLoginUser getSSOLoginUser(String loginName,String merchantId) {
+        logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},merchantId={}" + loginName,merchantId);
         try {
-            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,uuid);
+            CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,merchantId);
             SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
             loginUser.setId(adMUser.getUserId());                //用户ID
             loginUser.setLoginName(adMUser.getAccount());//登录名
@@ -76,22 +73,8 @@ public class MyDataSourceService {
             loginUser.setStatus(adMUser.getStatus());           //状态
             loginUser.setAccountType(adMUser.getAccountType());   //自有的帐号类型：[100 普通用户]、[900 管理员]
             loginUser.setLevel(adMUser.getLevel());
-            loginUser.setUuid(adMUser.getUuid()); //uuid,用户区别每个商户
+            loginUser.setMerchantId(adMUser.getMerchantId()); //merchantId,用户区别每个商户
             //---------------------------------------------------------------------------------------------------------数据权限BEGIN
-            /**此用户可以管理的城市ID**/
-            if (StringUtils.isNotEmpty(adMUser.getCities())) {
-                String[] idStrs = adMUser.getCities().trim().split(",");
-                Set<Integer> ids = new HashSet<Integer>(idStrs.length * 2 + 2);
-                for (String id : idStrs) {
-                    if (StringUtils.isNotEmpty(id)) {
-                        try {
-                            ids.add(Integer.valueOf(id.trim()));
-                        } catch (Exception e) {
-                        }
-                    }
-                }
-                loginUser.setCityIds(ids);
-            }
             //---------------------------------------------------------------------------------------------------------数据权限END
             logger.info("[WebSessionUtil获取用户的身份认证信息]=" + loginUser);
             return loginUser;

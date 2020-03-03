@@ -1,6 +1,8 @@
 package com.sq.transportmanage.gateway.service.common.constants;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**常量定义**/
@@ -40,7 +42,7 @@ public final class SaasConst {
 	}
 
 	/**系统预置角色**/
-	public static String           SYSTEM_ROLE             = "super_admin";
+	public static String           SYSTEM_ROLE             = "mp_driver_spark_super_admin";
 	/**系统预置权限**/
 	public static Set<String> SYSTEM_PERMISSIONS  = new HashSet<>( 64 );
 	static{
@@ -74,11 +76,18 @@ public final class SaasConst {
 		SYSTEM_PERMISSIONS.add("CammelCase_look");                          //查看
 
 		//权限只有超级管理员才有
-		//SYSTEM_PERMISSIONS.add("ADD_PERMISSION");                 //增加一个权限
-		//SYSTEM_PERMISSIONS.add("DISABLE_PERMISSION");            //禁用一个权限
-		//SYSTEM_PERMISSIONS.add("ENABLE_PERMISSION");             //启用一个权限
-		//SYSTEM_PERMISSIONS.add("CHANGE_PERMISSION");           //修改一个权限
+		SYSTEM_PERMISSIONS.add("ADD_SAAS_PERMISSION");                 //增加一个权限
+		SYSTEM_PERMISSIONS.add("DISABLE_SAAS_PERMISSION");            //禁用一个权限
+		SYSTEM_PERMISSIONS.add("ENABLE_SAAS_PERMISSION");             //启用一个权限
+		SYSTEM_PERMISSIONS.add("CHANGE_SAAS_PERMISSION");           //修改一个权限
 	}
 
+	public static Set<String> MENU_PERMISSION = new HashSet<>(64);
+	static {
+		MENU_PERMISSION.add("ADD_SAAS_PERMISSION");                 //增加一个权限
+		MENU_PERMISSION.add("DISABLE_SAAS_PERMISSION");            //禁用一个权限
+		MENU_PERMISSION.add("ENABLE_SAAS_PERMISSION");             //启用一个权限
+		MENU_PERMISSION.add("CHANGE_SAAS_PERMISSION");           //修改一个权限
+	}
 	
 }

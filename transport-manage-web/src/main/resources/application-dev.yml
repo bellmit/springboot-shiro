@@ -157,14 +157,14 @@ resetpassword.msgnotify.switch: false
 user.password.indexOfPhone: 9,5,3,7,1,4,8,2
 login.checkMsgCode.switch: false
 
-loginpage.url: http://dev-inside-car-manage.01zhuanche.com/
+loginpage.url: https://dev-saas.guobindui.cn/
 
-homepage.url: https://dev-xxx.01zhuanche.com/#/Manage
+homepage.url: https://dev-saas.guobindui.cn/#/Manage
 
-login.url: https://dev-inside-xxx.01zhuanche.com/login.json
+login.url: https://dev-saas-spark.guobindui.cn/login
 
 #短信发送相关
 short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/send
-short_message_appkey: 37746688660445878AB02BF98370D1F9
-short_message_appsecret: 6B5D87895C7B49BCA347D06C62ED98DE
+short_message_appkey: 04F934A9C93E4376ACC51CBE4B5FDCCC
+short_message_appsecret: B89E2C9C203D4CAE88383431A2C4CC6E
 template_short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/template/send
