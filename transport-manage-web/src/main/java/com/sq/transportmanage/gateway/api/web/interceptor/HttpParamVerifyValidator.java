@@ -77,7 +77,7 @@ public class HttpParamVerifyValidator {
 	}
 
 	/**自定义正则表达式**/
-	public String RegExp( String value ,  String threadHold ) {
+	public String regExp( String value ,  String threadHold ) {
 		if(StringUtils.isEmpty(value) || StringUtils.isEmpty(threadHold)){
 			return null;
 		}

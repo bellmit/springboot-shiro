@@ -5,12 +5,12 @@ import java.util.Random;
 
 public final class NumberUtil {
 	private static final String SEED_CHARS = "0123456789";
-	private static final Random rnd = new  SecureRandom();
+	private static final Random RND = new  SecureRandom();
 	
 	public static String genRandomCode( int length ) {
 		StringBuffer sb = new StringBuffer( length  );
 		for(int i=0;i<length;i++) {
-			int index = rnd.nextInt( SEED_CHARS.length()  );
+			int index = RND.nextInt( SEED_CHARS.length()  );
 			char cha = SEED_CHARS.charAt(index);
 			sb.append(cha);
 		}
@@ -20,7 +20,7 @@ public final class NumberUtil {
 	public static String genRandomCode( int length, String seed ) {
 		StringBuilder builder = new StringBuilder();
 		for(int i=0;i<length;i++) {
-			int index = rnd.nextInt( seed.length()  );
+			int index = RND.nextInt( seed.length()  );
 			char cha = seed.charAt(index);
 			builder.append(cha);
 		}

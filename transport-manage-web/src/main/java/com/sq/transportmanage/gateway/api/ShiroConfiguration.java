@@ -2,12 +2,11 @@ package com.sq.transportmanage.gateway.api;
 
 
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceConfig;
-import com.sq.transportmanage.gateway.service.shiro.PlatformShiroFilterFactoryBean;
-import com.sq.transportmanage.gateway.service.shiro.cache.RedisCacheManager;
-import com.sq.transportmanage.gateway.service.shiro.realm.UsernamePasswordRealm;
-import com.sq.transportmanage.gateway.service.shiro.session.RedisSessionDAO;
-import com.sq.transportmanage.gateway.service.shiro.session.UuIdSessionIdGenerator;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import com.sq.transportmanage.gateway.service.common.shiro.PlatformShiroFilterFactoryBean;
+import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCacheManager;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswordRealm;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
+import com.sq.transportmanage.gateway.service.common.shiro.session.UuIdSessionIdGenerator;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;

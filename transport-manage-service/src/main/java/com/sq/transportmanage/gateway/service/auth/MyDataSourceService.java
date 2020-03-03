@@ -5,15 +5,12 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissi
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRalationExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
-import com.sq.transportmanage.gateway.service.shiro.realm.SSOLoginUser;
-import org.apache.commons.lang3.StringUtils;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 用于设置方法数据源
