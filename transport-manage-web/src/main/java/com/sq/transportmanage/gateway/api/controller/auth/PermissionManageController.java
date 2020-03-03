@@ -41,7 +41,7 @@ public class PermissionManageController {
 		pemission.setPermissionType(permissionType);
 		pemission.setMenuUrl(menuUrl==null? "": menuUrl.trim());
 		pemission.setMenuOpenMode(menuOpenMode);
-		pemission.setUuid(ssoLoginUser.getUuid());
+		pemission.setMerchantIds(ssoLoginUser.getMerchantIds());
 		return permissionManagementService.addSaasPermission(pemission);
 	}
 	

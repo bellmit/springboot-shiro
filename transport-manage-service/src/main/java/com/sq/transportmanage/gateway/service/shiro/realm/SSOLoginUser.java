@@ -29,24 +29,19 @@ public final class SSOLoginUser implements Serializable{
 	/**帐号类型：[100 普通用户]、[900 管理员]**/
 	private Integer accountType;
 	//---------------------------------------------------------------------------------------------------------数据权限BEGIN
-	/**此用户可以管理的城市ID**/
-	private Set<Integer> cityIds = new HashSet<Integer>();
+
 	/**此用户可以管理的供应商ID**/
-	private Set<Integer> supplierIds = new HashSet<Integer>();
-	/**此用户可以管理的车队ID**/
-	private Set<Integer> teamIds = new HashSet<Integer>();
-	/**此用户可以管理的班组ID***/
-	private Set<Integer> groupIds = new HashSet<Integer>();
+	private String supplierIds;
+
 	/**此用户数据权限等级(参考PermissionLevelEnum枚举类型 1全国 2城市 4供应商 8小队 16班组) **/
 	private Integer level;
 
-	private String uuid;
+	private String merchantIds;
 
 	private List<String> menuUrlList;
 
 	private Map<Integer,String> menuPermissionMap;
 
-	private String merchentIds;
 
 	private Boolean isSuper;
 
@@ -100,24 +95,7 @@ public final class SSOLoginUser implements Serializable{
 	public void setAccountType(Integer accountType) {
 		this.accountType = accountType;
 	}
-	public Set<Integer> getCityIds() {
-		return cityIds;
-	}
-	public void setCityIds(Set<Integer> cityIds) {
-		this.cityIds = cityIds;
-	}
-	public Set<Integer> getSupplierIds() {
-		return supplierIds;
-	}
-	public void setSupplierIds(Set<Integer> supplierIds) {
-		this.supplierIds = supplierIds;
-	}
-	public Set<Integer> getTeamIds() {
-		return teamIds;
-	}
-	public void setTeamIds(Set<Integer> teamIds) {
-		this.teamIds = teamIds;
-	}
+
 
 	public Integer getLevel() {
 		return level;
@@ -127,21 +105,6 @@ public final class SSOLoginUser implements Serializable{
 		this.level = level;
 	}
 
-	public Set<Integer> getGroupIds() {
-		return groupIds;
-	}
-
-	public void setGroupIds(Set<Integer> groupIds) {
-		this.groupIds = groupIds;
-	}
-
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
 
 	public List<String> getMenuUrlList() {
 		return menuUrlList;
@@ -151,13 +114,6 @@ public final class SSOLoginUser implements Serializable{
 		this.menuUrlList = menuUrlList;
 	}
 
-	public String getMerchentIds() {
-		return merchentIds;
-	}
-
-	public void setMerchentIds(String merchentIds) {
-		this.merchentIds = merchentIds;
-	}
 
 
 	public Boolean getSuper() {
@@ -177,6 +133,23 @@ public final class SSOLoginUser implements Serializable{
 		this.menuPermissionMap = menuPermissionMap;
 	}
 
+
+	public String getSupplierIds() {
+		return supplierIds;
+	}
+
+	public void setSupplierIds(String supplierIds) {
+		this.supplierIds = supplierIds;
+	}
+
+	public String getMerchantIds() {
+		return merchantIds;
+	}
+
+	public void setMerchantIds(String merchantIds) {
+		this.merchantIds = merchantIds;
+	}
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -188,15 +161,13 @@ public final class SSOLoginUser implements Serializable{
 				", type=" + type +
 				", status=" + status +
 				", accountType=" + accountType +
-				", cityIds=" + cityIds +
-				", supplierIds=" + supplierIds +
-				", teamIds=" + teamIds +
-				", groupIds=" + groupIds +
+				", supplierIds='" + supplierIds + '\'' +
 				", level=" + level +
-				", uuid='" + uuid + '\'' +
+				", merchantIds='" + merchantIds + '\'' +
 				", menuUrlList=" + JSONObject.toJSONString(menuUrlList) +
-				", merchentIds='" + merchentIds + '\'' +
+				", menuPermissionMap=" + JSONObject.toJSONString(menuPermissionMap) +
 				", isSuper=" + isSuper +
 				'}';
 	}
 }
+

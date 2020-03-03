@@ -53,11 +53,11 @@ public class UserManagementController {
 		user.setTeamId( null );
 		user.setGroupIds(null);
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		if(StringUtils.isNotEmpty(loginUser.getUuid())){
-			user.setUuid(loginUser.getUuid());
+		if(StringUtils.isNotEmpty(loginUser.getMerchantIds())){
+			user.setMerchantIds(loginUser.getMerchantIds());
 		}else {
 			//为空表示为我方人员
-			user.setUuid(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
+			user.setMerchantIds(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
 		}
 		// 暂时不用
 		AjaxResponse ajaxResponse = userManagementService.addUser(user);
@@ -95,14 +95,14 @@ public class UserManagementController {
 			@Verify(param="userId",rule="required|min(1)") Integer userId, 
 			@Verify(param="userName",rule="required") String userName, 
 			@Verify(param="phone",rule="required|mobile") String phone,
-			@Verify(param="merchantIds",rule="required") String merchantIds,
+			@Verify(param="suppliers",rule="required") String suppliers,
 			@Verify(param="level",rule="required") Integer level
   		) {
 		CarAdmUser newUser = new CarAdmUser();
 		newUser.setUserId(userId);
 		newUser.setUserName(userName.trim());
 		newUser.setPhone(phone);
-		newUser.setMerchantIds(merchantIds);
+		newUser.setSuppliers(suppliers);
 		newUser.setLevel(level);
 		return userManagementService.changeUser(newUser);
 	}

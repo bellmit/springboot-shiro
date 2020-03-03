@@ -25,8 +25,8 @@ public class SaasRoleService {
     private SaasRoleExMapper saasRoleExMapper;
 
     /**查询角色列表**/
-    public List<SaasRole> queryRoles(String uuid, List<Integer> roleIds,String roleCode, String roleName, Byte valid){
-        return saasRoleExMapper.queryRoles(uuid,roleIds,roleCode,roleName,valid);
+    public List<SaasRole> queryRoles(String merchantIds, List<Integer> roleIds,String roleCode, String roleName, Byte valid){
+        return saasRoleExMapper.queryRoles(merchantIds,roleIds,roleCode,roleName,valid);
     }
 
     /**根据用户ID，查询其拥有的所有有效的角色ID**/
@@ -43,7 +43,7 @@ public class SaasRoleService {
     }
 
 
-    public int getRoleId(String uuid){
-        return saasRoleExMapper.getRoleId(uuid);
+    public int getRoleId(String merchantIds){
+        return saasRoleExMapper.getRoleId(merchantIds);
     }
 }

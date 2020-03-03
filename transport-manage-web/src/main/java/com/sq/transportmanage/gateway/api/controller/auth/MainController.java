@@ -198,7 +198,7 @@ public class MainController {
 		}
 		//B:查询用户信息
 		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getUuid());
+		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getMerchantIds());
 		if(user==null){
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
@@ -411,8 +411,9 @@ public class MainController {
 			}
 		}
 		//四、用户的数据权限
-		ajaxLoginUserDTO.setCityIds( ssoLoginUser.getCityIds()  );
-		ajaxLoginUserDTO.setSupplierIds( ssoLoginUser.getSupplierIds() );
+		//ajaxLoginUserDTO.setCityIds( ssoLoginUser.getCityIds()  );
+		//ajaxLoginUserDTO.setSupplierIds( ssoLoginUser.getSupplierIds() );
+		ajaxLoginUserDTO.setSupplierIds(ssoLoginUser.getSupplierIds());
 
 		//五、配置信息
 		Map<String, Object > configs = new HashMap<String,Object>();
@@ -475,7 +476,7 @@ public class MainController {
 
 	public boolean authCapacity(){
 		SSOLoginUser user = WebSessionUtil.getCurrentLoginUser();
-		Set<Integer> userCityIds = user.getCityIds();
+		Set<Integer> userCityIds = null;
 		if(userCityIds.isEmpty()){
 			return true;
 		}
