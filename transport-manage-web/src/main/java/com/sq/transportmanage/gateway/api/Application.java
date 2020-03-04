@@ -1,10 +1,12 @@
 package com.sq.transportmanage.gateway.api;
 
 import com.sq.transportmanage.gateway.api.web.filter.AccessFilter;
+import com.sq.transportmanage.gateway.api.web.filter.TraceIdFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Bean;
  * @create: 2020-02-15 23:06
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}, scanBasePackages = "com.sq.transportmanage.gateway")
+@ServletComponentScan(basePackageClasses = {TraceIdFilter.class})
 @EnableZuulProxy
 @MapperScan("com.sq.transportmanage.gateway.dao.mapper")
 public class Application {

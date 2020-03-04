@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <conversionRule conversionWord="ip" converterClass="com.sq.transportmanage.gateway.api.web.config.IPLogConfig" />
+    <conversionRule conversionWord="ip" converterClass="com.sq.transportmanage.gateway.service.common.config.IPLogConfig" />
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
     <property name="appName" value="transport-manage-api"/>
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}%L - %msg%n" />
@@ -52,87 +52,87 @@
         </encoder>
     </appender>
 
-    <appender name="LOGSTASH_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/warn.json</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>WARN</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_HOME}/warn.json.%d{yyyy-MM-dd}.%i</FileNamePattern>
-            <!--日志文件最大的大小-->
-            <maxFileSize>1024MB</maxFileSize>
-            <!--日志文件保留天数-->
-            <maxHistory>7</maxHistory>
-            <totalSizeCap>20GB</totalSizeCap>
-        </rollingPolicy>
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+    <!--<appender name="LOGSTASH_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${LOG_HOME}/warn.json</file>-->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>WARN</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash;日志文件输出的文件名&ndash;&gt;-->
+            <!--<FileNamePattern>${LOG_HOME}/warn.json.%d{yyyy-MM-dd}.%i</FileNamePattern>-->
+            <!--&lt;!&ndash;日志文件最大的大小&ndash;&gt;-->
+            <!--<maxFileSize>1024MB</maxFileSize>-->
+            <!--&lt;!&ndash;日志文件保留天数&ndash;&gt;-->
+            <!--<maxHistory>7</maxHistory>-->
+            <!--<totalSizeCap>20GB</totalSizeCap>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
+            <!--&lt;!&ndash;<immediateFlush>false</immediateFlush>&ndash;&gt;-->
+            <!--<jsonFactoryDecorator class="com.sq.transportmanage.gateway.api.web.config.MyJsonFactoryDecorator" />-->
+            <!--<providers>-->
+                <!--<timestamp>-->
+                    <!--<pattern>yyyy-MM-dd'T'HH:mm:ss.SSSZZ</pattern>-->
+                <!--</timestamp>-->
+                <!--<pattern>-->
+                    <!--<pattern>-->
+                        <!--{-->
+                        <!--"traceId": "%X{traceId}",-->
+                        <!--"level": "%level",-->
+                        <!--"service": "${springAppName:-}",-->
+                        <!--"host": "%ip",-->
+                        <!--"thread": "%thread",-->
+                        <!--"class": "%logger{40}-%L",-->
+                        <!--"message": "%message"-->
+                        <!--}-->
+                    <!--</pattern>-->
+                <!--</pattern>-->
+            <!--</providers>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!--<appender name="LOGSTASH_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${LOG_HOME}/info.json</file>-->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>INFO</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash;日志文件输出的文件名&ndash;&gt;-->
+            <!--<FileNamePattern>${LOG_HOME}/info.json.%d{yyyy-MM-dd}.%i</FileNamePattern>-->
+            <!--&lt;!&ndash;日志文件最大的大小&ndash;&gt;-->
+            <!--<maxFileSize>2024MB</maxFileSize>-->
+            <!--&lt;!&ndash;日志文件保留天数&ndash;&gt;-->
+            <!--<maxHistory>7</maxHistory>-->
+            <!--<totalSizeCap>20GB</totalSizeCap>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
             <!--<immediateFlush>false</immediateFlush>-->
-            <jsonFactoryDecorator class="MyJsonFactoryDecorator" />
-            <providers>
-                <timestamp>
-                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSSZZ</pattern>
-                </timestamp>
-                <pattern>
-                    <pattern>
-                        {
-                        "traceId": "%X{traceId}",
-                        "level": "%level",
-                        "service": "${springAppName:-}",
-                        "host": "%ip",
-                        "thread": "%thread",
-                        "class": "%logger{40}-%L",
-                        "message": "%message"
-                        }
-                    </pattern>
-                </pattern>
-            </providers>
-        </encoder>
-    </appender>
+            <!--<jsonFactoryDecorator class="com.sq.transportmanage.gateway.service.common.config.MyJsonFactoryDecorator" />-->
+            <!--<providers>-->
+                <!--<timestamp>-->
+                    <!--<pattern>yyyy-MM-dd'T'HH:mm:ss.SSSZZ</pattern>-->
+                <!--</timestamp>-->
+                <!--<pattern>-->
+                    <!--<pattern>-->
+                        <!--{-->
+                        <!--"traceId": "%X{traceId}",-->
+                        <!--"level": "%level",-->
+                        <!--"service": "${springAppName:-}",-->
+                        <!--"host": "%ip",-->
+                        <!--"thread": "%thread",-->
+                        <!--"class": "%logger{40}-%L",-->
+                        <!--"message": "%message"-->
+                        <!--}-->
+                    <!--</pattern>-->
+                <!--</pattern>-->
+            <!--</providers>-->
+        <!--</encoder>-->
+    <!--</appender>-->
 
-    <appender name="LOGSTASH_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/info.json</file>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_HOME}/info.json.%d{yyyy-MM-dd}.%i</FileNamePattern>
-            <!--日志文件最大的大小-->
-            <maxFileSize>2024MB</maxFileSize>
-            <!--日志文件保留天数-->
-            <maxHistory>7</maxHistory>
-            <totalSizeCap>20GB</totalSizeCap>
-        </rollingPolicy>
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-            <immediateFlush>false</immediateFlush>
-            <jsonFactoryDecorator class="com.sq.transportmanage.gateway.api.web.config.MyJsonFactoryDecorator" />
-            <providers>
-                <timestamp>
-                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSSZZ</pattern>
-                </timestamp>
-                <pattern>
-                    <pattern>
-                        {
-                        "traceId": "%X{traceId}",
-                        "level": "%level",
-                        "service": "${springAppName:-}",
-                        "host": "%ip",
-                        "thread": "%thread",
-                        "class": "%logger{40}-%L",
-                        "message": "%message"
-                        }
-                    </pattern>
-                </pattern>
-            </providers>
-        </encoder>
-    </appender>
-
-    <appender name="LOGSTASH_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--<appender name="LOGSTASH_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/sq_error.json</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
@@ -140,11 +140,11 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
+            &lt;!&ndash;日志文件输出的文件名&ndash;&gt;
             <FileNamePattern>${LOG_HOME}/sq_error.json.%d{yyyy-MM-dd}.%i</FileNamePattern>
-            <!--日志文件最大的大小-->
+            &lt;!&ndash;日志文件最大的大小&ndash;&gt;
             <maxFileSize>1024MB</maxFileSize>
-            <!--日志文件保留天数-->
+            &lt;!&ndash;日志文件保留天数&ndash;&gt;
             <maxHistory>15</maxHistory>
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
@@ -171,7 +171,7 @@
                 </pattern>
             </providers>
         </encoder>
-    </appender>
+    </appender>-->
 
     <appender name="okhttp_trace" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/okhttp-trace.log</file>
@@ -250,9 +250,9 @@
     </logger>
 
     <logger name="com.sq" level="INFO" addtivity="false">
-        <appender-ref ref="LOGSTASH_INFO"/>
-        <appender-ref ref="LOGSTASH_WARN"/>
-        <appender-ref ref="LOGSTASH_ERROR"/>
+        <!--<appender-ref ref="LOGSTASH_WARN"/>-->
+        <!--<appender-ref ref="LOGSTASH_INFO"/>-->
+        <!--<appender-ref ref="LOGSTASH_ERROR"/>-->
         <appender-ref ref="ERROR"/>
     </logger>
 
