@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 /**
  * @Author fanht
- * @Description
+ * @Description  让参数拦截器生效
  * @Date 2020/2/28 下午6:44
  * @Version 1.0
  */
