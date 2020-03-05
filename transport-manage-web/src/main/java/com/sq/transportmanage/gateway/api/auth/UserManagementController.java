@@ -90,18 +90,28 @@ public class UserManagementController {
 	@RequiresPermissions(value = { "CHANGE_USER" } )
 	@RequestFunction(menu = USER_UPDATE)
 	public 	AjaxResponse changeUser(
-			@Verify(param="userId",rule="required|min(1)") Integer userId, 
-			@Verify(param="userName",rule="required") String userName, 
-			@Verify(param="phone",rule="required|mobile") String phone,
-			@Verify(param="suppliers",rule="required") String suppliers,
-			@Verify(param="level",rule="required") Integer level
+			@Verify(param="userId",rule="min(1)") Integer userId,
+			 String userName,
+			@Verify(param="phone",rule="mobile") String phone,
+			 String suppliers,
+			 Integer level
   		) {
 		CarAdmUser newUser = new CarAdmUser();
-		newUser.setUserId(userId);
-		newUser.setUserName(userName.trim());
-		newUser.setPhone(phone);
-		newUser.setSuppliers(suppliers);
-		newUser.setLevel(level);
+		if(userId != null){
+			newUser.setUserId(userId);
+		}
+		if(StringUtils.isNotEmpty(userName.trim())){
+			newUser.setUserName(userName.trim());
+		}
+		if(StringUtils.isNotEmpty(phone)){
+			newUser.setPhone(phone);
+		}
+		if(StringUtils.isNotEmpty(suppliers)){
+			newUser.setSuppliers(suppliers);
+		}
+		if(level != null){
+			newUser.setLevel(level);
+		}
 		return userManagementService.changeUser(newUser);
 	}
 	
@@ -150,9 +160,11 @@ public class UserManagementController {
 			String userName, 
 			@Verify(param="phone",rule="mobile") String phone , 
 			Integer status ,
-			Integer roleId 
+			Integer roleId,
+			String createStartTime,
+			String createEndTime
 			) {
-		PageDTO pageDto = userManagementService.queryUserList(page, pageSize, roleId, account, userName, phone, status);
+		PageDTO pageDto = userManagementService.queryUserList(page, pageSize, roleId, account, userName, phone, status,createStartTime,createEndTime);
     	return AjaxResponse.success(pageDto);
 	}
 
@@ -163,5 +175,7 @@ public class UserManagementController {
 	public AjaxResponse resetPassword( @Verify(param="userId",rule="required|min(1)") Integer userId ) {
 		return userManagementService.resetPassword(userId);
 	}
+
+
 
 }

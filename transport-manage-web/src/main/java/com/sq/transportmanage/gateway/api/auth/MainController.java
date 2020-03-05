@@ -3,6 +3,7 @@ package com.sq.transportmanage.gateway.api.auth;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.api.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
@@ -34,6 +35,7 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.aspectj.weaver.loadtime.Aj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -522,6 +524,29 @@ public class MainController {
 		}
 		return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 	}
+
+
+	/**
+	 * 查询当前用户所拥有的数据权限
+	 * @return
+	 */
+	@RequestMapping("/queryDataPermissions")
+	@ResponseBody
+	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+	public AjaxResponse queryDataPermissions(Integer userId){
+
+		CarAdmUser carAdmUser = carAdmUserMapper.selectByPrimaryKey(userId);
+		if(carAdmUser != null){
+			Map<String,Object> map = Maps.newHashMap();
+			map.put("level",carAdmUser.getLevel());
+			map.put("suppliers",carAdmUser.getSuppliers());
+			return AjaxResponse.success(map);
+		}else {
+			return AjaxResponse.success(null);
+		}
+
+	}
+
 
 
 }
