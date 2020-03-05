@@ -14,7 +14,7 @@ import java.util.Map;
  * @Version 1.0
  */
 @Component
-public class LoginoutListener implements HttpSessionListener{
+public class LoginoutListener implements HttpSessionListener  {
 
     public static Map<Integer,String> mapUser = Maps.newHashMap();
 

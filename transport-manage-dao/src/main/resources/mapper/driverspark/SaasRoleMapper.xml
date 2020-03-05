@@ -7,9 +7,10 @@
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
     <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
+    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid,merchantId
+    role_id, role_code, role_name, valid,merchantId,role_desc
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -41,6 +42,9 @@
       <if test="merchantId != null" >
         merchantId,
       </if>
+      <if test="roleDesc != null" >
+        role_desc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="roleId != null" >
@@ -58,6 +62,9 @@
       <if test="merchantId != null" >
         #{merchantId,jdbcType=VARCHAR},
       </if>
+      <if test="roleDesc != null" >
+        #{roleDesc,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole" >
@@ -71,6 +78,9 @@
       </if>
       <if test="valid != null" >
         valid = #{valid,jdbcType=BIT},
+      </if>
+      <if test="roleDesc != null" >
+        role_desc = #{roleDesc,jdbcType=VARCHAR},
       </if>
     </set>
     where role_id = #{roleId,jdbcType=INTEGER}
