@@ -19,7 +19,9 @@ public class CarAdmUserDTO{
 
     //private String remark;
 
-   // private String createUser;
+    private String createUser;
+
+    private String email;
 
     private Date createDate;
 
@@ -150,5 +152,21 @@ public class CarAdmUserDTO{
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

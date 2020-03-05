@@ -211,7 +211,8 @@ public class UserManagementService{
 	
 	/**八、查询用户列表**/
 	@SuppressWarnings("rawtypes")
-	public PageDTO queryUserList(Integer page, Integer pageSize, Integer roleId , String account , String userName, String phone , Integer status ) {
+	public PageDTO queryUserList(Integer page, Integer pageSize, Integer roleId , String account , String userName, String phone , Integer status,
+								 String createStartTime,String createEndTime) {
     	//一、参数修正
 		if(page==null || page.intValue()<=0) {
 			page = new Integer(1);
@@ -250,7 +251,8 @@ public class UserManagementService{
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-    		users = carAdmUserExMapper.queryUsers(loginUser.getMerchantId(), userIds ,  account, userName, phone, status );
+    		users = carAdmUserExMapper.queryUsers(loginUser.getMerchantId(), userIds ,  account, userName, phone, status,createStartTime,
+					createEndTime);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -337,7 +339,7 @@ public class UserManagementService{
 
 	/**八、查询用户列表**/
 	public boolean userPhoneExist(String phone) {
-		List<CarAdmUser> users = carAdmUserExMapper.queryUsers( null,null ,  null, null, phone, null );
+		List<CarAdmUser> users = carAdmUserExMapper.queryUsers( null,null ,  null, null, phone, null,null,null );
 		return (null!=users && users.size()>0);
 	}
 
