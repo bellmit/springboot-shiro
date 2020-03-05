@@ -13,6 +13,8 @@ public class SaasRole {
 
     private String merchantId;
 
+    private String roleDesc;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -61,4 +63,14 @@ public class SaasRole {
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
     }
+
+    public String getRoleDesc() {
+        return roleDesc;
+    }
+
+    public void setRoleDesc(String roleDesc) {
+        this.roleDesc = roleDesc;
+    }
+
+
 }
