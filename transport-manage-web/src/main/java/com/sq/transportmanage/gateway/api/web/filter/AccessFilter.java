@@ -61,7 +61,10 @@ public class AccessFilter extends ZuulFilter {
             }
         }
         if(bl){
-            ctx.addZuulRequestHeader("user_token",JSONObject.toJSONString(loginUser));
+            JSONObject data = new JSONObject();
+            data.put("sysId","t_saas");
+            data.put("account",loginUser.getLoginName());
+            ctx.addZuulRequestHeader("login_user",data.toJSONString());
         }else{
             ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
             ctx.setResponseStatusCode(401);// 返回错误码
