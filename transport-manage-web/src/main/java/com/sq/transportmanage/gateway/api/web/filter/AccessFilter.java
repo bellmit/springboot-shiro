@@ -46,28 +46,31 @@ public class AccessFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
-//        SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-//        logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
-//        /**用户是否有权限**/
-//        boolean bl = false;
-//        //如果是管理员 直接通过
-//        if(AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
-//            bl = true;
-//        }else {
-//            String uri = request.getRequestURI().toString();
-//            List<String> menuUrl = loginUser.getMenuUrlList();
-//            if(menuUrl.contains(uri)){
-//                bl = true;
-//            }
-//        }
-//        if(bl){
-//            ctx.addZuulRequestHeader("user_token",JSONObject.toJSONString(loginUser));
-//        }else{
-//            ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
-//            ctx.setResponseStatusCode(401);// 返回错误码
-//            ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!验证方式为2\"}");// 返回错误内容
-//            ctx.set("isSuccess", false);
-//        }
+        SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+        logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
+        /**用户是否有权限**/
+        boolean bl = false;
+        //如果是管理员 直接通过
+        if(AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
+            bl = true;
+        }else {
+            String uri = request.getRequestURI().toString();
+            List<String> menuUrl = loginUser.getMenuUrlList();
+            if(menuUrl.contains(uri)){
+                bl = true;
+            }
+        }
+        if(bl){
+            JSONObject data = new JSONObject();
+            data.put("sysId","t_saas");
+            data.put("account",loginUser.getLoginName());
+            ctx.addZuulRequestHeader("login_user",data.toJSONString());
+        }else{
+            ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
+            ctx.setResponseStatusCode(401);// 返回错误码
+            ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!验证方式为2\"}");// 返回错误内容
+            ctx.set("isSuccess", false);
+        }
         return ctx;
     }
 
