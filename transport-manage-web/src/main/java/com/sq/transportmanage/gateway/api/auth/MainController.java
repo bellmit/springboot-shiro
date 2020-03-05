@@ -174,7 +174,7 @@ public class MainController {
 	public AjaxResponse getMsgCode( @Verify(param="username",rule="required") String username,
 									@Verify(param="password",rule="required") String password ){
 		//A: 频率检查 ,
-		String redis_getmsgcode_key = "mp_manager_getmsgcode_key_"+username;
+		String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+username;
 		long score = System.currentTimeMillis();
 		//zset内部是按分数来排序的，这里用当前时间做分数
 		redisTemplate.opsForZSet().add(redis_getmsgcode_key, String.valueOf(score), score);
@@ -235,8 +235,8 @@ public class MainController {
 								@Verify(param="password",rule="required") String password,
 								@Verify(param="msgcode",rule="required") String msgcode ) throws IOException{
 
-		String redis_login_key = "mp_manager_login_key_"+username;
-		String redis_getmsgcode_key = "mp_manager_getmsgcode_key_"+username;
+		String redis_login_key = "star_fire_login_key_"+username;
+		String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+username;
 
 		Subject currentLoginUser = SecurityUtils.getSubject();
 		//A:是否已经登录

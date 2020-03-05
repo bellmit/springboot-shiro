@@ -31,8 +31,8 @@ import java.util.concurrent.TimeUnit;
  **/
 public class RedisSessionDAO extends CachingSessionDAO{
 	private static final Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
-	private static final String KEY_PREFIX_OF_SESSION      = "sq_conference_sessionId_";        //KEY：会话ID，VALUE：shiro Session对象
-	private static final String KEY_PREFIX_OF_SESSIONID   = "sq_conference_sessionIds_Of_"; //KEY：登录账户的KEY，VALUE：此账户的所有会话ID（以Set形式存储）
+	private static final String KEY_PREFIX_OF_SESSION      = "sq_star_fire_sessionId_";        //KEY：会话ID，VALUE：shiro Session对象
+	private static final String KEY_PREFIX_OF_SESSIONID   = "sq_star_fire_sessionIds_Of_"; //KEY：登录账户的KEY，VALUE：此账户的所有会话ID（以Set形式存储）
 
 
 	@Autowired
