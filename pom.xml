@@ -20,7 +20,6 @@
         <module>transport-manage-dao</module>
         <module>transport-manage-service</module>
         <module>transport-manage-web</module>
-        <module>transport-manage-auth</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
