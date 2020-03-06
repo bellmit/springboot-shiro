@@ -140,6 +140,9 @@ zuul:
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
+    uploadPhoto:
+      path: /common/uploadPhoto/**
+      url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
     thirdapi:
       path: /common/upload/**
       url: http://dev-inside-third-api.01zhuanche.com/file/upload?filePath=driverspark/
