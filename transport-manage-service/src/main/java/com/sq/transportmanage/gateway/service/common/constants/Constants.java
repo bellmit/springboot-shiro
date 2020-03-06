@@ -31,5 +31,8 @@ public final class Constants {
      */
     public static String MANAGE_MD5 = "YujxVDA8w4uA5c9eIGv/QA==";
 
+    /**通过手机找回密码key**/
+    public static final String RESET_PHONE_KEY = "star_fire_reset_password_by_phone_";
+
 
 }

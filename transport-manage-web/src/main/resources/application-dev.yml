@@ -168,3 +168,7 @@ short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/s
 short_message_appkey: 04F934A9C93E4376ACC51CBE4B5FDCCC
 short_message_appsecret: B89E2C9C203D4CAE88383431A2C4CC6E
 template_short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/template/send
+
+
+#h5找回密码域名
+reset.password.url: https://dev-saas.guobindui.cn/forgot

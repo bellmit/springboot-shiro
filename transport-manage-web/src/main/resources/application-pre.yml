@@ -89,3 +89,6 @@ spring:
     cluster:
       nodes: SJ-redis-cluster-c1-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c3-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c5-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c2-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c4-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c6-ncds-online-db.01zhuanche.com:8002
     password: ysBhqkYHDifB
+
+#h5找回密码域名
+reset.password.url: https://pre-saas.guobindui.cn/forgot

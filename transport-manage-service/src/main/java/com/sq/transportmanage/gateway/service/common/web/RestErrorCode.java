@@ -97,6 +97,33 @@ public final class RestErrorCode{
 	public static final int SYSTEM_PERMISSION_CANOT_CHANGE  = 10007;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+	//---------------------------邮件发送异常参数---------------------
+	@ResultMessage("邮箱不存在")
+	public static final int EMAIL_UNEXIST                    = 2000;
+
+	@ResultMessage("邮箱验证码已过期")
+	public static final int EMAIL_VERIFY_EXPIRED                  = 2001;
+
+	@ResultMessage("邮箱验证码不匹配")
+	public static final int EMAIL_VERIFY_ERROR                    = 2002;
+
+	@ResultMessage("该手机号不存在")
+	public static final int PHONE_NOT_EXIST                    = 2005;
+
+	@ResultMessage("手机验证码已发送")
+	public static final int PHONE_CODE_EXIST                    = 2006;
+
+	@ResultMessage("手机验证码已过期")
+	public static final int PHONE_CODE_EXPIRE                    = 2007;
+
+	@ResultMessage("手机验证码不正确")
+	public static final int PHONE_CODE_UNSPECIAL                    = 2008;
+
+
+	//-------------------------------------------
+
 	//----------------------------------------------角色管理
 	@ResultMessage("角色不存在")
 	public static final int ROLE_NOT_EXIST                                      = 10100;

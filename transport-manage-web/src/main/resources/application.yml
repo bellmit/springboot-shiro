@@ -42,3 +42,6 @@ server:
       suffix: .log
       enabled: true
 
+spring.mail.host: smtp.qiye.aliyun.com
+spring.mail.username: syyc@01zhuanche.com
+spring.mail.password: cyys123$
