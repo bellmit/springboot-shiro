@@ -1,6 +1,8 @@
 spring:
     profiles.active: dev
     application.name: union-manage-web
+
+
 ribbon:
   eureka:
     enabled: false
@@ -45,3 +47,4 @@ server:
 spring.mail.host: smtp.qiye.aliyun.com
 spring.mail.username: syyc@01zhuanche.com
 spring.mail.password: cyys123$
+#spring.mail.port: 25
