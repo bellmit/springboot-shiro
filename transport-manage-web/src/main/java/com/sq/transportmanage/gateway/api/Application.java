@@ -2,6 +2,7 @@ package com.sq.transportmanage.gateway.api;
 
 import com.sq.transportmanage.gateway.api.web.filter.AccessFilter;
 import com.sq.transportmanage.gateway.api.web.filter.TraceIdFilter;
+import com.sq.transportmanage.gateway.api.web.interceptor.LoginoutListener;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +21,8 @@ import org.springframework.web.filter.CorsFilter;
  * @create: 2020-02-15 23:06
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}, scanBasePackages = "com.sq.transportmanage.gateway")
-@ServletComponentScan(basePackageClasses = {TraceIdFilter.class})
+//@ServletComponentScan(basePackageClasses = {TraceIdFilter.class})
+@ServletComponentScan(basePackageClasses = {LoginoutListener.class})
 @EnableZuulProxy
 @MapperScan("com.sq.transportmanage.gateway.dao.mapper")
 public class Application {

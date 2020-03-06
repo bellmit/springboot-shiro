@@ -1,12 +1,14 @@
 package com.sq.transportmanage.gateway.api;
 
 
+import com.sq.transportmanage.gateway.api.web.interceptor.LoginoutListener;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceConfig;
 import com.sq.transportmanage.gateway.service.common.shiro.PlatformShiroFilterFactoryBean;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCacheManager;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswordRealm;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.UuIdSessionIdGenerator;
+import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -19,9 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
-import java.util.Base64;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author:qxx
@@ -92,6 +92,10 @@ public class ShiroConfiguration {
         //session存活时间60分钟
         sessionManager.setGlobalSessionTimeout(3600000);
         sessionManager.setDeleteInvalidSessions(true);
+        //自定义监听 fht 不能使用@WebListern的 HttpSessionListerner 因为shiro重写了session 2020-03-05
+        Collection<SessionListener> sessionListeners = new ArrayList<>();
+        sessionListeners.add(sessionListener());
+        sessionManager.setSessionListeners(sessionListeners);
         //sessionManager.setSessionValidationSchedulerEnabled(true);
         //sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
         sessionManager.setSessionDAO(sessionDAO);
@@ -127,7 +131,6 @@ public class ShiroConfiguration {
                                                      DefaultWebSessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm);
-
         securityManager.setCacheManager(shiroCacheManager);
         securityManager.setSessionManager(sessionManager);
         // 指定 SubjectFactory,如果要实现cas的remember me的功能，需要用到下面这个CasSubjectFactory，并设置到securityManager的subjectFactory中
@@ -191,7 +194,16 @@ public class ShiroConfiguration {
         return advisor;
     }
 
+    /**
+     * 自定义shiro监听
+     * @return
+     */
+    @Bean("sessionListener")
+    public LoginoutListener sessionListener(){
+        LoginoutListener loginoutListener = new LoginoutListener();
 
+        return loginoutListener;
+    }
 
 }
 

@@ -26,6 +26,7 @@ import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
+import okhttp3.internal.http2.ErrorCode;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -33,6 +34,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.aspectj.weaver.loadtime.Aj;
@@ -49,6 +51,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -233,7 +236,8 @@ public class MainController {
 	public AjaxResponse dologin(HttpServletRequest request , HttpServletResponse response,
 								@Verify(param="username",rule="required") String username,
 								@Verify(param="password",rule="required") String password,
-								@Verify(param="msgcode",rule="required") String msgcode ) throws IOException{
+								@Verify(param="msgcode",rule="required") String msgcode,
+								HttpSession session) throws IOException{
 
 		String redis_login_key = "star_fire_login_key_"+username;
 		String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+username;
@@ -367,63 +371,76 @@ public class MainController {
 	@ResponseBody
 	@SuppressWarnings("unchecked")
 	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-	public AjaxResponse currentLoginUserInfo( String menuDataFormat ){
-		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
-
-		AjaxLoginUserDTO ajaxLoginUserDTO = new AjaxLoginUserDTO();
-		//一、用户基本信息
-		ajaxLoginUserDTO.setId(ssoLoginUser.getId());
-		ajaxLoginUserDTO.setLoginName(ssoLoginUser.getLoginName());
-		ajaxLoginUserDTO.setMobile(ssoLoginUser.getMobile());
-		ajaxLoginUserDTO.setName(ssoLoginUser.getName());
-		ajaxLoginUserDTO.setEmail(ssoLoginUser.getEmail());
-		ajaxLoginUserDTO.setStatus(ssoLoginUser.getStatus());
-		//二、用户的菜单信息      (  具有Session缓存机制 ，以提升性能   )
-		if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(menuDataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(menuDataFormat) ) {
-			menuDataFormat = SaasConst.PermissionDataFormat.TREE;//默认为树形
-		}
-		List<SaasPermissionDTO> menuPerms = (List<SaasPermissionDTO>)WebSessionUtil.getAttribute("xxx_menu_"+menuDataFormat);
-		if( menuPerms ==null ) {
-			List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU });
-			menuPerms = this.getAllPermissions( ssoLoginUser.getId()  , permissionTypes, menuDataFormat);
-			if(menuPerms!=null && menuPerms.size()>0) {
-				WebSessionUtil.setAttribute("xxx_menu_"+menuDataFormat, menuPerms);
-			}
-		}
-		ajaxLoginUserDTO.setPermissionDTOS( menuPerms );
-
-		//三、用户的权限信息 ( 参照shiro原码中的逻辑 )
-		Subject subject = SecurityUtils.getSubject();
-		subject.isPermitted("XXXX-XXXXXXXXX-XXXXXXXX-123456");//这里随意调用一下，确保shiro授权缓存已经被加载！！！
-		PrincipalCollection principalCollection =subject.getPrincipals();
-		if(principalCollection!=null) {
-			Cache<Object, AuthorizationInfo> cache = usernamePasswordRealm.getAuthorizationCache();
-			if(cache!=null) {
-				AuthorizationInfo info = cache.get(  usernamePasswordRealm.getAuthorizationCacheKey(principalCollection)  );
-				if(info!=null) {
-					Collection<String> pemissionStrings = info.getStringPermissions();
-					Collection<String> roles = info.getRoles();
-					if(pemissionStrings!=null && pemissionStrings.size()>0 ) {
-						ajaxLoginUserDTO.setHoldPerms( new  HashSet<String>( pemissionStrings )  );
-					}
-					if (roles != null && roles.size() > 0) {
-						ajaxLoginUserDTO.setHoldRoles(new HashSet<String>(roles));
-					}
+	public AjaxResponse currentLoginUserInfo( String menuDataFormat,HttpServletResponse response ){
+		try {
+			SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+			if(ssoLoginUser == null){
+				try {
+					response.sendRedirect(homepageUrl);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				return null;
 			}
-		}
-		//四、用户的数据权限
-		//ajaxLoginUserDTO.setCityIds( ssoLoginUser.getCityIds()  );
-		//ajaxLoginUserDTO.setSupplierIds( ssoLoginUser.getSupplierIds() );
-		ajaxLoginUserDTO.setSupplierIds(ssoLoginUser.getSupplierIds());
+			AjaxLoginUserDTO ajaxLoginUserDTO = new AjaxLoginUserDTO();
+			//一、用户基本信息
+			ajaxLoginUserDTO.setId(ssoLoginUser.getId());
+			ajaxLoginUserDTO.setLoginName(ssoLoginUser.getLoginName());
+			ajaxLoginUserDTO.setMobile(ssoLoginUser.getMobile());
+			ajaxLoginUserDTO.setName(ssoLoginUser.getName());
+			ajaxLoginUserDTO.setEmail(ssoLoginUser.getEmail());
+			ajaxLoginUserDTO.setStatus(ssoLoginUser.getStatus());
+			//二、用户的菜单信息      (  具有Session缓存机制 ，以提升性能   )
+			if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(menuDataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(menuDataFormat) ) {
+                menuDataFormat = SaasConst.PermissionDataFormat.TREE;//默认为树形
+            }
+			List<SaasPermissionDTO> menuPerms = (List<SaasPermissionDTO>)WebSessionUtil.getAttribute("xxx_menu_"+menuDataFormat);
+			if( menuPerms ==null ) {
+                List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU });
+                menuPerms = this.getAllPermissions( ssoLoginUser.getId()  , permissionTypes, menuDataFormat);
+                if(menuPerms!=null && menuPerms.size()>0) {
+                    WebSessionUtil.setAttribute("xxx_menu_"+menuDataFormat, menuPerms);
+                }
+            }
+			ajaxLoginUserDTO.setPermissionDTOS( menuPerms );
 
-		//五、配置信息
-		Map<String, Object > configs = new HashMap<String,Object>();
-		configs.put("mobileRegex",  SaasConst.MOBILE_REGEX);       //手机号码正则式
-		configs.put("accountRegex", SaasConst.ACCOUNT_REGEX);  //账号的正则表达式
-		configs.put("emailRegex",    SaasConst.EMAIL_REGEX);         //电子邮箱的正则表达式
-		ajaxLoginUserDTO.setConfigs(configs);
-		return AjaxResponse.success( ajaxLoginUserDTO );
+			//三、用户的权限信息 ( 参照shiro原码中的逻辑 )
+			Subject subject = SecurityUtils.getSubject();
+			subject.isPermitted("XXXX-XXXXXXXXX-XXXXXXXX-123456");//这里随意调用一下，确保shiro授权缓存已经被加载！！！
+			PrincipalCollection principalCollection =subject.getPrincipals();
+			if(principalCollection!=null) {
+                Cache<Object, AuthorizationInfo> cache = usernamePasswordRealm.getAuthorizationCache();
+                if(cache!=null) {
+                    AuthorizationInfo info = cache.get(  usernamePasswordRealm.getAuthorizationCacheKey(principalCollection)  );
+                    if(info!=null) {
+                        Collection<String> pemissionStrings = info.getStringPermissions();
+                        Collection<String> roles = info.getRoles();
+                        if(pemissionStrings!=null && pemissionStrings.size()>0 ) {
+                            ajaxLoginUserDTO.setHoldPerms( new  HashSet<String>( pemissionStrings )  );
+                        }
+                        if (roles != null && roles.size() > 0) {
+                            ajaxLoginUserDTO.setHoldRoles(new HashSet<String>(roles));
+                        }
+                    }
+                }
+            }
+			//四、用户的数据权限
+			//ajaxLoginUserDTO.setCityIds( ssoLoginUser.getCityIds()  );
+			//ajaxLoginUserDTO.setSupplierIds( ssoLoginUser.getSupplierIds() );
+			ajaxLoginUserDTO.setSupplierIds(ssoLoginUser.getSupplierIds());
+
+			//五、配置信息
+			Map<String, Object > configs = new HashMap<String,Object>();
+			configs.put("mobileRegex",  SaasConst.MOBILE_REGEX);       //手机号码正则式
+			configs.put("accountRegex", SaasConst.ACCOUNT_REGEX);  //账号的正则表达式
+			configs.put("emailRegex",    SaasConst.EMAIL_REGEX);         //电子邮箱的正则表达式
+			ajaxLoginUserDTO.setConfigs(configs);
+			return AjaxResponse.success( ajaxLoginUserDTO );
+		} catch (CacheException e) {
+
+			logger.error("登录异常" + e);
+			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
+		}
 	}
 
 	/*五、查询一个用户的菜单（返回的数据格式：列表、树形）*/
