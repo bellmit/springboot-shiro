@@ -40,17 +40,12 @@ public class LoginoutController {
     public AjaxResponse userLoginOut(String userIds, HttpSession httpSession,
                                      HttpServletRequest request){
 
-        logger.info("httpSessionId" + httpSession.getId() + ",是否是session会话：" +
-        request.getSession(false));
-        HttpSession session = request.getSession();
-        logger.info("获取监听存取的信息" + JSONObject.toJSONString(LoginoutListener.sessionCount));
+        logger.info("====通过监听让指定用户session失效====");
         try {
             String userId[] = StringUtils.tokenizeToStringArray(userIds,",");
-            List<Integer> userList = new ArrayList<Integer>();
             for(int i = 0;i<userId.length;i++){
                 redisSessionDAO.clearRelativeSession(null,null,Integer.valueOf(userId[i]));
              }
-
             return AjaxResponse.success(null);
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -59,8 +54,4 @@ public class LoginoutController {
         }
     }
 
-    /*@Override
-    public void clearRelativeSession(Integer permissionId, Integer roleId, Integer userId) {
-        super.clearRelativeSession(null, null, userId);
-    }*/
 }

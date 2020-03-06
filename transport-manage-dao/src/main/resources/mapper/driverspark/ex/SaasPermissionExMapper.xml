@@ -91,4 +91,18 @@
     </foreach>
     </if>
   </select>
+
+
+  <!--查询该用户在该模块下所拥有的菜单 -->
+  <select id="queryModularPermissionsOfParrent" resultMap="BaseResultMap" >
+    select  permission_id,permission_name
+    from auth_saas_permission
+    where 1=1
+    <if test="parentId!=null">
+      and parent_permission_id = #{parentId}
+    </if>
+    <if test="parentId!=null">
+      and user_id = #{userId}
+    </if>
+  </select>
 </mapper>
