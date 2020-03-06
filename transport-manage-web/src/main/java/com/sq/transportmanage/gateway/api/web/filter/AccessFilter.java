@@ -80,7 +80,7 @@ public class AccessFilter extends ZuulFilter {
             data.put("account","admin");//用户名
             data.put("name","默认超级管理员");//用户名中文
             logger.info("login_user :{}",data);
-            ctx.addZuulRequestHeader("login_user",data.toJSONString());
+            ctx.addZuulRequestHeader("login_user111",data.toJSONString());
         return ctx;
     }
 
