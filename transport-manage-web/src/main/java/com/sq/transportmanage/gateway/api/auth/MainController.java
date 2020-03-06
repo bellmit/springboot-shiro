@@ -194,10 +194,10 @@ public class MainController {
 
 		int countLimit = 5;
 		logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内第"+count+"次进行获取验证码操作");
-		if(count  > countLimit) {
+		/*if(count  > countLimit) {
 			logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内进行获取验证码"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED,statistics);
-		}
+		}*/
 		String flag = redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username) ==null? null: redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username).toString();
 
 		//String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
