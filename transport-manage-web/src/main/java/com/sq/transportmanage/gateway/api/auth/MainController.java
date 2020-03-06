@@ -36,10 +36,10 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.aspectj.weaver.loadtime.Aj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -546,6 +545,32 @@ public class MainController {
 		}
 		return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 	}
+
+
+
+	/**
+	 * 根据模块查询下面所有的菜单
+	 * @return
+	 */
+	@RequestMapping("/queryPermissionsByModularId")
+	@ResponseBody
+	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+	public AjaxResponse queryPermissionsByModularId(@Verify(param = "modularId",rule = "required") Integer modularId){
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+		if(ssoLoginUser != null){
+			Map<Integer,List<SaasPermissionDTO>> map = ssoLoginUser.getMapPermission();
+			JSONArray jsonArray = new JSONArray();
+			for(Integer key : map.keySet()){
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("permissionId",modularId);
+				jsonObject.put("permissionDTOS",map.get(modularId));
+				jsonArray.add(jsonObject);
+			}
+			return AjaxResponse.success(jsonArray);
+		}
+		return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
+	}
+
 
 
 	/**
