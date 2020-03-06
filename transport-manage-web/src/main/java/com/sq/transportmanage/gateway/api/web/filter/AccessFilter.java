@@ -79,8 +79,8 @@ public class AccessFilter extends ZuulFilter {
             data.put("merchantId",1);//商户ID
             data.put("account","admin");//用户名
             data.put("name","默认超级管理员");//用户名中文
-            logger.info("login_user :{}",data);
-            ctx.addZuulRequestHeader("login_user111",data.toJSONString());
+            logger.info("login_user :{}","aaaaaa");
+            ctx.addZuulRequestHeader("login_user","aaaaa");
         return ctx;
     }
 
