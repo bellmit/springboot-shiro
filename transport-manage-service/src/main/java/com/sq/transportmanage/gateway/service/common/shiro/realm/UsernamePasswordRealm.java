@@ -75,9 +75,9 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			}
 			List<String> menuUrlList = saasPermissionExMapper.queryPermissionMenussOfUser(adMUser.getUserId());
 			loginUser.setMenuUrlList(menuUrlList);
-
+			/**当前用户所拥有的菜单权限**/
 			List<Integer> permissionIds = saasPermissionExMapper.queryPermissionIdsOfUser(adMUser.getUserId());
-
+            /**查询所有的一级菜单**/
 			if(!CollectionUtils.isEmpty(permissionIds)){
 				List<SaasPermission> permissionList = saasPermissionExMapper.queryModularPermissions(permissionIds);
 				Map<Integer,String> map = Maps.newHashMap();
