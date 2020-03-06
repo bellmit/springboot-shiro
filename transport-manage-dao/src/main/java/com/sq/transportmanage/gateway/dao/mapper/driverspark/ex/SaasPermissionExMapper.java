@@ -21,5 +21,8 @@ public interface SaasPermissionExMapper{
 
 	/*查询该用户所拥有的模块**/
 	List<SaasPermission> queryModularPermissions(@Param("permissionIds") List<Integer> permissionIds);
-	
+
+	List<SaasPermission> queryModularPermissionsOfParrent(@Param("userId") Integer userId);
+
+
 }
