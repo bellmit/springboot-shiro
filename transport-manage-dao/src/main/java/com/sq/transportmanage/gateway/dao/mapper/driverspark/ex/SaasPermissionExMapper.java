@@ -19,10 +19,11 @@ public interface SaasPermissionExMapper{
 	/**根据用户ID，查询其拥有的所有有效的权限菜单url**/
 	List<String> queryPermissionMenussOfUser(@Param("userId") Integer userId);
 
-	/*查询该用户所拥有的模块**/
+	/**查询该用户所拥有的模块**/
 	List<SaasPermission> queryModularPermissions(@Param("permissionIds") List<Integer> permissionIds);
 
-	List<SaasPermission> queryModularPermissionsOfParrent(@Param("userId") Integer userId);
+	/**查询该用户在该模块下所拥有的菜单**/
+	List<SaasPermission> queryModularPermissionsOfParrent(@Param("userId") Integer userId,@Param("parentId") Integer parentId);
 
 
 }

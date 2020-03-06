@@ -79,7 +79,7 @@ public class AuthManageService {
         String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
         // 5分钟后过期
 
-        redisUtil.set(email,verifyCode,5*60*1000);
+        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,5*60);
 
 
         //将验证码 和 过期时间更新到数据库
@@ -117,6 +117,11 @@ public class AuthManageService {
     public AjaxResponse isExpire(String type,String param){
         logger.info("===判断是否过期===" );
 
+        if(!Constants.EMAIL.equals(type) && !Constants.PHONE.equals(type) ) {
+            logger.info("======通过密码找回类型不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.RESET_TYPE_UNEXIST);
+        }
+
         CarAdmUser carAdmUser = null;
         //邮箱验证以及邮箱验证码验证
         if(Constants.EMAIL.equals(type)){
@@ -146,10 +151,9 @@ public class AuthManageService {
                 return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
             }
 
-        }else {
-            logger.info("======通过密码找回类型不匹配=====");
-            return AjaxResponse.fail(RestErrorCode.RESET_TYPE_UNEXIST);
         }
+
+
 
 
         return AjaxResponse.success(null);
