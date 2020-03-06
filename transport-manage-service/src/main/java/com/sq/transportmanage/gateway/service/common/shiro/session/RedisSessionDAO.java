@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,14 +30,16 @@ import java.util.concurrent.TimeUnit;
  * 此外，当权限信息、角色信息、用户信息发生变化时，可以同时自动清理与之相关联的会话
  * @author zhaoyali
  **/
+@Component
 public class RedisSessionDAO extends CachingSessionDAO{
 	private static final Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
-	private static final String KEY_PREFIX_OF_SESSION      = "sq_conference_sessionId_";        //KEY：会话ID，VALUE：shiro Session对象
-	private static final String KEY_PREFIX_OF_SESSIONID   = "sq_conference_sessionIds_Of_"; //KEY：登录账户的KEY，VALUE：此账户的所有会话ID（以Set形式存储）
+	private static final String KEY_PREFIX_OF_SESSION      = "sq_star_fire_sessionId_";        //KEY：会话ID，VALUE：shiro Session对象
+	private static final String KEY_PREFIX_OF_SESSIONID   = "sq_star_fire_sessionIds_Of_"; //KEY：登录账户的KEY，VALUE：此账户的所有会话ID（以Set形式存储）
 
 
 	@Autowired
 	private MyDataSourceService myDataSourceService;
+	@Autowired
 	private RedisTemplate<String, Serializable>    redisTemplate;
 	public void setRedisTemplate(RedisTemplate<String, Serializable> redisTemplate) {
 		this.redisTemplate = redisTemplate;

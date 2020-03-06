@@ -7,9 +7,10 @@
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
     <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
+      <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid,merchantId
+    role_id, role_code, role_name, valid,merchantId,role_desc
   </sql>
 
   <!-- 查询角色列表 -->

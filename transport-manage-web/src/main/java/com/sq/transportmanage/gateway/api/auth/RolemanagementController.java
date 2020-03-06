@@ -32,12 +32,13 @@ public class RolemanagementController{
 	@RequestMapping("/addSaasRole")
 	@RequiresPermissions(value = { "ADD_SAAS_ROLE" } )
 	@RequestFunction(menu = ROLE_ADD)
-	public AjaxResponse addSaasRole(@Verify(param="roleCode",rule="required") String roleCode, @Verify(param="roleName",rule="required") String roleName) {
+	public AjaxResponse addSaasRole(@Verify(param="roleCode",rule="required") String roleCode, @Verify(param="roleName",rule="required") String roleName,String roleDesc) {
 		SaasRole role = new SaasRole();
 		role.setRoleCode(roleCode.trim());
 		role.setRoleName(roleName.trim());
 		role.setMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
 		role.setValid(true);
+		role.setRoleDesc(roleDesc);
 		return roleManagementService.addSaasRole(role);
 	}
 
@@ -61,11 +62,12 @@ public class RolemanagementController{
 	@RequestMapping("/changeRole")
 	@RequiresPermissions(value = { "CHANGE_SAAS_ROLE" } )
 	@RequestFunction(menu = ROLE_UPDATE)
-	public 	AjaxResponse changeRole( @Verify(param="roleId",rule="required|min(1)") Integer roleId , @Verify(param="roleCode",rule="required")  String roleCode,  @Verify(param="roleName",rule="required") String roleName ) {
+	public 	AjaxResponse changeRole( @Verify(param="roleId",rule="required|min(1)") Integer roleId , @Verify(param="roleCode",rule="required")  String roleCode,  @Verify(param="roleName",rule="required") String roleName,String roleDesc ) {
 		SaasRole roleForupdate = new SaasRole();
 		roleForupdate.setRoleId(roleId);
 		roleForupdate.setRoleCode(roleCode.trim());
 		roleForupdate.setRoleName(roleName.trim());
+		roleForupdate.setRoleDesc(roleDesc);
 		return roleManagementService.changeRole(roleForupdate);
 	}
 
