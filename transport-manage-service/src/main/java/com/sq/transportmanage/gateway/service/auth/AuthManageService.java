@@ -114,18 +114,43 @@ public class AuthManageService {
      * 判断是否过期
      * @return
      */
-    public AjaxResponse isExpire(String email){
-        logger.info("===判断是否过期===" + email);
-        CarAdmUser carAdmUser = carAdmUserExMapper.queryExist(email,null);
-        if(carAdmUser == null){
-            logger.info("======邮箱不存在=====");
-            return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
+    public AjaxResponse isExpire(String type,String param){
+        logger.info("===判断是否过期===" );
+
+        CarAdmUser carAdmUser = null;
+        //邮箱验证以及邮箱验证码验证
+        if(Constants.EMAIL.equals(type)){
+            carAdmUser = carAdmUserExMapper.queryExist(param,null);
+            if(carAdmUser == null){
+                logger.info("======邮箱不存在=====");
+                return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
+            }
+
+            if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+param)){
+                logger.info("======邮箱验证码已过期=====");
+                return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
+            }
+
         }
 
-        if(!redisUtil.hasKey(email)){
-            logger.info("======邮箱验证码已过期=====");
-            return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
+        //手机验证以及手机验证码验证
+        if(Constants.PHONE.equals(type)){
+            carAdmUser = carAdmUserExMapper.queryExist(null,param);
+            if(carAdmUser == null){
+                logger.info("======根据手机查询账号不存在=====");
+                return AjaxResponse.fail(RestErrorCode.PHONE_NOT_EXIST);
+            }
+
+            if(!redisUtil.hasKey(Constants.RESET_PHONE_KEY+param)){
+                logger.info("======手机验证码已过期=====");
+                return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
+            }
+
+        }else {
+            logger.info("======通过密码找回类型不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.RESET_TYPE_UNEXIST);
         }
+
 
         return AjaxResponse.success(null);
     }

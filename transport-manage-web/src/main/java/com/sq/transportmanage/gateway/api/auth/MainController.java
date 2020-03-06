@@ -200,7 +200,6 @@ public class MainController {
 		}*/
 		String flag = redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username) ==null? null: redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username).toString();
 
-		//String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
 		if(flag!=null ) {
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED);
 		}
