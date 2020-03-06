@@ -5,14 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
-import com.sq.transportmanage.gateway.api.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
-import com.sq.transportmanage.gateway.service.common.cache.RedisCacheUtil;
+import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.common.dto.AjaxLoginUserDTO;
@@ -26,7 +25,7 @@ import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
-import okhttp3.internal.http2.ErrorCode;
+import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -87,6 +86,9 @@ public class MainController {
 
 	@Autowired
 	private RedisTemplate<String, Serializable> redisTemplate;
+
+	@Autowired
+	private RedisUtil redisUtil;
 
 
     /**运维监控心跳检测 **/
@@ -196,14 +198,14 @@ public class MainController {
 			logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内进行获取验证码"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED,statistics);
 		}
+		String flag = redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username) ==null? null: redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username).toString();
 
-		String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
+		//String flag = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE_CONTROL+username, String.class);
 		if(flag!=null ) {
 			return AjaxResponse.fail(RestErrorCode.GET_MSGCODE_EXCEED);
 		}
 		//B:查询用户信息
-		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,loginUser.getMerchantId());
+ 		CarAdmUser user = carAdmUserExMapper.queryByAccount(username,null);
 		if(user==null){
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
@@ -213,7 +215,8 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
 		}
 		//D: 查询验证码，或新生成验证码，而后发送验证码短信
-		String  msgcode = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE+username, String.class);
+		//String  msgcode = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE+username, String.class);
+		String msgcode = redisUtil.get(CACHE_PREFIX_MSGCODE+username);
 		if(msgcode==null) {
 			msgcode = NumberUtil.genRandomCode(6);
 		}
@@ -221,7 +224,8 @@ public class MainController {
 		String content  = "登录验证码为："+msgcode+"，请在"+msgcodeTimeoutMinutes+"分钟内进行登录。";
 		SmsSendUtil.send(mobile, content);
 		//E: 写入缓存
-		RedisCacheUtil.set(CACHE_PREFIX_MSGCODE+username, msgcode,  msgcodeTimeoutMinutes * 60 );
+		redisUtil.set(CACHE_PREFIX_MSGCODE+username, msgcode,  msgcodeTimeoutMinutes * 60 );
+		//RedisCacheUtil.set(CACHE_PREFIX_MSGCODE+username, msgcode,  msgcodeTimeoutMinutes * 60 );
 		//返回结果
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("timeout",  60 );//验证码有效的秒数
@@ -286,7 +290,9 @@ public class MainController {
 				return AjaxResponse.fail(RestErrorCode.DO_LOGIN_FREQUENTLY,statistics);
 			}
 			//验证验证码是否正确
-			String  msgcodeInCache = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE+username, String.class);
+			String  msgcodeInCache = redisUtil.get(CACHE_PREFIX_MSGCODE+username);
+
+			//String  msgcodeInCache = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE+username, String.class);
 			if(msgcodeInCache==null) {
 				return AjaxResponse.fail(RestErrorCode.MSG_CODE_INVALID) ;
 			}
