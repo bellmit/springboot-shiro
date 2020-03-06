@@ -145,7 +145,7 @@ zuul:
       url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
     thirdapi:
       path: /common/upload/**
-      url: http://dev-inside-third-api.01zhuanche.com/file/upload?filePath=driverspark/
+      url: http://dev-inside-third-api.01zhuanche.com/file/upload
 
 #钉钉报警开关
 ding.ding.switch: false
