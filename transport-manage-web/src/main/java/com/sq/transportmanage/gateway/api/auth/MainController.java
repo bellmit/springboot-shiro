@@ -593,7 +593,7 @@ public class MainController {
 			ajaxLoginUserDTO.setStatus(ssoLoginUser.getStatus());
 			//二、用户的菜单信息      (  具有Session缓存机制 ，以提升性能   )
 			if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(menuDataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(menuDataFormat) ) {
-				menuDataFormat = SaasConst.PermissionDataFormat.LIST;//默认为树形
+				menuDataFormat = SaasConst.PermissionDataFormat.LIST;//默认为列表
 			}
 			List<SaasPermissionDTO> menuPerms = (List<SaasPermissionDTO>)WebSessionUtil.getAttribute("xxx_menu_"+menuDataFormat);
 			if( menuPerms ==null ) {

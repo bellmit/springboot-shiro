@@ -35,4 +35,7 @@ public interface CarAdmUserExMapper {
                             @Param("phone")String phone
     );
 
+    /**找回密码查询是否存在手机或者email**/
+    CarAdmUser queryExist(@Param("email")String email,
+                          @Param("phone")String phone);
 }

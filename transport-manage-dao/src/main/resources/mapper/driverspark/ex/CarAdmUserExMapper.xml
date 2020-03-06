@@ -165,4 +165,19 @@
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
 
+
+    <select id="queryExist" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from auth_car_adm_user
+        where 1=1
+        <if test="email!=null">
+            and email = #{email}
+        </if>
+        <if test="phone!=null">
+            and phone = #{phone}
+        </if>
+        limit 1
+    </select>
+
 </mapper>

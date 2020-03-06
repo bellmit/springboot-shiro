@@ -163,3 +163,6 @@ dispatcher:
   businessId: 9f260ae13ec0adbceef9edc88fa746a9
   driver:
     url: http://test-inside-dispatcher-baseinfo.01zhuanche.com
+
+#h5找回密码域名
+reset.password.url: https://test-saas.guobindui.cn/forgot
