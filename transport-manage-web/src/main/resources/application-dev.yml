@@ -141,7 +141,7 @@ zuul:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
     thirdapi:
-      path: /uploadPhoto/**
+      path: /common/uploadPhoto/**
       url: http://dev-inside-mp.01zhuanche.com/uploadPhoto/
 
 #钉钉报警开关
