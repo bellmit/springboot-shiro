@@ -46,7 +46,7 @@ public class AccessFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
-        if(request.getRequestURL().toString().contains("/common/upload/")){
+        if(request.getRequestURL().toString().contains("/common/upload")){
             request.setAttribute("filePath","driverspark/");
         }
 //        SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
