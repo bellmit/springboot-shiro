@@ -45,4 +45,4 @@ server:
 spring.mail.host: smtp.qiye.aliyun.com
 spring.mail.username: syyc@01zhuanche.com
 spring.mail.password: cyys123$
-spring.mail.port: 465
+spring.mail.port: 25
