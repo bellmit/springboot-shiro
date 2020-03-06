@@ -1,6 +1,8 @@
 package com.sq.transportmanage.gateway.service.common.shiro.realm;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
+import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,10 +42,10 @@ public final class SSOLoginUser implements Serializable{
 
 	private Map<Integer,String> menuPermissionMap;
 
-
 	private Boolean isSuper;
 
-
+	/**所有模块的权限**/
+	private Map<Integer,List<SaasPermissionDTO>> mapPermission = Maps.newHashMap();
 	//---------------------------------------------------------------------------------------------------------数据权限END
 	public Integer getId() {
 		return id;
@@ -149,6 +151,14 @@ public final class SSOLoginUser implements Serializable{
 		this.merchantId = merchantId;
 	}
 
+	public Map<Integer, List<SaasPermissionDTO>> getMapPermission() {
+		return mapPermission;
+	}
+
+	public void setMapPermission(Map<Integer, List<SaasPermissionDTO>> mapPermission) {
+		this.mapPermission = mapPermission;
+	}
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -166,6 +176,7 @@ public final class SSOLoginUser implements Serializable{
 				", menuUrlList=" + JSONObject.toJSONString(menuUrlList) +
 				", menuPermissionMap=" + JSONObject.toJSONString(menuPermissionMap) +
 				", isSuper=" + isSuper +
+				", mapPermission=" +  JSONObject.toJSONString(mapPermission) +
 				'}';
 	}
 }

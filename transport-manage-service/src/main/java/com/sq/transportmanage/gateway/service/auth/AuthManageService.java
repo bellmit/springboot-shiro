@@ -172,7 +172,7 @@ public class AuthManageService {
             return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
         }
 
-        if(!redisUtil.hasKey(email)){
+        if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+email)){
             logger.info("======邮箱验证码已过期=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
         }

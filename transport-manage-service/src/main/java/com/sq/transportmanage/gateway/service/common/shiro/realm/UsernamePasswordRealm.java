@@ -7,6 +7,9 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionEx
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
 import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
+import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
+import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
+import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.MD5Utils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -20,10 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**认证  与  权限  **/
 
@@ -77,15 +77,29 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setMenuUrlList(menuUrlList);
 			/**当前用户所拥有的菜单权限**/
 			List<Integer> permissionIds = saasPermissionExMapper.queryPermissionIdsOfUser(adMUser.getUserId());
-            /**查询所有的一级菜单**/
+
+			List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU });
+
+			Map<Integer,List<SaasPermissionDTO>> mapPermission = Maps.newHashMap();
+
+			/**查询所有的一级菜单**/
 			if(!CollectionUtils.isEmpty(permissionIds)){
 				List<SaasPermission> permissionList = saasPermissionExMapper.queryModularPermissions(permissionIds);
 				Map<Integer,String> map = Maps.newHashMap();
 				permissionList.forEach(list ->{
 					map.put(list.getPermissionId(),list.getPermissionName());
+					//查询所有一级菜单下的子菜单 以树形结果返回
+					List<SaasPermissionDTO> menuPerms = this.getChildren( permissionIds , list.getPermissionId(), permissionTypes);
+					mapPermission.put(list.getPermissionId(),menuPerms);
 				});
+
 				loginUser.setMenuPermissionMap(map);
+				loginUser.setMapPermission(mapPermission);
 			}
+			//
+
+
+
 
 			//---------------------------------------------------------------------------------------------------------数据权限BEGIN
 
@@ -95,6 +109,30 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			logger.error("获取用户的身份认证信息异常",e);
 			return null;
 		}
+	}
+
+
+	/**
+	 * 查询每个一级菜单下的子菜单
+	 * @param permissionIds
+	 * @param parentPermissionId
+	 * @param permissionTypes  tree 树形，list 列表
+	 * @return
+	 */
+	private List<SaasPermissionDTO> getChildren( List<Integer> permissionIds,  Integer parentPermissionId,  List<Byte> permissionTypes ){
+		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(permissionIds, parentPermissionId, null, permissionTypes, null, null);
+		if(childrenPos==null || childrenPos.size()==0) {
+			return null;
+		}
+		//递归
+		List<SaasPermissionDTO> childrenDtos = BeanUtil.copyList(childrenPos, SaasPermissionDTO.class);
+		Iterator<SaasPermissionDTO> iterator = childrenDtos.iterator();
+		while (iterator.hasNext()) {
+			SaasPermissionDTO childrenDto = iterator.next();
+			List<SaasPermissionDTO> childs = this.getChildren( permissionIds, childrenDto.getPermissionId() ,  permissionTypes );
+			childrenDto.setChildPermissions(childs);
+		}
+		return childrenDtos;
 	}
 
 
