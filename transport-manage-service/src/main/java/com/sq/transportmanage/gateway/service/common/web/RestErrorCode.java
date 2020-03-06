@@ -122,6 +122,9 @@ public final class RestErrorCode{
 	public static final int PHONE_CODE_UNSPECIAL                    = 2008;
 
 
+	@ResultMessage("通过密码找回类型不匹配")
+	public static final int RESET_TYPE_UNEXIST                    = 2020;
+
 	//-------------------------------------------
 
 	//----------------------------------------------角色管理

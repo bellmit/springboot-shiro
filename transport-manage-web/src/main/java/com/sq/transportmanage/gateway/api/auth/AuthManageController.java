@@ -45,15 +45,17 @@ public class AuthManageController {
 
     /**
      * 是否过期
-     * @param email
+     * @param type 1 邮箱 2 短信
+     * @param
      * @return
      * @throws MessagingException
      */
     @ResponseBody
     @RequestMapping("/isExpire")
-    public AjaxResponse isExpire(@Verify(param = "email",rule = "required")String email) {
-        logger.info("判断是否过期入参：" + email);
-        return authManageService.isExpire(email);
+    public AjaxResponse isExpire(@Verify(param = "type",rule = "required") String type,
+                                 @Verify(param = "param",rule = "required")String param) {
+        logger.info("判断是否过期入参：type:" + type + ",param:" + param);
+        return authManageService.isExpire(type,param);
     }
 
 
