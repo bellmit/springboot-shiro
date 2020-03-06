@@ -130,7 +130,7 @@ zuul:
   routes:
     chargeapi:
       path: /charge/**
-      url: http://dev-inside-saas-charge.guobindui.cn/
+      url: http://dev-inside-saas-charge.guobindui.cn/charge/
     orderapi:
       path: /order/**
       url: http://dev-inside-order-spark.guobindui.cn/order/
@@ -140,6 +140,12 @@ zuul:
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
+    uploadPhoto:
+      path: /common/uploadPhoto/**
+      url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
+    thirdapi:
+      path: /common/upload/**
+      url: http://dev-inside-third-api.01zhuanche.com/file/upload?filePath=driverspark/
 
 #钉钉报警开关
 ding.ding.switch: false
