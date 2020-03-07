@@ -147,6 +147,9 @@ zuul:
     thirdapi:
       path: /common/upload/**
       url: http://dev-inside-third-api.01zhuanche.com/file/upload
+    shareapi:
+      path: /share/**
+      url: http://dev-inside-saas-share.guobindui.cn
 
 #钉钉报警开关
 ding.ding.switch: false
