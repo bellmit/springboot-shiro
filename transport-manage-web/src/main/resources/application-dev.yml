@@ -140,12 +140,16 @@ zuul:
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
+#      url: http://10.67.1.213:8080/
     uploadPhoto:
       path: /common/uploadPhoto/**
       url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
     thirdapi:
       path: /common/upload/**
-      url: http://dev-inside-third-api.01zhuanche.com/file/upload?filePath=driverspark/
+      url: http://dev-inside-third-api.01zhuanche.com/file/upload
+    shareapi:
+      path: /share/**
+      url: http://dev-inside-saas-share.guobindui.cn
 
 #钉钉报警开关
 ding.ding.switch: false

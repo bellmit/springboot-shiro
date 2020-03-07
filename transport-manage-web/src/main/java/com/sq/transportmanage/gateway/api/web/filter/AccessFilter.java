@@ -3,16 +3,11 @@ package com.sq.transportmanage.gateway.api.web.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.sq.transportmanage.gateway.api.common.AuthEnum;
-import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
-import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @program: sq-union-manage
@@ -46,9 +41,6 @@ public class AccessFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
-        if(request.getRequestURL().toString().contains("/common/upload/")){
-            request.setAttribute("filePath","driverspark/");
-        }
 //        SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
 //        logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
 //        /**用户是否有权限**/
@@ -65,15 +57,26 @@ public class AccessFilter extends ZuulFilter {
 //        }
 //        if(bl){
 //            JSONObject data = new JSONObject();
-//            data.put("sysId","t_saas");
-//            data.put("account",loginUser.getLoginName());
+//            data.put("sysId","t_saas");//平台ID
+//            data.put("merchantId",loginUser.getMerchantId());//商户ID
+//            data.put("account",loginUser.getLoginName());//用户名
+//            data.put("name",loginUser.getName());//用户名中文
 //            ctx.addZuulRequestHeader("login_user",data.toJSONString());
 //        }else{
 //            ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
 //            ctx.setResponseStatusCode(401);// 返回错误码
-//            ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!验证方式为2\"}");// 返回错误内容
+//            ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!请先登录\"}");// 返回错误内容
 //            ctx.set("isSuccess", false);
 //        }
+
+            JSONObject data = new JSONObject();
+            data.put("sysId","t_saas");//平台ID
+            data.put("merchantId",1);//商户ID
+            data.put("account","admin");//用户名
+            data.put("name","默认超级管理员");//用户名中文
+            logger.info("login_user :{}",data);
+            ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
+            ctx.addZuulRequestHeader("loginuser",data.toJSONString());
         return ctx;
     }
 
