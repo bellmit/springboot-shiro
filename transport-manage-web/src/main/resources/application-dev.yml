@@ -149,7 +149,7 @@ zuul:
       url: http://dev-inside-third-api.01zhuanche.com/file/upload
     shareapi:
       path: /share/**
-      url: http://dev-inside-saas-share.guobindui.cn
+      url: http://dev-inside-saas-share.guobindui.cn/share/
 
 #钉钉报警开关
 ding.ding.switch: false
