@@ -10,6 +10,7 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
+import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
@@ -26,6 +27,7 @@ import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
 import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
+import com.sq.transportmanage.gateway.service.vo.BaseSupplierVo;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -88,6 +90,9 @@ public class MainController {
 
 	@Autowired
 	private RedisUtil redisUtil;
+
+	@Autowired
+	private BaseSupplierService baseSupplierService;
 
 
     /**运维监控心跳检测 **/
@@ -575,6 +580,26 @@ public class MainController {
 
 	/**
 	 * 查询当前用户所拥有的数据权限
+	 * @return
+	 */
+	@RequestMapping("/queryAllSuppliers")
+	@ResponseBody
+	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+	public AjaxResponse queryAllSuppliers(){
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+		if(ssoLoginUser != null){
+			List<BaseSupplierVo> voList = baseSupplierService.listAllBaseSupplier(Integer.valueOf(ssoLoginUser.getMerchantId()));
+			return AjaxResponse.success(voList);
+		}else {
+			return AjaxResponse.success(null);
+		}
+
+	}
+
+
+
+	/**
+	 * 查询当前用户所有的运力商
 	 * @return
 	 */
 	@RequestMapping("/queryDataPermissions")
