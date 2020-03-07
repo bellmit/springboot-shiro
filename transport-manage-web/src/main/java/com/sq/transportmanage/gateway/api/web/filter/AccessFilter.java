@@ -3,16 +3,11 @@ package com.sq.transportmanage.gateway.api.web.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.sq.transportmanage.gateway.api.common.AuthEnum;
-import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
-import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @program: sq-union-manage
@@ -80,7 +75,7 @@ public class AccessFilter extends ZuulFilter {
             data.put("account","admin");//用户名
             data.put("name","默认超级管理员");//用户名中文
             logger.info("login_user :{}",data);
-            ctx.addZuulRequestHeader("login_user",data.toJSONString());
+            ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
             ctx.addZuulRequestHeader("loginuser",data.toJSONString());
         return ctx;
     }
