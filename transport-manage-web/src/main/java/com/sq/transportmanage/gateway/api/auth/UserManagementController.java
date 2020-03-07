@@ -176,6 +176,12 @@ public class UserManagementController {
 		return userManagementService.resetPassword(userId);
 	}
 
-
+	/**九、根据用户id查询用户**/
+	@RequestMapping("/queryUserById")
+	@RequestFunction(menu = USER_RESET_PASSWORD)
+	public AjaxResponse queryUserById( @Verify(param="userId",rule="required|min(1)") Integer userId ) {
+		CarAdmUser carAdmUser = userManagementService.findByPrimaryKey(userId);
+		return AjaxResponse.success(carAdmUser);
+	}
 
 }
