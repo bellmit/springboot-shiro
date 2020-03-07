@@ -71,7 +71,7 @@ public class AccessFilter extends ZuulFilter {
 
             JSONObject data = new JSONObject();
             data.put("sysId","t_saas");//平台ID
-            data.put("merchantId",1);//商户ID
+            data.put("merchantId","1");//商户ID
             data.put("account","admin");//用户名
             data.put("name","默认超级管理员");//用户名中文
             data.put("supplierIds","1,2,3,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,24,25,26");//用户名中文
