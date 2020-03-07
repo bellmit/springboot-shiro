@@ -147,7 +147,7 @@
 
 
     <!-- 查询角色列表 -->
-    <select id="getRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="getRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select role_id FROM  auth_saas_role  WHERE  merchant_id = #{merchantId} limit 1
     </select>
 
