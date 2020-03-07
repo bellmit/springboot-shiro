@@ -13,6 +13,6 @@ public interface SaasPermissionMapper {
 
     int updateByPrimaryKey(SaasPermission record);
 
-    int deleteByPrimaryKey(Integer permissionId);
+    int deleteByPrimaryKey(Integer roleId);
 
 }

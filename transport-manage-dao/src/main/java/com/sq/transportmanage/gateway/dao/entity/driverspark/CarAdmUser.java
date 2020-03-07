@@ -42,7 +42,7 @@ public class CarAdmUser {
     private String updateUser;
 
 
-    private String merchantId;
+    private Integer merchantId;
 
     public Integer getUserId() {
         return userId;
@@ -196,11 +196,12 @@ public class CarAdmUser {
         this.updateUser = updateUser == null ? null : updateUser.trim();
     }
 
-    public String getMerchantId() {
+
+    public Integer getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
     }
 }

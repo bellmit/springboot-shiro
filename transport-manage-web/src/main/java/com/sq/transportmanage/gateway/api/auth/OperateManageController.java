@@ -79,7 +79,7 @@ public class OperateManageController {
             @Verify(param = "email",rule = "required|email")String email) throws NoSuchAlgorithmException {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
         if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
-            String md5=MD5Utils.getMD5DigestBase64(loginUser.getMerchantId());
+            String md5=MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());
             if(!Constants.MANAGE_MD5.equals(md5)){
                 logger.info("当前用户不是系统管理员，不能创建商户");
                 return AjaxResponse.fail(RestErrorCode.IS_NOT_SYS_ROLE);
@@ -94,7 +94,8 @@ public class OperateManageController {
             user.setRoleId(1);
             ////管理员
             user.setAccountType(AuthEnum.MANAGE.getAuthId());
-            String merchantId = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
+            //String merchantId = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
+            Integer merchantId = 0;
             user.setMerchantId(merchantId);
             //创建商户后获取uuid并创建商户的系统用户，赋予默认权限
             AjaxResponse ajaxResponse = userManagementService.addUser(user);
@@ -167,7 +168,7 @@ public class OperateManageController {
         if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
             String md5= null;
             try {
-                md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId());
+                md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());
             } catch (NoSuchAlgorithmException e) {
                 logger.error("获取md5加密异常" + e);
             }

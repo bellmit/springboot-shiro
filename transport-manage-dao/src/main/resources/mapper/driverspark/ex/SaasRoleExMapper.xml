@@ -6,11 +6,29 @@
     <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
-    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
       <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+      <result column="creater_id" property="createrId" jdbcType="INTEGER" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+    <resultMap id="BaseResultMapDto" type="com.sq.transportmanage.gateway.dao.dto.SaasRoleDTO" >
+        <id column="role_id" property="roleId" jdbcType="INTEGER" />
+        <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="valid" property="valid" jdbcType="BIT" />
+         <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+        <result column="creater_id" property="createrId" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    </resultMap>
+
+
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid,merchantId,role_desc
+    role_id, role_code, role_name, valid,merchant_id,role_desc,creater_id, create_time,
+    update_time
   </sql>
 
   <!-- 查询角色列表 -->
@@ -35,10 +53,42 @@
     	and valid = #{valid}
     </if>
     <if test="merchantId!=null">
-      and merchantId = #{merchantId}
+      and merchant_id = #{merchantId}
     </if>
     order by role_id
   </select>
+
+    <!-- 查询角色列表 -->
+    <select id="queryRoleList" resultMap="BaseResultMapDto">
+        select
+        t.role_id, t.role_code, t.role_name, t.valid,t.merchant_id,
+        t.role_desc,creater_id, t.create_time,
+        t.update_time,m.user_name
+        from auth_saas_role t
+        INNER JOIN auth_car_adm_user m on t.creater_id = m.user_id
+        where 1=1
+        <if test="roleIds!=null and roleIds.size()>0">
+            and t.role_id in
+            <foreach collection="roleIds" open="(" close=")" separator="," item="id">
+                #{id}
+            </foreach>
+        </if>
+        <if test="roleCode!=null">
+            and t.role_code = #{roleCode}
+        </if>
+        <if test="roleName!=null">
+            and  t.role_name like #{roleName} ESCAPE '/'
+        </if>
+        <if test="valid!=null">
+            and t.valid = #{valid}
+        </if>
+        <if test="merchantId!=null">
+            and t.merchant_id = #{merchantId}
+        </if>
+        order by t.role_id
+    </select>
+
+
  
    <!-- 根据用户ID，查询其拥有的所有有效的角色ID -->
   <select id="queryRoleIdsOfUser" resultType="java.lang.Integer">
@@ -73,7 +123,7 @@
                 valid,
             </if>
             <if test="merchantId != null" >
-                merchantId,
+                merchant_id,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -90,7 +140,7 @@
                 #{valid,jdbcType=BIT},
             </if>
             <if test="merchantId != null" >
-                #{merchantId,jdbcType=VARCHAR},
+                #{merchantId,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -98,7 +148,7 @@
 
     <!-- 查询角色列表 -->
     <select id="getRoleId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select role_id FROM  auth_saas_role  WHERE  merchantId = #{merchantId} limit 1
+        select role_id FROM  auth_saas_role  WHERE  merchant_id = #{merchantId} limit 1
     </select>
 
 </mapper>

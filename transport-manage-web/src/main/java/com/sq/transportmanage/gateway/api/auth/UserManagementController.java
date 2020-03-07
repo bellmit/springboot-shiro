@@ -41,6 +41,10 @@ public class UserManagementController {
 			@Verify(param="userName",rule="required") String userName, 
 			@Verify(param="phone",rule="required|mobile") String phone,
 			@Verify(param = "email",rule = "required|email")String email) {
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		if(loginUser == null){
+			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
+		}
 		CarAdmUser user  = new CarAdmUser();
 		user.setAccount(account.trim());
 		user.setUserName(userName.trim());
@@ -50,12 +54,8 @@ public class UserManagementController {
 		user.setSuppliers( null );
 		user.setTeamId( null );
 		user.setGroupIds(null);
-		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		if(StringUtils.isNotEmpty(loginUser.getMerchantId())){
+		if(loginUser != null && loginUser.getMerchantId() > 0){
 			user.setMerchantId(loginUser.getMerchantId());
-		}else {
-			//为空表示为我方人员
-			user.setMerchantId(System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-",""));
 		}
 		// 暂时不用
 		AjaxResponse ajaxResponse = userManagementService.addUser(user);

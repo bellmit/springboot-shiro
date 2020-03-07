@@ -64,7 +64,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setSupplierIds(adMUser.getSuppliers());
 			String md5= null;
 			try {
-				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId());
+				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());
 			} catch (NoSuchAlgorithmException e) {
 				logger.info("sign error" + e);
 			}

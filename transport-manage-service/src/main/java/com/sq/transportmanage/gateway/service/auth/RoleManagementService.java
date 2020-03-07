@@ -2,6 +2,7 @@ package com.sq.transportmanage.gateway.service.auth;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sq.transportmanage.gateway.dao.dto.SaasRoleDTO;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRolePermissionRalation;
@@ -12,7 +13,6 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissi
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
-import com.sq.transportmanage.gateway.service.common.dto.SaasRoleDTO;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
@@ -229,12 +229,12 @@ public class RoleManagementService{
 		}
     	//二、开始查询DB
     	int total = 0;
-    	List<SaasRole> roles = null;
+    	List<SaasRoleDTO> roles = null;
     	Page p = PageHelper.startPage( page, pageSize, true );
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
 
-			roles = saasRoleExMapper.queryRoles(loginUser.getSuper()== true ? null:loginUser.getMerchantId(),null, roleCode, roleName, valid);
+			roles = saasRoleExMapper.queryRoleList(loginUser.getSuper()== true ? null:loginUser.getMerchantId(),null, roleCode, roleName, valid);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();
@@ -244,8 +244,8 @@ public class RoleManagementService{
         	PageDTO pageDto = new PageDTO( page, pageSize, total , new ArrayList()  );
         	return pageDto;
     	}
-    	List<SaasRoleDTO> roledtos = BeanUtil.copyList(roles, SaasRoleDTO.class);
-    	PageDTO pageDto = new PageDTO( page, pageSize, total , roledtos);
+    	//List<SaasRoleDTO> roledtos = BeanUtil.copyList(roles, SaasRoleDTO.class);
+    	PageDTO pageDto = new PageDTO( page, pageSize, total , roles);
     	return pageDto;
 	}
 	
