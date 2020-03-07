@@ -1,8 +1,8 @@
-package com.sq.transportmanage.gateway.dao.entity.driverspark;
+package com.sq.transportmanage.gateway.dao.dto;
 
 import java.util.Date;
 
-public class SaasRole {
+public class SaasRoleDTO {
     private Integer roleId;
 
     private String roleCode;
@@ -11,18 +11,15 @@ public class SaasRole {
 
     private Boolean valid;
 
-    private Integer merchantId;
-
     private String roleDesc;
 
-    private Integer createrId;
+    private String createrId;
+
+    private String userName;
 
     private Date createTime;
 
     private Date updateTime;
-
-    private String permissionIds;
-
 
     public Integer getRoleId() {
         return roleId;
@@ -56,28 +53,28 @@ public class SaasRole {
         this.valid = valid;
     }
 
-    public Integer getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Integer merchantId) {
-        this.merchantId = merchantId;
-    }
-
     public String getRoleDesc() {
         return roleDesc;
     }
 
     public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc == null ? null : roleDesc.trim();
+        this.roleDesc = roleDesc;
     }
 
-    public Integer getCreaterId() {
+    public String getCreaterId() {
         return createrId;
     }
 
-    public void setCreaterId(Integer createrId) {
+    public void setCreaterId(String createrId) {
         this.createrId = createrId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Date getCreateTime() {
@@ -94,13 +91,5 @@ public class SaasRole {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getPermissionIds() {
-        return permissionIds;
-    }
-
-    public void setPermissionIds(String permissionIds) {
-        this.permissionIds = permissionIds;
     }
 }

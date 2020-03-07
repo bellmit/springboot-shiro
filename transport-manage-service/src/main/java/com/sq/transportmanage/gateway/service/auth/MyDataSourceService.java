@@ -59,7 +59,7 @@ public class MyDataSourceService {
      * @return
      */
     @MyDataSource(value = DataSourceType.MDBCARMANAGER_MASTER)
-    public SSOLoginUser getSSOLoginUser(String loginName,String merchantId) {
+    public SSOLoginUser getSSOLoginUser(String loginName,Integer merchantId) {
         logger.info("[WebSessionUtil获取用户的身份认证信息开始]loginName={},merchantId={}" + loginName,merchantId);
         try {
             CarAdmUser adMUser = carAdmUserExMapper.queryByAccount(loginName,merchantId);

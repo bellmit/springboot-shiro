@@ -1,5 +1,7 @@
 package com.sq.transportmanage.gateway.dao.entity.driverspark;
 
+import java.util.Date;
+
 public class SaasPermission {
     private Integer permissionId;
 
@@ -19,7 +21,12 @@ public class SaasPermission {
 
     private Integer sortSeq;
 
-    private String merchantId;
+    private Integer merchantId;
+
+    private Date createTime;
+
+    private Date updateTime;
+
     public Integer getPermissionId() {
         return permissionId;
     }
@@ -92,11 +99,27 @@ public class SaasPermission {
         this.sortSeq = sortSeq;
     }
 
-    public String getMerchantId() {
+    public Integer getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

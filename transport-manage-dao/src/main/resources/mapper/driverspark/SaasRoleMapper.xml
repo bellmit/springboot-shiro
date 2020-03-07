@@ -6,11 +6,15 @@
     <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
-    <result column="merchantId" property="merchantId" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
     <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+    <result column="creater_id" property="createrId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    role_id, role_code, role_name, valid,merchantId,role_desc
+    role_id, role_code, role_name, valid, merchant_id, role_desc, creater_id, create_time, 
+    update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -19,10 +23,14 @@
     where role_id = #{roleId,jdbcType=INTEGER}
   </select>
   <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole" >
-    insert into auth_saas_role (role_id, role_code, role_name,
-      valid)
+    insert into auth_saas_role (role_id, role_code, role_name, 
+      valid, merchant_id, role_desc, 
+      creater_id, create_time, update_time
+      )
     values (#{roleId,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
-      #{valid,jdbcType=BIT})
+      #{valid,jdbcType=BIT}, #{merchantId,jdbcType=INTEGER}, #{roleDesc,jdbcType=VARCHAR}, 
+      #{createrId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole" >
     insert into auth_saas_role
@@ -40,10 +48,19 @@
         valid,
       </if>
       <if test="merchantId != null" >
-        merchantId,
+        merchant_id,
       </if>
       <if test="roleDesc != null" >
         role_desc,
+      </if>
+      <if test="createrId != null" >
+        creater_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -60,10 +77,19 @@
         #{valid,jdbcType=BIT},
       </if>
       <if test="merchantId != null" >
-        #{merchantId,jdbcType=VARCHAR},
+        #{merchantId,jdbcType=INTEGER},
       </if>
       <if test="roleDesc != null" >
         #{roleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createrId != null" >
+        #{createrId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -79,8 +105,20 @@
       <if test="valid != null" >
         valid = #{valid,jdbcType=BIT},
       </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
       <if test="roleDesc != null" >
         role_desc = #{roleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createrId != null" >
+        creater_id = #{createrId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where role_id = #{roleId,jdbcType=INTEGER}
@@ -89,7 +127,12 @@
     update auth_saas_role
     set role_code = #{roleCode,jdbcType=VARCHAR},
       role_name = #{roleName,jdbcType=VARCHAR},
-      valid = #{valid,jdbcType=BIT}
+      valid = #{valid,jdbcType=BIT},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      role_desc = #{roleDesc,jdbcType=VARCHAR},
+      creater_id = #{createrId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
 
@@ -97,5 +140,6 @@
     delete from saas_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </delete>
+
 
 </mapper>

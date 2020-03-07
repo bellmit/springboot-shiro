@@ -36,7 +36,7 @@ public final class SSOLoginUser implements Serializable{
 	/**此用户数据权限等级(参考PermissionLevelEnum枚举类型 1全国 2城市 4供应商 8小队 16班组) **/
 	private Integer level;
 
-	private String merchantId;
+	private Integer merchantId;
 
 	private List<String> menuUrlList;
 
@@ -143,11 +143,11 @@ public final class SSOLoginUser implements Serializable{
 	}
 
 
-	public String getMerchantId() {
+	public Integer getMerchantId() {
 		return merchantId;
 	}
 
-	public void setMerchantId(String merchantId) {
+	public void setMerchantId(Integer merchantId) {
 		this.merchantId = merchantId;
 	}
 

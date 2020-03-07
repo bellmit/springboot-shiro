@@ -12,6 +12,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 import java.util.List;
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 
@@ -42,6 +44,8 @@ public class PermissionManageController {
 		pemission.setMenuUrl(menuUrl==null? "": menuUrl.trim());
 		pemission.setMenuOpenMode(menuOpenMode);
 		pemission.setMerchantId(ssoLoginUser.getMerchantId());
+		pemission.setCreateTime(new Date());
+		pemission.setUpdateTime(new Date());
 		return permissionManagementService.addSaasPermission(pemission);
 	}
 	

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
@@ -39,6 +40,10 @@ public class RolemanagementController{
 		role.setMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
 		role.setValid(true);
 		role.setRoleDesc(roleDesc);
+		role.setUpdateTime(new Date());
+		role.setCreateTime(new Date());
+		role.setRoleDesc(roleDesc);
+		role.setCreaterId(WebSessionUtil.getCurrentLoginUser().getId());
 		return roleManagementService.addSaasRole(role);
 	}
 

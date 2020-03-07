@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CarAdmUserExMapper {
 	/**根据账户查询**/
-    CarAdmUser queryByAccount(@Param("account") String account,@Param("merchantId")String merchantId);
+    CarAdmUser queryByAccount(@Param("account") String account,@Param("merchantId")Integer merchantId);
     /**查询用户列表**/
-    List<CarAdmUser> queryUsers(@Param("merchantId")String merchantId,@Param("userIds") List<Integer> userIds, @Param("account") String account, @Param("userName") String userName,
+    List<CarAdmUser> queryUsers(@Param("merchantId")Integer merchantId,@Param("userIds") List<Integer> userIds, @Param("account") String account, @Param("userName") String userName,
                                 @Param("phone") String phone, @Param("status") Integer status,
                                 @Param("createStartTime") String createStartTime,@Param("createEndTime") String createEndTime);
 

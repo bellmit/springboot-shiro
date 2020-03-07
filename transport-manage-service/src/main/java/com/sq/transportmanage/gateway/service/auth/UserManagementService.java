@@ -348,7 +348,7 @@ public class UserManagementService{
 		return carAdmUserMapper.selectByPrimaryKey(id);
 	}
 
-	public CarAdmUser findByUuid (String merchantId){
+	public CarAdmUser findByUuid (Integer merchantId){
 		return carAdmUserExMapper.queryByAccount(null,merchantId);
 	}
 
