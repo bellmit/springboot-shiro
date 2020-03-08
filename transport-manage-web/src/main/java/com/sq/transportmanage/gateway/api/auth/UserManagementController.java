@@ -102,8 +102,8 @@ public class UserManagementController {
 		if(userId != null){
 			newUser.setUserId(userId);
 		}
-		if(StringUtils.isNotEmpty(userName.trim())){
-			newUser.setUserName(userName.trim());
+		if(StringUtils.isNotEmpty(userName)){
+			newUser.setUserName(userName);
 		}
 		if(StringUtils.isNotEmpty(phone)){
 			newUser.setPhone(phone);
