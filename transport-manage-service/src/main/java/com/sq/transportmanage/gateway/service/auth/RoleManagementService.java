@@ -42,16 +42,21 @@ public class RoleManagementService{
 	
 	/**一、增加一个角色**/
 	public AjaxResponse addSaasRole(SaasRole role ) {
-		//角色代码已经存在
-		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
-		List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantId(),null, role.getRoleCode(), null, null);
-		if(roles!=null && roles.size()>0) {
-			return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
+		try {
+			//角色代码已经存在
+			SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+			List<SaasRole> roles = saasRoleExMapper.queryRoles(loginUser.getMerchantId(),null, role.getRoleCode(), null, null);
+			if(roles!=null && roles.size()>0) {
+                return AjaxResponse.fail(RestErrorCode.ROLE_CODE_EXIST );
+            }
+			//保存
+			role.setValid(true);
+			saasRoleExMapper.insert(role);
+
+			return AjaxResponse.success(role);
+		} catch (Exception e) {
+			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
 		}
-		//保存
-		role.setValid(true);
-		saasRoleMapper.insertSelective(role);
-		return AjaxResponse.success( role );
 	}
 
 	/**二、禁用一个角色**/
