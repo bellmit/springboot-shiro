@@ -31,6 +31,7 @@ public class UserManagementController {
 	@Autowired
 	private UserManagementService userManagementService;
 
+
 	
 	/**一、增加一个用户**/
 	@RequestMapping("/addUser")
@@ -93,6 +94,7 @@ public class UserManagementController {
 			@Verify(param="userId",rule="min(1)") Integer userId,
 			 String userName,
 			@Verify(param="phone",rule="mobile") String phone,
+			 @Verify(param = "email",rule = "required")String email,
 			 String suppliers,
 			 Integer level
   		) {
@@ -111,6 +113,9 @@ public class UserManagementController {
 		}
 		if(level != null){
 			newUser.setLevel(level);
+		}
+		if(StringUtils.isNotEmpty(email)){
+			newUser.setEmail(email);
 		}
 		return userManagementService.changeUser(newUser);
 	}
@@ -183,5 +188,6 @@ public class UserManagementController {
 		CarAdmUser carAdmUser = userManagementService.findByPrimaryKey(userId);
 		return AjaxResponse.success(carAdmUser);
 	}
+
 
 }
