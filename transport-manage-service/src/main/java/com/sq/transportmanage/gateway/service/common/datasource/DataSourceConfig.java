@@ -36,18 +36,6 @@ public class DataSourceConfig {
     @Primary
     public DataSource dataSource() {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
-        //mp-driver库
-        DataSource mp_driver_master = dbProperties.getMpdrivermaster();
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>mp-driver主库,pool-name:{}",dbProperties.getMpdrivermaster().getPoolName());
-
-        DataSource mp_driver_slave = dbProperties.getMpdriverslave();
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>mp-driver从库,pool-name:{}",dbProperties.getMpdriverslave().getPoolName());
-        //mdbcarmanage库
-        DataSource mdbcarmanage_master = dbProperties.getMdbcarmanagemaster();
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>mdbcarmanage主库,pool-name:{}",dbProperties.getMdbcarmanagemaster().getPoolName());
-
-        DataSource mdbcarmanage_slave = dbProperties.getMdbcarmanageslave();
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>mdbcarmanage_master,pool-name:{}",dbProperties.getMdbcarmanageslave().getPoolName());
 
         DataSource driver_spark_master = dbProperties.getDriversparkmaster();
         logger.info(">>>>>>>>>>>>>>>>>>>>>>>driver_spark_master,pool-name:{}",dbProperties.getDriversparkmaster().getPoolName());
@@ -62,15 +50,9 @@ public class DataSourceConfig {
         //配置多数据源
         Map<Object,Object> map = new HashMap<>();
         //key需要跟ThreadLocal中的值对应
-        //mp_driver库
-        map.put(DataSourceType.MPDRIVER_MASTER.getName(), mp_driver_master);
-        map.put(DataSourceType.MPDRIVER_SLAVE.getName(), mp_driver_slave);
-        //mdbcarmanage库
-        map.put(DataSourceType.MDBCARMANAGER_MASTER.getName(), mdbcarmanage_master);
-        map.put(DataSourceType.MDBCARMANAGER_SLAVE.getName(), mdbcarmanage_slave);
         //driverspark库
-        map.put(DataSourceType.MPDRIVER_MASTER,driver_spark_master);
-        map.put(DataSourceType.MPDRIVER_SLAVE,driver_spark_slave);
+        map.put(DataSourceType.DRIVERSPARK_MASTER,driver_spark_master);
+        map.put(DataSourceType.DRIVERSPARK_SLAVE,driver_spark_slave);
 
         dynamicDataSource.setTargetDataSources(map);
         return dynamicDataSource;

@@ -7,18 +7,6 @@ package com.sq.transportmanage.gateway.service.common.datasource;
  */
 public enum DataSourceType {
 
-    //mp_driver主库
-    MPDRIVER_MASTER("mpdriver_master"),
-
-    //mp_driver从库
-    MPDRIVER_SLAVE("mpdriver_slave"),
-
-    // mdbcarmanage主库
-    MDBCARMANAGER_MASTER("mdbcarmanage_master"),
-    // mdbcarmanage从库
-    MDBCARMANAGER_SLAVE("mdbcarmanage_slave"),
-
-
     // driver_spark主库
     DRIVERSPARK_MASTER("driver_spark_master"),
     // driver_spark从库

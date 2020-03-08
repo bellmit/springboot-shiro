@@ -1,64 +1,12 @@
-#测试环境配置
+#开发环境配置
 spring:
   datasource:
     hikari:
-      mpdrivermaster:
-        name: test
-        jdbc-url: jdbc:mysql://10.20.10.100:3306/mp_driver?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: mp_driver
-        password: mp_driver@01zhuanche.com
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: master_mpdriver_hikaricp
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
-      mpdriverslave:
-        name: test
-        jdbc-url: jdbc:mysql://10.20.10.101:3306/mp_driver?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: mp_driver
-        password: mp_driver@01zhuanche.com
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: slave_mpdriver_hikaricp
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
-      mdbcarmanagemaster:
-        name: test
-        jdbc-url: jdbc:mysql://10.20.10.100:3306/MDB_CAR_MANAGE?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: sqhc_rentcar
-        password: BzkmQM%O^U7Dy8X3
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: master_rentcar_hikaricp
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
-      mdbcarmanageslave:
-        name: test
-        jdbc-url: jdbc:mysql://10.20.10.100:3306/MDB_CAR_MANAGE?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: sqhc_rentcar
-        password: BzkmQM%O^U7Dy8X3
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: slave_rentcar_hikaricp
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
       driversparkmaster:
         name: dev
-        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
+        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-test-db.01zhuanche.com:3306/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        username: sqhc_rentcar
+        password: BzkmQM%O^U7Dy8X3
         minimum-idle: 5
         idle-timeout: 300000
         maximum-pool-size: 50
@@ -69,9 +17,9 @@ spring:
         connection-test-query: SELECT 1
       driversparkslave:
         name: dev
-        jdbc-url: jdbc:mysql://mysql-s-ro-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
+        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-test-db.01zhuanche.com:3306/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        username: sqhc_rentcar
+        password: BzkmQM%O^U7Dy8X3
         minimum-idle: 5
         idle-timeout: 300000
         maximum-pool-size: 50
@@ -82,6 +30,7 @@ spring:
         connection-test-query: SELECT 1
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
+
   redis:
     pool:
       max-active: 200
@@ -90,79 +39,58 @@ spring:
       nodes: redis-cluster-c1-car-all-test-db.01zhuanche.com:6381,redis-cluster-c2-car-all-test-db.01zhuanche.com:6381,redis-cluster-c3-car-all-test-db.01zhuanche.com:6381,redis-cluster-c4-car-all-test-db.01zhuanche.com:6380,redis-cluster-c5-car-all-test-db.01zhuanche.com:6380,redis-cluster-c6-car-all-test-db.01zhuanche.com:6380
     password: qBa39fA&?@-o
 
-#okhttp:
-#  client:
-#    connections:
-#    -
-#      clientName: client3
-#      connectTimeout: 100
-#      readTimeout: 100
-#      writeTimeout: 100
-#      maxIdleConnections: 100
-#      keepAliveDuration: 5
-#      maxRetry: 3
-#      logParamsSwitch: false
-#      logIgnore: true
-#      enalbeHttps: true
-###########配置中心##########
-#config-manager:
-#  appName: sq_conference_manage_test
-#  mode: 0
-#  baseFolder: ./config_center
-#  remoteCheckInterval: 10
-#  remoteUrl: http://cnodeprod.01zhuanche.com/rpc/download
-#  remoteToken: 0gqt6b6p
-#  connectTimeout: 1000
-#  readTimeout: 1000
-#配置中心
-#config-manager:
-#  appName: mp_manage_rest_test
-#  mode: 0
-#  baseFolder: /u01/config_center
-#  remoteCheckInterval: 10
-#  remoteUrl: http://cnodeprod.01zhuanche.com/rpc/download
-#  remoteToken: 3zqpna8h
-#  connectTimeout: 2000
-#  readTimeout: 2000
-
+zuul:
+  routes:
+    chargeapi:
+      path: /charge/**
+      url: http://test-inside-saas-charge.guobindui.cn/charge/
+    orderapi:
+      path: /order/**
+      url: http://test-inside-order-spark.guobindui.cn/order/
+    dispatchapi:
+      path: /dispatch/**
+      url: http://test-inside-spark-dispatch-cms.guobindui.cn/
+    mpapi:
+      path: /mp/**
+      url: http://test-inside-mp-spark-manage.guobindui.cn/
+    uploadPhoto:
+      path: /common/uploadPhoto/**
+      url: http://test-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
+    thirdapi:
+      path: /common/upload/**
+      url: http://test-inside-third-api.01zhuanche.com/file/upload
+    shareapi:
+      path: /share/**
+      url: http://test-inside-saas-share.guobindui.cn/share/
 
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
 ding.ding.monitor.url: https://oapi.dingtalk.com/robot/send?access_token=adba3f805eeaec5d6b87f85d7cd93b850aa6055d54a4079a87e2d79b2265746d
 
+
+auth.finduser.url: http://test-inside-auth.01zhuanche.com/findUser.html
+
+auth.permission.url: http://test-inside-auth.01zhuanche.com/findPermission.html
+#应该是用不到
+auth.appid: 18
+
 resetpassword.msgnotify.switch: false
 user.password.indexOfPhone: 9,5,3,7,1,4,8,2
 login.checkMsgCode.switch: false
 
+loginpage.url: https://test-saas.guobindui.cn/
 
-loginpage.url: http://test-inside-manage.01zhuanche.com/
+homepage.url: https://test-saas.guobindui.cn/#/Manage
 
-homepage.url: http://test-inside-manage.01zhuanche.com/
-  #https://test-huiyi.01zhuanche.com/#/Manage
-
-passenger.integral.url: http://test-inside-passenger-integral.01zhuanche.com
-
-third.api.url: http://test-inside-third-api.01zhuanche.com
-
-#login.url: https://test-inside-conference-manage.01zhuanche.com/login.json
-login.url: http://test-inside-manage.01zhuanche.com/
+login.url: https://test-saas-spark.guobindui.cn/login
 
 #短信发送相关
 short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/send
-short_message_appkey: 37746688660445878AB02BF98370D1F9
-short_message_appsecret: 6B5D87895C7B49BCA347D06C62ED98DE
+short_message_appkey: 04F934A9C93E4376ACC51CBE4B5FDCCC
+short_message_appsecret: B89E2C9C203D4CAE88383431A2C4CC6E
 template_short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/template/send
 
-
-third-api:
-  url: http://test-inside-third-api.01zhuanche.com
-#派单
-dispatcher:
-  url: http://test-inside-dispatcher-baseinfo.01zhuanche.com
-  businessId: 9f260ae13ec0adbceef9edc88fa746a9
-  driver:
-    url: http://test-inside-dispatcher-baseinfo.01zhuanche.com
 
 #h5找回密码域名
 reset.password.url: https://test-saas.guobindui.cn/forgot
