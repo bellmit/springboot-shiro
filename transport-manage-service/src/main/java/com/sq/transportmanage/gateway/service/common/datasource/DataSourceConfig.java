@@ -51,8 +51,8 @@ public class DataSourceConfig {
         Map<Object,Object> map = new HashMap<>();
         //key需要跟ThreadLocal中的值对应
         //driverspark库
-        map.put(DataSourceType.MPDRIVER_MASTER,driver_spark_master);
-        map.put(DataSourceType.MPDRIVER_SLAVE,driver_spark_slave);
+        map.put(DataSourceType.DRIVERSPARK_MASTER,driver_spark_master);
+        map.put(DataSourceType.DRIVERSPARK_SLAVE,driver_spark_slave);
 
         dynamicDataSource.setTargetDataSources(map);
         return dynamicDataSource;

@@ -17,5 +17,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface MyDataSource {
 
-    DataSourceType value() default DataSourceType.MPDRIVER_MASTER;//默认主表
+    DataSourceType value() default DataSourceType.DRIVERSPARK_MASTER;//默认主表
 }
