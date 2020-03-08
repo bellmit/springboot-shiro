@@ -150,7 +150,7 @@ public class RolemanagementController{
 	public AjaxResponse addAndSaveSaasRole(@Verify(param="roleCode",rule="required") String roleCode,
 									@Verify(param="roleName",rule="required") String roleName,
 									String roleDesc,
-									@Verify(param="permissionIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String permissionIds) {
+									@Verify(param="permissionIds",rule="required") String permissionIds) {
 		SaasRole role = new SaasRole();
 		role.setRoleCode(roleCode.trim());
 		role.setRoleName(roleName.trim());
@@ -171,9 +171,16 @@ public class RolemanagementController{
 					for(String id : ids ) {
 						if(StringUtils.isNotEmpty(id)) {
 							try {
-								newPermissionIds.add(Integer.valueOf(id));
+								String strs[] = id.split("-");
+								if(strs.length > 0){
+									for(String str : strs){
+										if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
+											newPermissionIds.add(Integer.valueOf(str));
+										}
+									}
+								}
 							}catch(Exception ex) {
-								ex.printStackTrace();
+								return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
 							}
 						}
 					}
