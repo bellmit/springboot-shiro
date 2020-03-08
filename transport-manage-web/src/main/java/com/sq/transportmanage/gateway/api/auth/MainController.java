@@ -7,9 +7,12 @@ import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
+import com.sq.transportmanage.gateway.service.auth.SaasRoleService;
+import com.sq.transportmanage.gateway.service.auth.SaasUserRoleRalationService;
 import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
@@ -22,6 +25,7 @@ import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswor
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
+import com.sq.transportmanage.gateway.service.common.web.RequestFunction;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
@@ -41,11 +45,11 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,6 +61,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.USER_RESET_PASSWORD;
 
 @Controller
 public class MainController {
@@ -93,6 +99,12 @@ public class MainController {
 
 	@Autowired
 	private BaseSupplierService baseSupplierService;
+
+	@Autowired
+	private SaasUserRoleRalationService saasUserRoleRalationService;
+
+	@Autowired
+	private SaasRoleService saasRoleService;
 
 
     /**运维监控心跳检测 **/
@@ -619,6 +631,21 @@ public class MainController {
 
 	}
 
+
+
+	/**九、根据用户id查询用户有哪些角色**/
+	@RequestMapping("/queryRolesByUserId")
+	@RequestFunction(menu = USER_RESET_PASSWORD)
+	@ResponseBody
+	public AjaxResponse queryRolesByUserId( @Verify(param="userId",rule="required|min(1)") Integer userId ) {
+		List<Integer> listRoleIds = saasUserRoleRalationService.queryRoleIdsOfUser(userId);
+		if(!CollectionUtils.isEmpty(listRoleIds)){
+			List<SaasRole> saasRoleList = saasRoleService.queryRoles(WebSessionUtil.getCurrentLoginUser().getMerchantId(),
+					listRoleIds,null,null,null);
+			return AjaxResponse.success(saasRoleList);
+		}
+		return AjaxResponse.success(null);
+	}
 
 
 
