@@ -1,7 +1,9 @@
 package com.sq.transportmanage.gateway.api.auth;
 
 
+import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
+import com.sq.transportmanage.gateway.service.auth.PermissionManagementService;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
@@ -29,6 +31,9 @@ import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 public class RolemanagementController{
 	@Autowired
 	private RoleManagementService roleManagementService;
+
+	@Autowired
+	private PermissionManagementService permissionManagementService;
 	
 	/**一、增加一个角色**/
 	@RequestMapping("/addSaasRole")
@@ -94,7 +99,7 @@ public class RolemanagementController{
 	@RequiresPermissions(value = { "GET_PERMISSIONIDS_OF_ROLE" } )
 	@RequestFunction(menu = ROLE_PERMISSION_IDS)
 	public AjaxResponse getAllPermissionIds( @Verify(param="roleId",rule="required|min(1)") Integer roleId){
-		List<Integer> permissionIds = roleManagementService.getAllPermissionIds(roleId);
+		List<String> permissionIds = permissionManagementService.queryPermissionsOfRoleId(roleId);
 		return AjaxResponse.success(permissionIds);
 	}
 	
@@ -103,7 +108,7 @@ public class RolemanagementController{
 	@RequiresPermissions(value = { "SAVE_ROLE_PERMISSIONIDS" } )
 	@RequestFunction(menu = ROLE_PERMISSION_SAVE)
 	public AjaxResponse savePermissionIds(@Verify(param="roleId",rule="required|min(1)") Integer roleId,
-										  @Verify(param="permissionIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String permissionIds) {
+										  @Verify(param="permissionIds",rule="required") String permissionIds) {
 		List<Integer> newPermissionIds = new ArrayList<Integer>();
 		if(StringUtils.isNotEmpty(permissionIds) ) {
 			String[]  ids = permissionIds.split(",");
@@ -111,9 +116,16 @@ public class RolemanagementController{
 				for(String id : ids ) {
 					if(StringUtils.isNotEmpty(id)) {
 						try {
-							newPermissionIds.add(Integer.valueOf(id));
+							String strs[] = id.split("-");
+							if(strs.length > 0){
+								for(String str : strs){
+									if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
+										newPermissionIds.add(Integer.valueOf(str));
+									}
+								}
+							}
 						}catch(Exception ex) {
-							ex.printStackTrace();
+							return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
 						}
 					}
 				}
