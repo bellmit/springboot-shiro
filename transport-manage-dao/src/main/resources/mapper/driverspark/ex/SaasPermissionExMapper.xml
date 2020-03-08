@@ -107,4 +107,15 @@
       and user_id = #{userId}
     </if>
   </select>
+
+  <!--查询角色所拥有的菜单 -->
+  <select id="queryPermissionsOfRoleId" resultMap="BaseResultMap" >
+    select
+    o.permission_id, o.parent_permission_id
+    from  auth_saas_role_permission_ralation t INNER JOIN auth_saas_permission  o on
+    t.permission_id = o.permission_id WHERE 1 = 1
+    <if test="roleId!=null">
+      and t.role_id = #{roleId}
+    </if>
+  </select>
 </mapper>

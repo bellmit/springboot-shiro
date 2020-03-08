@@ -292,4 +292,6 @@ public class RoleManagementService{
 		entity.setPermissionIds(stringBuffer.toString());
 		return entity;
 	}
+
+
 }

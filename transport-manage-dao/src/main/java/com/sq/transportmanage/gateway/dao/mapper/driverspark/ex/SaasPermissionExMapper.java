@@ -25,5 +25,8 @@ public interface SaasPermissionExMapper{
 	/**查询该用户在该模块下所拥有的菜单**/
 	List<SaasPermission> queryModularPermissionsOfParrent(@Param("userId") Integer userId,@Param("parentId") Integer parentId);
 
+	/**查询某角色的全部菜单**/
+	List<SaasPermission> queryPermissionsOfRoleId(@Param("roleId")Integer roleId);
+
 
 }
