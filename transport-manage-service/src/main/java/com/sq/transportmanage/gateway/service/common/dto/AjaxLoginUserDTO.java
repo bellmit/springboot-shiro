@@ -19,6 +19,8 @@ public final class AjaxLoginUserDTO implements Serializable{
 	private String email;
 	/**状态**/
 	private Integer status;
+
+	private Integer merchantId;
 	//---------------------------------------------------------------------------------------------------------用户基本信息END
 	
 	//---------------------------------------------------------------------------------------------------------用户的菜单信息BEGIN
@@ -144,5 +146,13 @@ public final class AjaxLoginUserDTO implements Serializable{
 
 	public void setSupplierIds(String supplierIds) {
 		this.supplierIds = supplierIds;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 }
