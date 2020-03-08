@@ -2,65 +2,6 @@
 spring:
   datasource:
     hikari:
-      mpdrivermaster:
-        name: dev
-        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/mp_driver?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
-         #最小空闲连接数量
-        minimum-idle: 5
-        #空闲连接存活最大时间，默认600000（10分钟
-        idle-timeout: 300000
-        #连接池最大连接数，默认是50
-        maximum-pool-size: 50
-        #此属性控制从池返回的连接的默认自动提交行为,默认值：true
-        auto-commit: true
-        #pool-name
-        pool-name: master_mpDriver_HikariCP
-        #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-        max-lifetime: 1800000
-        #数据库连接超时时间,默认30秒，即30000
-        connection-timeout: 300000
-        connection-test-query: SELECT 1
-      mpdriverslave:
-        name: dev
-        jdbc-url: jdbc:mysql://mysql-s-ro-car-all-dev-new-db.01zhuanche.com:3307/mp_driver?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: slave_mdbCarManager_HikariCP
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
-      mdbcarmanagemaster:
-        name: dev
-        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/MDB_CAR_MANAGE?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: master_mdbCarManager_HikariCP
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
-      mdbcarmanageslave:
-        name: dev
-        jdbc-url: jdbc:mysql://mysql-s-ro-car-all-dev-new-db.01zhuanche.com:3307/MDB_CAR_MANAGE?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
-        minimum-idle: 5
-        idle-timeout: 300000
-        maximum-pool-size: 50
-        auto-commit: true
-        pool-name: slave_mdbCarManager_HikariCP
-        max-lifetime: 1800000
-        connection-timeout: 30000
-        connection-test-query: SELECT 1
       driversparkmaster:
         name: dev
         jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
@@ -97,35 +38,6 @@ spring:
       nodes: redis-cluster-c1-car-all-dev-new-db.01zhuanche.com:6381,redis-cluster-c2-car-all-dev-new-db.01zhuanche.com:6381,redis-cluster-c3-car-all-dev-new-db.01zhuanche.com:6381,redis-cluster-c4-car-all-dev-new-db.01zhuanche.com:6380,redis-cluster-c5-car-all-dev-new-db.01zhuanche.com:6380,redis-cluster-c6-car-all-dev-new-db.01zhuanche.com:6380
     password: qBa39fA&?@-o
 
-#sso redis 配置
-#  redis.sentinel.name=test
-#  redis.server1.host=10.20.10.100
-#  redis.server1.port=26379
-#  redis.server2.host=10.20.10.101
-#  redis.server2.port=26379
-#  redis.server3.host=10.20.10.102
-#  redis.server3.port=26379
-#  redis.maxActive=120
-#  redis.maxIdle=60
-#  redis.maxWait=2000
-#  redis.testOnBorrow=true
-#  redis.password=
-
-okhttp:
-  client:
-    connections:
-    -
-      clientName: client3
-      connectTimeout: 100
-      readTimeout: 100
-      writeTimeout: 100
-      maxIdleConnections: 100
-      keepAliveDuration: 5
-      maxRetry: 3
-      logParamsSwitch: false
-      logIgnore: true
-      enalbeHttps: true
-
 zuul:
   routes:
     chargeapi:
@@ -140,7 +52,6 @@ zuul:
     mpapi:
       path: /mp/**
       url: http://dev-inside-mp-spark-manage.guobindui.cn/
-#      url: http://10.67.1.213:8080/
     uploadPhoto:
       path: /common/uploadPhoto/**
       url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
