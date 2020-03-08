@@ -8,6 +8,7 @@ import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RequestFunction;
+import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.auth.RoleManagementService;
 import org.apache.commons.lang.StringUtils;
@@ -101,7 +102,8 @@ public class RolemanagementController{
 	@RequestMapping("/savePermissionIds")
 	@RequiresPermissions(value = { "SAVE_ROLE_PERMISSIONIDS" } )
 	@RequestFunction(menu = ROLE_PERMISSION_SAVE)
-	public AjaxResponse savePermissionIds(@Verify(param="roleId",rule="required|min(1)") Integer roleId, @Verify(param="permissionIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String permissionIds) {
+	public AjaxResponse savePermissionIds(@Verify(param="roleId",rule="required|min(1)") Integer roleId,
+										  @Verify(param="permissionIds",rule="RegExp(^([0-9]+,)*[0-9]+$)") String permissionIds) {
 		List<Integer> newPermissionIds = new ArrayList<Integer>();
 		if(StringUtils.isNotEmpty(permissionIds) ) {
 			String[]  ids = permissionIds.split(",");
@@ -140,4 +142,56 @@ public class RolemanagementController{
 	public AjaxResponse deleteSaasRole ( @Verify(param="roleId",rule="required|min(1)") Integer roleId ) {
 		return roleManagementService.deleteSaasRole(roleId);
 	}
+
+	/**一、增加一个角色**/
+	@RequestMapping("/addAndSaveSaasRole")
+	@RequiresPermissions(value = { "ADD_SAAS_ROLE" } )
+	@RequestFunction(menu = ROLE_ADD)
+	public AjaxResponse addAndSaveSaasRole(@Verify(param="roleCode",rule="required") String roleCode,
+									@Verify(param="roleName",rule="required") String roleName,
+									String roleDesc,
+									@Verify(param="permissionIds",rule="required") String permissionIds) {
+		SaasRole role = new SaasRole();
+		role.setRoleCode(roleCode.trim());
+		role.setRoleName(roleName.trim());
+		role.setMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
+		role.setValid(true);
+		role.setRoleDesc(roleDesc);
+		role.setUpdateTime(new Date());
+		role.setCreateTime(new Date());
+		role.setRoleDesc(roleDesc);
+		role.setCreaterId(WebSessionUtil.getCurrentLoginUser().getId());
+		AjaxResponse response = roleManagementService.addSaasRole(role);
+		if(response != null && response.getCode() == 0){
+			role = (SaasRole) response.getData();
+			List<Integer> newPermissionIds = new ArrayList<Integer>();
+			if(StringUtils.isNotEmpty(permissionIds) ) {
+				String[]  ids = permissionIds.split(",");
+				if(ids.length>0) {
+					for(String id : ids ) {
+						if(StringUtils.isNotEmpty(id)) {
+							try {
+								String strs[] = id.split("-");
+								if(strs.length > 0){
+									for(String str : strs){
+										if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
+											newPermissionIds.add(Integer.valueOf(str));
+										}
+									}
+								}
+							}catch(Exception ex) {
+								return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
+							}
+						}
+					}
+				}
+			}
+			return roleManagementService.savePermissionIds(role.getRoleId(), newPermissionIds);
+		}
+
+		return  response;
+
+	}
+
+
 }
