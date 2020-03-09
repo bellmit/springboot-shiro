@@ -293,7 +293,8 @@ public class PermissionManagementService {
 	 */
 	public StringBuffer getKey(Map<Integer,Integer> map,Integer permissionId){
 		StringBuffer sb = new StringBuffer();
-		if(permissionId != 0){
+		if(permissionId != 0 && permissionId > 0){
+			System.out.println("permissionId:" + permissionId);
 			sb.append(permissionId).append("-");
 			sb.append(getKey(map,map.get(permissionId)));
 		}
