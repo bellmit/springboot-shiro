@@ -14,9 +14,11 @@ import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.auth.RoleManagementService;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -73,7 +75,10 @@ public class RolemanagementController{
 	@RequestMapping("/changeRole")
 	@RequiresPermissions(value = { "CHANGE_SAAS_ROLE" } )
 	@RequestFunction(menu = ROLE_UPDATE)
-	public 	AjaxResponse changeRole( @Verify(param="roleId",rule="required|min(1)") Integer roleId , @Verify(param="roleCode",rule="required")  String roleCode,  @Verify(param="roleName",rule="required") String roleName,String roleDesc ) {
+	public 	AjaxResponse changeRole( @Verify(param="roleId",rule="required|min(1)") Integer roleId ,
+									 @Verify(param="roleCode",rule="required")  String roleCode,
+									 @Verify(param="roleName",rule="required") String roleName,
+									  String roleDesc ) {
 		SaasRole roleForupdate = new SaasRole();
 		roleForupdate.setRoleId(roleId);
 		roleForupdate.setRoleCode(roleCode.trim());
@@ -205,5 +210,16 @@ public class RolemanagementController{
 
 	}
 
+	/**
+	 * 获取角色信息
+	 * @param roleId
+	 * @return
+	 */
+	@RequestMapping("/getRoleDetail")
+	@ResponseBody
+	public AjaxResponse getRoleDetail(@Verify(param = "roleId",rule="required|min(1)") Integer roleId){
+		SaasRole saasRole = roleManagementService.findByPrimaryKey(roleId);
+		return AjaxResponse.success(saasRole);
+	}
 
 }

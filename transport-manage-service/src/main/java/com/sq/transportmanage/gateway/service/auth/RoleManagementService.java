@@ -277,20 +277,13 @@ public class RoleManagementService{
 		return saasRolePermissionRalationExMapper.queryRoleNameList(userId);
 	}
 
-	public SaasRole findByPrimaryKeyV2 (Integer id ){
+	public SaasRole findByPrimaryKey (Integer id ){
 		SaasRole dbEntity = saasRoleMapper.selectByPrimaryKey(id);
-		List<Integer> checkedPermissionIds = saasRolePermissionRalationExMapper.queryPermissionIdsOfRole(id);
+		//List<Integer> checkedPermissionIds = saasRolePermissionRalationExMapper.queryPermissionIdsOfRole(id);
 		if(dbEntity == null){
 			return null;
 		}
-		StringBuffer stringBuffer = new StringBuffer();
-		for(Integer checkedPermissionId : checkedPermissionIds){
-			stringBuffer.append(checkedPermissionId).append("");
-		}
-		SaasRole entity = new SaasRole();
-		BeanUtils.copyProperties(dbEntity,entity);
-		entity.setPermissionIds(stringBuffer.toString());
-		return entity;
+		return dbEntity;
 	}
 
 
