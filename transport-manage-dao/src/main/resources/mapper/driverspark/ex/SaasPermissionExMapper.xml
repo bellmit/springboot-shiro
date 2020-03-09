@@ -117,6 +117,7 @@
     <if test="roleId!=null">
       and t.role_id = #{roleId}
     </if>
+    ORDER BY o.permission_id desc
   </select>
 
 
