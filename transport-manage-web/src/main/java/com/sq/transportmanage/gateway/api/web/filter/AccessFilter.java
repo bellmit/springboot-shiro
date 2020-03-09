@@ -70,7 +70,7 @@ public class AccessFilter extends ZuulFilter {
             data.put("account",loginUser.getLoginName());//用户名
             String decodeStr = "";
             try {
-                decodeStr = URLDecoder.decode(loginUser.getName(),"UTF-8");
+                decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
