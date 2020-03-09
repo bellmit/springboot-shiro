@@ -49,6 +49,9 @@ public class AccessFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
+        if(request.getRequestURL().toString().contains("common/upload")){
+            return ctx;
+        }
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
         logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
         /**用户是否有权限**/
