@@ -72,7 +72,7 @@ public class MainController {
 	@Value("${homepage.url}")
 	private String homepageUrl; //前端UI首页页面
 	@Value("${login.checkMsgCode.switch}")
-	private String loginCheckMsgCodeSwitch = "ON";//登录时是否进行短信验证的开关
+	private String loginCheckMsgCodeSwitch = "OFF";//登录时是否进行短信验证的开关
 
 
 	private static final String CACHE_PREFIX_MSGCODE_CONTROL = "mp_star_fire_login_cache_msgcode_control_";
