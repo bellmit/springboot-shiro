@@ -333,6 +333,8 @@ public class MainController {
 			redisTemplate.delete(redis_getmsgcode_key);
 
 		}catch(AuthenticationException aex) {
+			aex.getStackTrace();
+			logger.info(aex.getMessage());
 			return AjaxResponse.fail(RestErrorCode.USER_LOGIN_FAILED) ;
 		}
 		//返回登录成功
