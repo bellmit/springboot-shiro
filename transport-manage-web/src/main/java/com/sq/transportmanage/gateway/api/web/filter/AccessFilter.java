@@ -70,12 +70,12 @@ public class AccessFilter extends ZuulFilter {
             data.put("account",loginUser.getLoginName());//用户名
             String decodeStr = "";
             try {
-                decodeStr = URLDecoder.decode("默认超级管理员","UTF-8");
+                decodeStr = URLDecoder.decode(loginUser.getName(),"UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             data.put("name", decodeStr);//用户名中文
-            data.put("supplierIds",loginUser.getSupplierIds());//用户名中文
+            data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
             logger.info("login_user :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
