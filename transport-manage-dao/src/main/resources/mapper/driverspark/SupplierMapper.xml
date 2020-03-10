@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.SupplierMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.Supplier" >
+    <id column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="supplier_full_name" property="supplierFullName" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="business_scope" property="businessScope" jdbcType="VARCHAR" />
+    <result column="economic_type" property="economicType" jdbcType="VARCHAR" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="DECIMAL" />
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+    <result column="legal_person_name" property="legalPersonName" jdbcType="VARCHAR" />
+    <result column="legal_person_phone" property="legalPersonPhone" jdbcType="VARCHAR" />
+    <result column="legal_idcard" property="legalIdcard" jdbcType="VARCHAR" />
+    <result column="charge_person_name" property="chargePersonName" jdbcType="VARCHAR" />
+    <result column="charge_person_phone" property="chargePersonPhone" jdbcType="VARCHAR" />
+    <result column="company_date" property="companyDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    supplier_id, supplier_name, supplier_full_name, merchant_id, province_id, province_name, 
+    city_id, city_name, area_id, area_name, address, business_scope, economic_type, registered_capital, 
+    credit_code, legal_person_name, legal_person_phone, legal_idcard, charge_person_name, 
+    charge_person_phone, company_date, status, email, create_by, create_time, update_by, 
+    update_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from base_supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from base_supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.Supplier" >
+    insert into base_supplier (supplier_id, supplier_name, supplier_full_name, 
+      merchant_id, province_id, province_name, 
+      city_id, city_name, area_id, 
+      area_name, address, business_scope, 
+      economic_type, registered_capital, credit_code, 
+      legal_person_name, legal_person_phone, legal_idcard, 
+      charge_person_name, charge_person_phone, company_date, 
+      status, email, create_by, 
+      create_time, update_by, update_time, 
+      remark)
+    values (#{supplierId,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR}, #{supplierFullName,jdbcType=VARCHAR}, 
+      #{merchantId,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR}, 
+      #{cityId,jdbcType=INTEGER}, #{cityName,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER}, 
+      #{areaName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{businessScope,jdbcType=VARCHAR}, 
+      #{economicType,jdbcType=VARCHAR}, #{registeredCapital,jdbcType=DECIMAL}, #{creditCode,jdbcType=VARCHAR}, 
+      #{legalPersonName,jdbcType=VARCHAR}, #{legalPersonPhone,jdbcType=VARCHAR}, #{legalIdcard,jdbcType=VARCHAR}, 
+      #{chargePersonName,jdbcType=VARCHAR}, #{chargePersonPhone,jdbcType=VARCHAR}, #{companyDate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.Supplier" >
+    insert into base_supplier
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="supplierFullName != null" >
+        supplier_full_name,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="provinceName != null" >
+        province_name,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="areaName != null" >
+        area_name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="businessScope != null" >
+        business_scope,
+      </if>
+      <if test="economicType != null" >
+        economic_type,
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital,
+      </if>
+      <if test="creditCode != null" >
+        credit_code,
+      </if>
+      <if test="legalPersonName != null" >
+        legal_person_name,
+      </if>
+      <if test="legalPersonPhone != null" >
+        legal_person_phone,
+      </if>
+      <if test="legalIdcard != null" >
+        legal_idcard,
+      </if>
+      <if test="chargePersonName != null" >
+        charge_person_name,
+      </if>
+      <if test="chargePersonPhone != null" >
+        charge_person_phone,
+      </if>
+      <if test="companyDate != null" >
+        company_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierFullName != null" >
+        #{supplierFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null" >
+        #{businessScope,jdbcType=VARCHAR},
+      </if>
+      <if test="economicType != null" >
+        #{economicType,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="creditCode != null" >
+        #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null" >
+        #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPhone != null" >
+        #{legalPersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="legalIdcard != null" >
+        #{legalIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="chargePersonName != null" >
+        #{chargePersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="chargePersonPhone != null" >
+        #{chargePersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyDate != null" >
+        #{companyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.Supplier" >
+    update base_supplier
+    <set >
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierFullName != null" >
+        supplier_full_name = #{supplierFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null" >
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null" >
+        business_scope = #{businessScope,jdbcType=VARCHAR},
+      </if>
+      <if test="economicType != null" >
+        economic_type = #{economicType,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital = #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="creditCode != null" >
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null" >
+        legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPhone != null" >
+        legal_person_phone = #{legalPersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="legalIdcard != null" >
+        legal_idcard = #{legalIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="chargePersonName != null" >
+        charge_person_name = #{chargePersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="chargePersonPhone != null" >
+        charge_person_phone = #{chargePersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyDate != null" >
+        company_date = #{companyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.Supplier" >
+    update base_supplier
+    set supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_full_name = #{supplierFullName,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      province_name = #{provinceName,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=INTEGER},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      area_id = #{areaId,jdbcType=INTEGER},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      business_scope = #{businessScope,jdbcType=VARCHAR},
+      economic_type = #{economicType,jdbcType=VARCHAR},
+      registered_capital = #{registeredCapital,jdbcType=DECIMAL},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
+      legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      legal_person_phone = #{legalPersonPhone,jdbcType=VARCHAR},
+      legal_idcard = #{legalIdcard,jdbcType=VARCHAR},
+      charge_person_name = #{chargePersonName,jdbcType=VARCHAR},
+      charge_person_phone = #{chargePersonPhone,jdbcType=VARCHAR},
+      company_date = #{companyDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </update>
+
+</mapper>
