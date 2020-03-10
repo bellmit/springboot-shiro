@@ -171,13 +171,16 @@ public class MainController {
 		PrintWriter out = null;
 		try{
 			response.setStatus(HttpStatus.SC_OK);
-			out = response.getWriter();
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType("application/json; charset=UTF-8");
+			//response.setCharacterEncoding("UTF-8");
+			//response.setContentType("application/json; charset=UTF-8");
 			response.setHeader("pragma", "no-cache");
 			response.setHeader("Cache-Control", "no-cache");
+			//通知浏览器服务器发送的数据格式是text/html，并要求浏览器使用utf-8进行解码。
+			response.setHeader("contentType", "text/html;charset=utf-8");
 			response.setDateHeader("Expires", 0);
-			out.write( JSON.toJSONString(ajaxResponse, true) );
+			response.setContentType("text/html;charset=utf-8");
+			out = response.getWriter();
+			out.write( JSON.toJSONString(ajaxResponse, true));
 			out.close();
 		} catch (Exception e) {
 		} finally {

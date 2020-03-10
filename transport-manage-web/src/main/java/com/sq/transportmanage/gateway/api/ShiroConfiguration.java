@@ -172,7 +172,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/updateLevel", "anon");
         filterChainDefinitionMap.put("/permission/levelList", "anon");
-        filterChainDefinitionMap.put("/unauthorized", "anon");
+        //filterChainDefinitionMap.put("/unauthorized", "anon");
         filterChainDefinitionMap.put("/getMsgCode", "anon");
         filterChainDefinitionMap.put("/dologin", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
