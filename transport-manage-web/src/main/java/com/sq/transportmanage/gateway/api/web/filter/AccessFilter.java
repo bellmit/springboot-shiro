@@ -4,11 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -27,6 +33,9 @@ import java.util.List;
 public class AccessFilter extends ZuulFilter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessFilter.class);
+
+    @Autowired
+    private SupplierExtMapper supplierExtMapper;
 
     @Override
     public String filterType() {
@@ -78,8 +87,15 @@ public class AccessFilter extends ZuulFilter {
                 e.printStackTrace();
             }
             data.put("name", decodeStr);//用户名中文
-            data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
-            logger.info("login_user :{}",data);
+            if(1==loginUser.getLevel()){
+                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
+                if(!CollectionUtils.isEmpty(supplierIds)){
+                    data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
+                }
+            }else{
+                data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
+            }
+            logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
             ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由

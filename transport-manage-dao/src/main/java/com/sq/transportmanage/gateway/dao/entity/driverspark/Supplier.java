@@ -1,0 +1,286 @@
+package com.sq.transportmanage.gateway.dao.entity.driverspark;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class Supplier {
+    private Integer supplierId;
+
+    private String supplierName;
+
+    private String supplierFullName;
+
+    private Integer merchantId;
+
+    private Integer provinceId;
+
+    private String provinceName;
+
+    private Integer cityId;
+
+    private String cityName;
+
+    private Integer areaId;
+
+    private String areaName;
+
+    private String address;
+
+    private String businessScope;
+
+    private String economicType;
+
+    private BigDecimal registeredCapital;
+
+    private String creditCode;
+
+    private String legalPersonName;
+
+    private String legalPersonPhone;
+
+    private String legalIdcard;
+
+    private String chargePersonName;
+
+    private String chargePersonPhone;
+
+    private Date companyDate;
+
+    private Integer status;
+
+    private String email;
+
+    private String createBy;
+
+    private Date createTime;
+
+    private String updateBy;
+
+    private Date updateTime;
+
+    private String remark;
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierFullName() {
+        return supplierFullName;
+    }
+
+    public void setSupplierFullName(String supplierFullName) {
+        this.supplierFullName = supplierFullName == null ? null : supplierFullName.trim();
+    }
+
+    public Integer getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public Integer getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName == null ? null : provinceName.trim();
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName == null ? null : areaName.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public String getBusinessScope() {
+        return businessScope;
+    }
+
+    public void setBusinessScope(String businessScope) {
+        this.businessScope = businessScope == null ? null : businessScope.trim();
+    }
+
+    public String getEconomicType() {
+        return economicType;
+    }
+
+    public void setEconomicType(String economicType) {
+        this.economicType = economicType == null ? null : economicType.trim();
+    }
+
+    public BigDecimal getRegisteredCapital() {
+        return registeredCapital;
+    }
+
+    public void setRegisteredCapital(BigDecimal registeredCapital) {
+        this.registeredCapital = registeredCapital;
+    }
+
+    public String getCreditCode() {
+        return creditCode;
+    }
+
+    public void setCreditCode(String creditCode) {
+        this.creditCode = creditCode == null ? null : creditCode.trim();
+    }
+
+    public String getLegalPersonName() {
+        return legalPersonName;
+    }
+
+    public void setLegalPersonName(String legalPersonName) {
+        this.legalPersonName = legalPersonName == null ? null : legalPersonName.trim();
+    }
+
+    public String getLegalPersonPhone() {
+        return legalPersonPhone;
+    }
+
+    public void setLegalPersonPhone(String legalPersonPhone) {
+        this.legalPersonPhone = legalPersonPhone == null ? null : legalPersonPhone.trim();
+    }
+
+    public String getLegalIdcard() {
+        return legalIdcard;
+    }
+
+    public void setLegalIdcard(String legalIdcard) {
+        this.legalIdcard = legalIdcard == null ? null : legalIdcard.trim();
+    }
+
+    public String getChargePersonName() {
+        return chargePersonName;
+    }
+
+    public void setChargePersonName(String chargePersonName) {
+        this.chargePersonName = chargePersonName == null ? null : chargePersonName.trim();
+    }
+
+    public String getChargePersonPhone() {
+        return chargePersonPhone;
+    }
+
+    public void setChargePersonPhone(String chargePersonPhone) {
+        this.chargePersonPhone = chargePersonPhone == null ? null : chargePersonPhone.trim();
+    }
+
+    public Date getCompanyDate() {
+        return companyDate;
+    }
+
+    public void setCompanyDate(Date companyDate) {
+        this.companyDate = companyDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy == null ? null : createBy.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy == null ? null : updateBy.trim();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+}
