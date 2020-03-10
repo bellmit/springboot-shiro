@@ -167,18 +167,18 @@ public class ShiroConfiguration {
         //所以上面的url要苛刻，宽松的url要放在下面，尤其是"/**"要放到最下面，如果放前面的话其后的验证规则就没作用了。
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/nginx.html", "anon");
-        filterChainDefinitionMap.put("/common/filesUpload.json", "anon");
-        filterChainDefinitionMap.put("/dispatcher/changeStatus.json", "anon");
-        filterChainDefinitionMap.put("/driver/getUnderWayDriver.json", "anon");
-        filterChainDefinitionMap.put("/login.json", "anon");
-        filterChainDefinitionMap.put("/updateLevel.json", "anon");
-        filterChainDefinitionMap.put("/permission/levelList.json", "anon");
-        //filterChainDefinitionMap.put("/unauthorized", "anon");
-        filterChainDefinitionMap.put("/getMsgCode.json", "anon");
-        filterChainDefinitionMap.put("/dologin.json", "anon");
+        filterChainDefinitionMap.put("/common/filesUpload", "anon");
+        filterChainDefinitionMap.put("/dispatcher/changeStatus", "anon");
+        filterChainDefinitionMap.put("/driver/getUnderWayDriver", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/updateLevel", "anon");
+        filterChainDefinitionMap.put("/permission/levelList", "anon");
+        filterChainDefinitionMap.put("/unauthorized", "anon");
+        filterChainDefinitionMap.put("/getMsgCode", "anon");
+        filterChainDefinitionMap.put("/dologin", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
-        //filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
