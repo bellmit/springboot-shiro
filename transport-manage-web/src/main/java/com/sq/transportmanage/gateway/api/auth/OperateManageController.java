@@ -1,5 +1,6 @@
 package com.sq.transportmanage.gateway.api.auth;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
@@ -8,8 +9,12 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasUserRoleRalation;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.SaasPermissionMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.service.auth.*;
+import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
+import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
@@ -23,12 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author fanht
@@ -63,6 +66,12 @@ public class OperateManageController {
     @Autowired
     private SaasUserRoleRalationService saasUserRoleRalationService;
 
+    @Autowired
+    private SaasPermissionMapper saasPermissionMapper;
+
+    @Autowired
+    private SaasPermissionExMapper saasPermissionExMapper;
+
     /**
      * 创建商户
      * @param account
@@ -72,6 +81,7 @@ public class OperateManageController {
      * @return
      */
     @RequestMapping("/addMerchant")
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
     public AjaxResponse addMerchant(
             @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
             @Verify(param="userName",rule="required") String userName,
@@ -95,7 +105,8 @@ public class OperateManageController {
             ////管理员
             user.setAccountType(AuthEnum.MANAGE.getAuthId());
             //String merchantId = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
-            Integer merchantId = 0;
+            Random random = new Random();
+            Integer merchantId = Integer.valueOf((int) (Math.random()*1000));
             user.setMerchantId(merchantId);
             //创建商户后获取uuid并创建商户的系统用户，赋予默认权限
             AjaxResponse ajaxResponse = userManagementService.addUser(user);
@@ -221,5 +232,111 @@ public class OperateManageController {
             list.add(mapContain.get(permissionCode));
         }
         return list;
+    }
+
+
+
+    @RequestMapping("/batchAddMenu")
+    @ResponseBody
+    public AjaxResponse batchAddMenu(@Verify(param = "jsonMenu",rule = "required") String jsonMenu){
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+
+        SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+        if(loginUser != null &&  AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
+            String md5= null;
+            try {
+                md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());
+            } catch (NoSuchAlgorithmException e) {
+                logger.error("获取md5加密异常" + e);
+            }
+            if(!Constants.MANAGE_MD5.equals(md5)){
+                logger.info("当前用户不是系统管理员，不能添加菜单");
+                return AjaxResponse.fail(RestErrorCode.CAN_NOT_CHANGE_MENU);
+            }
+        }
+
+        JSONArray jsonArray = JSONArray.parseArray(jsonMenu);
+        if(jsonArray != null && jsonArray.size() > 0){
+            jsonArray.forEach(jsonObject ->{
+                JSONObject jsonData = (JSONObject) jsonObject;
+                String permissionName = jsonData.get("name") == null ? null : jsonData.getString("name");
+                String permissionCode = "PAR" + UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
+                String url = jsonData.get("url") == null ? null: jsonData.getString("url");
+                //添加模块菜单
+                SaasPermission pemission =  new SaasPermission();
+                pemission.setParentPermissionId(0);
+                pemission.setPermissionName(permissionName);
+                pemission.setPermissionCode(permissionCode.trim());
+                pemission.setPermissionType(SaasConst.PermissionType.MENU);
+                pemission.setMenuUrl(url);
+                pemission.setMenuOpenMode(SaasConst.MenuOpenMode.CURRENT_WINDOW);
+                pemission.setMerchantId(ssoLoginUser.getMerchantId());
+                pemission.setCreateTime(new Date());
+                pemission.setUpdateTime(new Date());
+                pemission = this.addSaasPermission(pemission);
+                if(pemission != null &&  pemission.getPermissionId() > 0){
+                    JSONArray arraySun = jsonData.getJSONArray("routes");
+                    if(arraySun != null && arraySun.size() > 0){
+                        SaasPermission finalPemission = pemission;
+                        arraySun.forEach(sun ->{
+                            JSONObject jsonSun = (JSONObject) sun;
+                            String sunName = jsonSun.get("name") == null ? null : jsonSun.getString("name");
+                            String sunUrl = jsonSun.get("url") == null ? null : jsonSun.getString("url");
+                            String permissionSunCode = "SUN" + UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
+                            SaasPermission sunPermission = new SaasPermission();
+                            sunPermission.setParentPermissionId(finalPemission.getPermissionId());
+                            sunPermission.setPermissionName(sunName);
+                            sunPermission.setPermissionCode(permissionSunCode);
+                            sunPermission.setPermissionType(SaasConst.PermissionType.MENU);
+                            sunPermission.setMenuUrl(sunUrl);
+                            sunPermission.setMenuOpenMode(SaasConst.MenuOpenMode.CURRENT_WINDOW);
+                            sunPermission.setMerchantId(ssoLoginUser.getMerchantId());
+                            sunPermission.setCreateTime(new Date());
+                            sunPermission.setUpdateTime(new Date());
+                            this.addSaasPermission(sunPermission);
+                        });
+                    }
+
+                }
+            });
+            logger.info("===========初始化菜单数据成功==========");
+            return AjaxResponse.success(null);
+        }
+        logger.info("========初始化数据为空=========");
+        return AjaxResponse.success(null);
+    }
+
+
+
+    /**
+     * 一、增加一个权限
+     **/
+    public SaasPermission addSaasPermission(SaasPermission pemission) {
+        //父权限不存在
+        if (pemission.getParentPermissionId() != null && pemission.getParentPermissionId().intValue() > 0) {
+            SaasPermission parentPermission = saasPermissionMapper.selectByPrimaryKey(pemission.getParentPermissionId());
+            if (parentPermission == null) {
+                logger.info("===============父权限不存在=========");
+                return null;
+            }
+        }
+        //权限代码已经存在
+        List<SaasPermission> pos = saasPermissionExMapper.queryPermissions(null, null, pemission.getPermissionCode(), null, null, null);
+        if (pos != null && pos.size() > 0) {
+            logger.info("=============权限代码已经存在=========================================================================");
+            return null;
+        }
+        //权限类型不合法
+        List<Byte> permTypes = Arrays.asList(new Byte[]{SaasConst.PermissionType.MENU, SaasConst.PermissionType.BUTTON, SaasConst.PermissionType.DATA_AREA});
+        if (!permTypes.contains(pemission.getPermissionType())) {
+            logger.info("========权限类型不合法===========");
+            return null;
+        }
+
+        int sortSeq = saasPermissionExMapper.selectMaxSortSeq(pemission.getParentPermissionId()).intValue() + 1;//自动生成排序的序号
+        pemission.setValid(true);
+        pemission.setSortSeq(sortSeq);
+        saasPermissionExMapper.insertSelective(pemission);
+        return pemission;
     }
 }

@@ -28,5 +28,7 @@ public interface SaasPermissionExMapper{
 	/**查询某角色的全部菜单**/
 	List<SaasPermission> queryPermissionsOfRoleId(@Param("roleId")Integer roleId);
 
+	/**插入并获取主键**/
+	int insertSelective(SaasPermission record);
 
 }

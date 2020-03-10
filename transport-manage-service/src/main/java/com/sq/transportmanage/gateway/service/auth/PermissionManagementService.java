@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**权限管理功能**/
 @Service
@@ -268,6 +265,8 @@ public class PermissionManagementService {
 		List<SaasPermission> permissionList = saasPermissionExMapper.queryPermissionsOfRoleId(roleId);
 		List<String> strPermissionIds = new ArrayList<>();
 		if(!CollectionUtils.isEmpty(permissionList)){
+			String varble = "";
+			StringJoiner stringJoiner = new StringJoiner(varble);
 			Map<Integer,Integer> map = Maps.newHashMap();
 			permissionList.forEach(permission ->{
 				map.put(permission.getPermissionId(),permission.getParentPermissionId());
@@ -277,7 +276,11 @@ public class PermissionManagementService {
 				if(sb != null && sb.length() > 0){
 					String value = sb.substring(0,sb.length()-1);
 					String newStr = replaceStr(value);
-					strPermissionIds.add(newStr);
+					if(!stringJoiner.toString().contains(newStr)){
+						strPermissionIds.add(newStr);
+						stringJoiner.add(newStr+",");
+						System.out.println(stringJoiner);
+					}
 				}
 			});
 		}
@@ -293,7 +296,8 @@ public class PermissionManagementService {
 	 */
 	public StringBuffer getKey(Map<Integer,Integer> map,Integer permissionId){
 		StringBuffer sb = new StringBuffer();
-		if(permissionId != 0){
+		if(permissionId != 0 && permissionId > 0){
+			System.out.println("permissionId:" + permissionId);
 			sb.append(permissionId).append("-");
 			sb.append(getKey(map,map.get(permissionId)));
 		}

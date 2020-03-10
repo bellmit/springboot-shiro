@@ -156,7 +156,7 @@ public class UserManagementController {
 	
 	/**八、查询用户列表**/
 	@RequestMapping("/queryUserList")
-	@RequiresPermissions(value = { "UserManages_look" } )
+	@RequiresPermissions(value = { "USER_MANAGEMENT" } )
 	@RequestFunction(menu = USER_LIST)
 	public AjaxResponse queryUserList( 
 			@Verify(param="page",rule="required|min(1)") Integer page, 

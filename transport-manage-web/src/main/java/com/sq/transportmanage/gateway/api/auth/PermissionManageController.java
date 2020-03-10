@@ -88,7 +88,7 @@ public class PermissionManageController {
 
 	/**五、查询所有的权限信息（返回的数据格式：列表、树形）**/
 	@RequestMapping("getAllSaasPermissionsInfo")
-	@RequiresPermissions(value = { "CammelCase_look" } )
+	@RequiresPermissions(value = { "PERMISSION_MANAGENT" } )
 	@RequestFunction(menu = PERMISSION_LIST)
 	public AjaxResponse getAllSaasPermissionsInfo( String dataFormat ){
 		if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(dataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(dataFormat) ) {

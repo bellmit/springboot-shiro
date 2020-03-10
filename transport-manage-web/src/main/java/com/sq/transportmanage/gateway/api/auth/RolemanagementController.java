@@ -141,7 +141,7 @@ public class RolemanagementController{
 	
 	/**八、查询角色列表**/
 	@RequestMapping("/queryRoleList")
-	@RequiresPermissions(value = { "RoleManages_look" } )
+	@RequiresPermissions(value = { "ROLE_MANAGEMENT" } )
 	@RequestFunction(menu = ROLE_LIST)
 	public AjaxResponse queryRoleList( 
 			@Verify(param="page",rule="required|min(1)") Integer page, 

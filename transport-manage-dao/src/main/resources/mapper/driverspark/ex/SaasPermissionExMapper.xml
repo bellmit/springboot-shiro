@@ -117,5 +117,92 @@
     <if test="roleId!=null">
       and t.role_id = #{roleId}
     </if>
+    ORDER BY o.permission_id desc
   </select>
+
+
+  <!--添加权限并获取主键 -->
+  <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission"
+          useGeneratedKeys="true"  keyProperty="permission_id">
+    <selectKey resultType="java.lang.Integer" keyProperty="permissionId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into auth_saas_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="permissionId != null" >
+        permission_id,
+      </if>
+      <if test="parentPermissionId != null" >
+        parent_permission_id,
+      </if>
+      <if test="permissionCode != null" >
+        permission_code,
+      </if>
+      <if test="permissionType != null" >
+        permission_type,
+      </if>
+      <if test="permissionName != null" >
+        permission_name,
+      </if>
+      <if test="menuUrl != null" >
+        menu_url,
+      </if>
+      <if test="menuOpenMode != null" >
+        menu_open_mode,
+      </if>
+      <if test="valid != null" >
+        valid,
+      </if>
+      <if test="sortSeq != null" >
+        sort_seq,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="permissionId != null" >
+        #{permissionId,jdbcType=INTEGER},
+      </if>
+      <if test="parentPermissionId != null" >
+        #{parentPermissionId,jdbcType=INTEGER},
+      </if>
+      <if test="permissionCode != null" >
+        #{permissionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionType != null" >
+        #{permissionType,jdbcType=TINYINT},
+      </if>
+      <if test="permissionName != null" >
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="menuOpenMode != null" >
+        #{menuOpenMode,jdbcType=TINYINT},
+      </if>
+      <if test="valid != null" >
+        #{valid,jdbcType=BIT},
+      </if>
+      <if test="sortSeq != null" >
+        #{sortSeq,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 </mapper>
