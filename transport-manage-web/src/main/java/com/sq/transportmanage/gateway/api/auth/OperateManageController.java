@@ -83,7 +83,7 @@ public class OperateManageController {
     @RequestMapping("/addMerchant")
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
     public AjaxResponse addMerchant(
-            @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
+            @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,50}$)") String account,
             @Verify(param="userName",rule="required") String userName,
             @Verify(param="phone",rule="required|mobile") String phone,
             @Verify(param = "email",rule = "required|email")String email) throws NoSuchAlgorithmException {
