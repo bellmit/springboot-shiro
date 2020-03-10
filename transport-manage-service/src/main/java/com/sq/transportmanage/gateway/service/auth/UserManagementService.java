@@ -118,7 +118,7 @@ public class UserManagementService{
 			Integer uId = carAdmUserMapper.insertSelective(user);
 
 			//短信通知
-			String text = user.getUserName() + "您已注册聚合平台账号"+user.getAccount()+"，初始密码为："+initPassword+"（请前往登录并及时修改密码）";
+			String text =  "您已注册聚合平台账号"+user.getAccount()+"，初始密码为："+initPassword+"（请前往登录并及时修改密码）";
 			SmsSendUtil.send( user.getPhone() , text);
 
 

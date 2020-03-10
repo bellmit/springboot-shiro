@@ -38,7 +38,7 @@ public class UserManagementController {
 	@RequiresPermissions(value = { "ADD_USER" } )
 	@RequestFunction(menu = USER_ADD)
 	public AjaxResponse addUser(
-			@Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
+			@Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,50}$)") String account,
 			@Verify(param="userName",rule="required") String userName, 
 			@Verify(param="phone",rule="required|mobile") String phone,
 			@Verify(param = "email",rule = "required|email")String email) {

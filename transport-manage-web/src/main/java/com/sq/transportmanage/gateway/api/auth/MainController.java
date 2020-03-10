@@ -138,14 +138,16 @@ public class MainController {
     /**显示无权限页面**/
     @ExceptionHandler(UnauthenticatedException.class)
 	@RequestMapping("/unauthorized")
-    public String unauthorized(HttpServletRequest request , HttpServletResponse response) throws Exception{
-		Boolean isAjax = (Boolean) request.getAttribute("X_IS_AJAX");
+    public AjaxResponse unauthorized(HttpServletRequest request , HttpServletResponse response) throws Exception{
+		AjaxResponse ajaxResponse = AjaxResponse.fail(RestErrorCode.HTTP_FORBIDDEN);
+		this.outJson(response, ajaxResponse);
+		/**Boolean isAjax = (Boolean) request.getAttribute("X_IS_AJAX");
+
 		if(  isAjax  ) {
-			AjaxResponse ajaxResponse = AjaxResponse.fail(RestErrorCode.HTTP_FORBIDDEN);
-			this.outJson(response, ajaxResponse);
+
 		}else {
 			response.sendRedirect(homepageUrl);
-		}
+		} **/
 		return null;
     }
 
