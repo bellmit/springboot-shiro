@@ -169,12 +169,12 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/common/filesUpload", "anon");
         filterChainDefinitionMap.put("/dispatcher/changeStatus", "anon");
         filterChainDefinitionMap.put("/driver/getUnderWayDriver", "anon");
-        filterChainDefinitionMap.put("/login.json", "anon");
-        filterChainDefinitionMap.put("/updateLevel.json", "anon");
-        filterChainDefinitionMap.put("/permission/levelList.json", "anon");
-        filterChainDefinitionMap.put("/unauthorized.json", "anon");
-        filterChainDefinitionMap.put("/getMsgCode.json", "anon");
-        filterChainDefinitionMap.put("/dologin.json", "anon");
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/updateLevel", "anon");
+        filterChainDefinitionMap.put("/permission/levelList", "anon");
+        filterChainDefinitionMap.put("/unauthorized", "anon");
+        filterChainDefinitionMap.put("/getMsgCode", "anon");
+        filterChainDefinitionMap.put("/dologin", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
 //        filterChainDefinitionMap.put("/**", "anon");
