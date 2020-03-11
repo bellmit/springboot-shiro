@@ -158,7 +158,8 @@ public class ShiroConfiguration {
     public PlatformShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
         PlatformShiroFilterFactoryBean shiroFilterFactoryBean = new PlatformShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/unauthorized");
+        shiroFilterFactoryBean.setLoginUrl(loginUrl);
+        shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
         //shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
         shiroFilterFactoryBean.setSuccessUrl("${homepage.url}");
        // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
@@ -176,9 +177,11 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/updateLevel", "anon");
         filterChainDefinitionMap.put("/permission/levelList", "anon");
-        filterChainDefinitionMap.put("/unauthorized", "anon");
+        //注意此处：如果是h5放开的话 会出现跨域问题
+        //filterChainDefinitionMap.put("/unauthorized", "anon");
         filterChainDefinitionMap.put("/getMsgCode", "anon");
         filterChainDefinitionMap.put("/dologin", "anon");
+        filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
         //filterChainDefinitionMap.put("/**", "anon");
