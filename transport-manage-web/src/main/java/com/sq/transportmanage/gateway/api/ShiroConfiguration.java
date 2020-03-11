@@ -162,6 +162,7 @@ public class ShiroConfiguration {
         PlatformShiroFilterFactoryBean shiroFilterFactoryBean = new PlatformShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/unauthorized");
+        //shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
         //shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
         //shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
         shiroFilterFactoryBean.setSuccessUrl(homepageUrl);
