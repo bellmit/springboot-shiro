@@ -98,5 +98,3 @@ template_short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/
 #h5找回密码域名
 reset.password.url: https://test-saas.guobindui.cn/forgot
 
-#
-unauthorized.url: https://dev-saas.guobindui.cn/unauthorized
