@@ -16,6 +16,7 @@ import java.util.*;
  */
 public class DateUtil {
     public static final String LOCAL_FORMAT = "yyyy年MM月dd日 HH时mm分ss秒";
+    public static final String MAIN_TIME_FORMAT = "yyyy年MM月dd日 HH时mm分";
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String TIME_FORMAT = "HH:mm:ss";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -76,6 +77,10 @@ public class DateUtil {
      */
     public static String getTimeString(Date date) {
         return date == null ? "" : getSdf(DATE_TIME_FORMAT).format(date);
+    }
+
+    public static String getMailTimeString(Date date) {
+        return date == null ? "" : getSdf(MAIN_TIME_FORMAT).format(date);
     }
 
     /**
