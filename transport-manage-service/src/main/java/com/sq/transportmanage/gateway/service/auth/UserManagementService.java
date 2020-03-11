@@ -20,6 +20,7 @@ import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
+import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,9 @@ public class UserManagementService{
 					return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
 				}else if(user.getPhone().equals(po.getPhone())){
 					return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
-				}else {
+				}else if(user.getUserName().equals(po.getUserName())){
+					return AjaxResponse.fail(RestErrorCode.USER_EXIT);
+				}else if (user.getEmail().equals(po.getEmail())){
 					return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 				}
             }
@@ -117,8 +120,8 @@ public class UserManagementService{
 			Integer uId = carAdmUserMapper.insertSelective(user);
 
 			//短信通知
-			String text = user.getUserName() + "，您好！已为您成功开通“首约加盟商服务平台”管理员账号。登录账号为："+user.getAccount()+"，初始密码为："+initPassword+"（为保障账户安全，请您登录后进行密码修改）";
-			//SmsSendUtil.send( user.getPhone() , text);
+			String text =  "您已注册聚合平台账号"+user.getAccount()+"，初始密码为："+initPassword+"（请前往登录并及时修改密码）";
+			SmsSendUtil.send( user.getPhone() , text);
 
 
 			//兼容增加用户时要使用log,但是原来成功时返回值的data为null.这里适当改造了下。

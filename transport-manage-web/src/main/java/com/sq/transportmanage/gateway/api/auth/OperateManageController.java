@@ -83,7 +83,7 @@ public class OperateManageController {
     @RequestMapping("/addMerchant")
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
     public AjaxResponse addMerchant(
-            @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,30}$)") String account,
+            @Verify(param="account",rule="required|RegExp(^[a-zA-Z0-9_\\-]{3,50}$)") String account,
             @Verify(param="userName",rule="required") String userName,
             @Verify(param="phone",rule="required|mobile") String phone,
             @Verify(param = "email",rule = "required|email")String email) throws NoSuchAlgorithmException {
@@ -293,7 +293,32 @@ public class OperateManageController {
                             sunPermission.setMerchantId(ssoLoginUser.getMerchantId());
                             sunPermission.setCreateTime(new Date());
                             sunPermission.setUpdateTime(new Date());
-                            this.addSaasPermission(sunPermission);
+                            sunPermission = this.addSaasPermission(sunPermission);
+
+                            if(sunPermission != null && sunPermission.getPermissionId() > 0){
+                                JSONArray jsonThird = jsonSun.getJSONArray("routes");
+                                if(jsonThird != null && jsonThird.size() > 0){
+                                    SaasPermission thirdSaas = sunPermission;
+                                    jsonThird.forEach(third ->{
+                                        JSONObject thirdJson = (JSONObject) third;
+                                        String thirdName = thirdJson.get("name")==null ? null : thirdJson.getString("name");
+                                        String thirdUrl = thirdJson.get("url")==null ? null : thirdJson.getString("url");
+                                        String permissionGrandSun = "GRAND" + UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
+
+                                        SaasPermission grandSun = new SaasPermission();
+                                        grandSun.setParentPermissionId(thirdSaas.getPermissionId());
+                                        grandSun.setPermissionName(thirdName);
+                                        grandSun.setPermissionCode(permissionGrandSun);
+                                        grandSun.setPermissionType(SaasConst.PermissionType.MENU);
+                                        grandSun.setMenuUrl(thirdUrl);
+                                        grandSun.setMenuOpenMode(SaasConst.MenuOpenMode.CURRENT_WINDOW);
+                                        grandSun.setMerchantId(ssoLoginUser.getMerchantId());
+                                        grandSun.setCreateTime(new Date());
+                                        grandSun.setUpdateTime(new Date());
+                                         this.addSaasPermission(grandSun);
+                                    });
+                                }
+                            }
                         });
                     }
 

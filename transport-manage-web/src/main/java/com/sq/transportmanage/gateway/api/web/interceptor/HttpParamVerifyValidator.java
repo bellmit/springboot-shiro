@@ -88,6 +88,30 @@ public class HttpParamVerifyValidator {
 		return null;
 	}
 
+	/**自定义正则表达式**/
+	public String registerAccount( String value ,  String threadHold ) {
+		if(StringUtils.isEmpty(value) || StringUtils.isEmpty(threadHold)){
+			return null;
+		}
+		String regexp = threadHold;
+		if( ! value.matches(regexp) ) {
+			return "数字、或者字母开头,50个字符以内";
+		}
+		return null;
+	}
+
+	/**自定义正则表达式**/
+	public String resetPassword( String value ,  String threadHold ) {
+		if(StringUtils.isEmpty(value) || StringUtils.isEmpty(threadHold)){
+			return null;
+		}
+		String regexp = threadHold;
+		if( ! value.matches(regexp) ) {
+			return "密码8—50字母、数字、符号";
+		}
+		return null;
+	}
+
 	/**逗号分隔的数字**/
 	public String multiNumber( String value ) {
 		if(StringUtils.isEmpty(value) ){
