@@ -273,14 +273,23 @@ public class PermissionManagementService {
 			});
 			permissionList.forEach(permission->{
 				StringBuffer sb = getKey(map,permission.getPermissionId());
-				if(sb != null && sb.length() > 0){
-					String value = sb.substring(0,sb.length()-1);
-					String newStr = replaceStr(value);
-					if(!stringJoiner.toString().contains(newStr)){
-						strPermissionIds.add(newStr);
-						stringJoiner.add(newStr+",");
-						System.out.println(stringJoiner);
-					}
+				try {
+					if(sb != null && sb.length() > 0){
+                        String value = sb.substring(0,sb.length()-1);
+                        String newStr = replaceStr(value);
+                        if(newStr != null){
+                            String[] splitStr = newStr.split("-");
+                            if(splitStr.length > 2){
+                                if(!stringJoiner.toString().contains(newStr)){
+                                    strPermissionIds.add(newStr);
+                                    stringJoiner.add(newStr+",");
+                                    System.out.println(stringJoiner);
+                                }
+                            }
+                        }
+                    }
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			});
 		}
@@ -297,7 +306,6 @@ public class PermissionManagementService {
 	public StringBuffer getKey(Map<Integer,Integer> map,Integer permissionId){
 		StringBuffer sb = new StringBuffer();
 		if(permissionId != 0 && permissionId > 0){
-			System.out.println("permissionId:" + permissionId);
 			sb.append(permissionId).append("-");
 			sb.append(getKey(map,map.get(permissionId)));
 		}
