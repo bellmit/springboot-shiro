@@ -92,3 +92,6 @@ spring:
 
 #h5找回密码域名
 reset.password.url: https://saas.guobindui.cn/forgot
+
+#没有权限地址
+unauthorized.url: https://saas.guobindui.cn/unauthorized

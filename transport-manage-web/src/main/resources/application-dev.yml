@@ -82,7 +82,10 @@ loginpage.url: https://dev-saas.guobindui.cn/
 
 homepage.url: https://dev-saas.guobindui.cn/#/Manage
 
-login.url: https://dev-saas-spark.guobindui.cn/login
+login.url: https://dev-saas.guobindui.cn/signin
+
+#没有权限地址
+unauthorized.url: https://dev-saas.guobindui.cn/unauthorized
 
 #短信发送相关
 short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/send
