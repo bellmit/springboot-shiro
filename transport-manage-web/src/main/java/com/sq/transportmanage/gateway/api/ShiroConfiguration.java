@@ -167,6 +167,7 @@ public class ShiroConfiguration {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/nginx.html", "anon");
         filterChainDefinitionMap.put("/common/filesUpload", "anon");
+        filterChainDefinitionMap.put("/common/upload", "anon");
         filterChainDefinitionMap.put("/dispatcher/changeStatus", "anon");
         filterChainDefinitionMap.put("/driver/getUnderWayDriver", "anon");
         filterChainDefinitionMap.put("/login.json", "anon");
