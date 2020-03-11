@@ -8,6 +8,7 @@ import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCache;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
+import com.sq.transportmanage.gateway.service.util.DateUtil;
 import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
 import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
@@ -87,13 +88,14 @@ public class AuthManageService {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<html><head><title>首汽约车——用户密码找回</title></head><body>");
         stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
-        stringBuilder.append("您在"+ DateUtils.formatDate(new Date(),"yyyy-MM-dd HH:mm:ss")+"提交找回密码请求,请点击下面的连接修改用户密码").append("<br/>");
+        stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的连接修改用户密码").append("<br/>");
+        stringBuilder.append("/br");
         stringBuilder.append(""+resetPasswordUrl+"").append("?").append(email).append("<br/>");
-        stringBuilder.append("(如果您无法点击这个连接，请将次连接复制到浏览器地址栏后访问)<br/>");
-        stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效<br/>");
+        stringBuilder.append("(如果您无法点击这个链接,请将次连接复制到浏览器地址栏后访问)<br/>");
+        stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
         stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
-        stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行<br/>");
-        stringBuilder.append("任何操作，并可以放心的忽略此电子邮件。<br/>");
+        stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行任<br/>");
+        stringBuilder.append("何操作，并可以放心的忽略此电子邮件。<br/>");
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
