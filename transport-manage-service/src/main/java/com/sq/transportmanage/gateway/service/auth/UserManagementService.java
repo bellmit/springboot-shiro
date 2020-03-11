@@ -73,7 +73,9 @@ public class UserManagementService{
 					return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
 				}else if(user.getPhone().equals(po.getPhone())){
 					return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
-				}else {
+				}else if(user.getUserName().equals(po.getUserName())){
+					return AjaxResponse.fail(RestErrorCode.USER_EXIT);
+				}else if (user.getEmail().equals(po.getEmail())){
 					return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 				}
             }

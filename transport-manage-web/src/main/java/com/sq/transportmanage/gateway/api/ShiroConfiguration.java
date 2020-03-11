@@ -161,7 +161,8 @@ public class ShiroConfiguration {
     public PlatformShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
         PlatformShiroFilterFactoryBean shiroFilterFactoryBean = new PlatformShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl(loginUrl);
+        shiroFilterFactoryBean.setLoginUrl("/unauthorized");
+        //shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
         //shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
         //shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
         shiroFilterFactoryBean.setSuccessUrl(homepageUrl);
@@ -188,7 +189,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
-        filterChainDefinitionMap.put("/**", "anon");
+        //filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
