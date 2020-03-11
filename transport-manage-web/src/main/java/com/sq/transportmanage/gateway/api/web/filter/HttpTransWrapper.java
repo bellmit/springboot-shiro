@@ -59,6 +59,11 @@ public class HttpTransWrapper extends HttpServletResponseWrapper{
             finalUrl += ":" + request.getServerPort();
         }
         finalUrl += location;
-        super.sendRedirect(finalUrl);
+        if(finalUrl.indexOf("localhost") > 0){
+            //todo 如果是本地测试 仍然用http的
+            super.sendRedirect(location);
+        }else {
+            super.sendRedirect(finalUrl);
+        }
     }
 }
