@@ -55,7 +55,7 @@ public class HttpTransWrapper extends HttpServletResponseWrapper{
         }
 
         String finalUrl = "https://" + this.request.getServerName();
-        if(request.getServerPort() != 80 && request.getServerPort() != 443){
+        if(request.getServerPort() != 80 && request.getServerPort() != 443 ){
             finalUrl += ":" + request.getServerPort();
         }
         finalUrl += location;
