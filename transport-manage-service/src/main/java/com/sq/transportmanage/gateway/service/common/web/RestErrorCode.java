@@ -61,9 +61,9 @@ public final class RestErrorCode{
 	public static final int MSG_CODE_INVALID                = 1005;
 	@ResultMessage("短信验证码不正确")
 	public static final int MSG_CODE_WRONG                = 1006;
-	@ResultMessage("账号已经存在")
+	@ResultMessage("登录账号不能重复")
 	public static final int ACCOUNT_EXIST                      = 1007;
-	@ResultMessage("邮箱已存在")
+	@ResultMessage("邮箱不能重复")
 	public static final int EMAIL_EXIST                      = 1009;
 	@ResultMessage("短信验证码发送失败")
 	public static final int MSG_CODE_FAIL                      = 1011;
@@ -71,8 +71,10 @@ public final class RestErrorCode{
 	public static final int MSG_CODE_REPEAT_SEND                      = 1012;
 	@ResultMessage("登录太频繁，请{0}分钟后重新登录")
 	public static final int DO_LOGIN_FREQUENTLY           = 1013;
-	@ResultMessage("手机号已存在")
+	@ResultMessage("手机号不能重复")
 	public static final int PHONE_EXIST                          = 1014;
+	@ResultMessage("用户名称不能重复")
+	public static final int USER_EXIT                          = 1015;
 
 	@ResultMessage("当前用户不是系统管理员，不能创建商户")
 	public static final int IS_NOT_SYS_ROLE                          = 1200;
