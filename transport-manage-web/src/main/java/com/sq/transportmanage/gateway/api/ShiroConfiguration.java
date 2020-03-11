@@ -36,6 +36,9 @@ public class ShiroConfiguration {
     @Value(value = "${login.url}")
     private String loginUrl;
 
+    @Value(value = "${unauthorized.url}")
+    private String unauthorizedUrl;
+
 
     @Resource(name = "ncdsSerRedisTemplate")
     private RedisTemplate ncdsSerRedisTemplate;
@@ -156,7 +159,7 @@ public class ShiroConfiguration {
         PlatformShiroFilterFactoryBean shiroFilterFactoryBean = new PlatformShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl(loginUrl);
-        //shiroFilterFactoryBean.setLoginUrl("/unauthorized");
+        //shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
         shiroFilterFactoryBean.setSuccessUrl("${homepage.url}");
        // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 
