@@ -1,14 +1,14 @@
 package com.sq.transportmanage.gateway.api.web.filter;
 
-import org.apache.shiro.web.servlet.OncePerRequestFilter;
+import org.apache.http.HttpStatus;
+import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @Author fanht
@@ -17,26 +17,21 @@ import java.io.IOException;
  * @Version 1.0
  */
 @Component
-public class CORSFilter extends OncePerRequestFilter{
+public class CORSFilter extends BasicHttpAuthenticationFilter{
+
     @Override
-    protected void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-
-        res.setContentType("text/html;charset=UTF-8");
-
-        res.setHeader("Access-Control-Allow-Origin", "*");
-
-        res.setHeader("Access-Control-Allow-Methods", "*");
-
-        res.setHeader("Access-Control-Max-Age", "0");
-
-        res.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
-
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-
-        res.setHeader("XDomainRequestAllowed","1");
-
-        chain.doFilter(request, res);
-
+        res.setHeader("Access-control-Allow-Origin",req.getHeader("Origin"));
+        res.setHeader("Access-Control-Allow-Methods","GET,POST,OPTIONS,PUT,DELETE");
+        // 响应首部 Access-Control-Allow-Headers 用于 preflight request （预检请求）中，列出了将会在正式请求的 Access-Control-Expose-Headers 字段中出现的首部信息。修改为请求首部
+        res.setHeader("Access-Control-Allow-Headers",req.getHeader("Access-Control-Request-Headers"));
+        //给option请求直接返回正常状态
+        if(req.getMethod().equals(RequestMethod.OPTIONS.name())){
+            res.setStatus(HttpStatus.SC_OK);
+            return false;
+        }
+        return super.preHandle(request, response);
     }
 }
