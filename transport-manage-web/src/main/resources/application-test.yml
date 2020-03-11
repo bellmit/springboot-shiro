@@ -83,7 +83,7 @@ loginpage.url: https://test-saas.guobindui.cn/
 
 homepage.url: https://test-saas.guobindui.cn/#/Manage
 
-login.url: https://test-saas-spark.guobindui.cn/login
+login.url: https://test-saas-spark.guobindui.cn/signin
 
 #没有权限地址
 unauthorized.url: https://test-saas.guobindui.cn/unauthorized
