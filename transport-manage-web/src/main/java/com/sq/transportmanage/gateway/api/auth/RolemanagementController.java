@@ -107,6 +107,17 @@ public class RolemanagementController{
 		List<String> permissionIds = permissionManagementService.queryPermissionsOfRoleId(roleId);
 		return AjaxResponse.success(permissionIds);
 	}
+
+
+
+	/**六、查询一个角色中的权限ID 以Integer类型返回**/
+	@RequestMapping("/getAllPermissionIdsOfInteger")
+	@RequiresPermissions(value = { "GET_PERMISSIONIDS_OF_ROLE" } )
+	@RequestFunction(menu = ROLE_PERMISSION_IDS)
+	public AjaxResponse getAllPermissionIdsOfInteger( @Verify(param="roleId",rule="required|min(1)") Integer roleId){
+		List<Integer> permissionIds = roleManagementService.getAllPermissionIds(roleId);
+		return AjaxResponse.success(permissionIds);
+	}
 	
 	/**七、保存一个角色中的权限ID**/
 	@RequestMapping("/savePermissionIds")
