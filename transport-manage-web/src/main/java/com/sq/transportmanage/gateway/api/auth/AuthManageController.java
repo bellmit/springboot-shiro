@@ -68,7 +68,7 @@ public class AuthManageController {
     @ResponseBody
     @RequestMapping("/resetPassword")
     public AjaxResponse resetPassword(@Verify(param = "email",rule = "required")String email,
-                                @Verify(param = "newPassword",rule = "required")String newPassword){
+                                @Verify(param = "newPassword",rule = "required|resetPassword(^[a-zA-Z0-9_\\-]{8,50}$)")String newPassword){
         logger.info(MessageFormat.format("重置密码入参：email:{0},newPassword:{1}"
                 ,email,newPassword));
         return authManageService.resetPassword(email,newPassword);
