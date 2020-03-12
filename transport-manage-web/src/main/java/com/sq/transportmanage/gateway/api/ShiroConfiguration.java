@@ -190,6 +190,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/dologin", "anon");
         filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
+        filterChainDefinitionMap.put("/car/batchImport", "anon");
         filterChainDefinitionMap.put("/**", "user");
         //filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
