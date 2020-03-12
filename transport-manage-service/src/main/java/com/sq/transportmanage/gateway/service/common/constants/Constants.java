@@ -41,6 +41,8 @@ public final class Constants {
     /**通过手机找回密码key**/
     public static final String RESET_PHONE_KEY = "star_fire_reset_password_by_phone_";
 
+    public static final Integer EXPIRE_TIME = 5*60;
+
 
     /**邮箱**/
     public static final String EMAIL = "1";
