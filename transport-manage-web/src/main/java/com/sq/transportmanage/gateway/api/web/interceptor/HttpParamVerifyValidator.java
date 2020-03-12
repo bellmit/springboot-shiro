@@ -107,7 +107,7 @@ public class HttpParamVerifyValidator {
 		}
 		String regexp = threadHold;
 		if( ! value.matches(regexp) ) {
-			return "密码8—50字母、数字、符号";
+			return "新密码不符合密码规则：8-50字符";
 		}
 		return null;
 	}
