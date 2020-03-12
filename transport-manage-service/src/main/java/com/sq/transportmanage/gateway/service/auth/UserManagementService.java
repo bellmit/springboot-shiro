@@ -73,8 +73,6 @@ public class UserManagementService{
 					return AjaxResponse.fail(RestErrorCode.ACCOUNT_EXIST );
 				}else if(user.getPhone().equals(po.getPhone())){
 					return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
-				}else if(user.getUserName().equals(po.getUserName())){
-					return AjaxResponse.fail(RestErrorCode.USER_EXIT);
 				}else if (user.getEmail().equals(po.getEmail())){
 					return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
 				}
@@ -84,7 +82,14 @@ public class UserManagementService{
             }
 			//用户初始密码
 			String initPassword = null;
-			if(indexOfPhone!=null && indexOfPhone.length()>0) {
+
+			if(user.getPhone().length() > 8){
+				initPassword = user.getPhone().substring(user.getPhone().length()-8,user.getPhone().length());
+			}else {
+				initPassword = SaasConst.INITIAL_PASSWORD;
+			}
+
+			/*if(indexOfPhone!=null && indexOfPhone.length()>0) {
                 List<Integer> indexes = Stream.of(indexOfPhone.split(",")).mapToInt( s -> Integer.parseInt(s) ).boxed().collect(Collectors.toList());
                 StringBuffer password = new StringBuffer();
                 for( Integer index : indexes ) {
@@ -93,7 +98,7 @@ public class UserManagementService{
                 initPassword = password.toString();
             }else {
                 initPassword = SaasConst.INITIAL_PASSWORD;
-            }
+            }*/
             logger.info("用户名：" + user.getAccount() + ",password:" + initPassword);
 			user.setPassword( PasswordUtil.md5( initPassword, user.getAccount())  );
 			if(user.getRoleId() == null ){

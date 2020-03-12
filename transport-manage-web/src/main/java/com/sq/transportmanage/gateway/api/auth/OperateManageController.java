@@ -35,7 +35,7 @@ import java.util.*;
 
 /**
  * @Author fanht
- * @Description
+ * @Description 创建商户、移动菜单
  * @Date 2020/2/27 下午2:22
  * @Version 1.0
  */

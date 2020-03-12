@@ -177,6 +177,8 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/nginx.html", "anon");
         filterChainDefinitionMap.put("/common/filesUpload", "anon");
         filterChainDefinitionMap.put("/common/upload", "anon");
+        filterChainDefinitionMap.put("/loginoutController/*","anon");
+        filterChainDefinitionMap.put("/authManageController/*","anon");
         filterChainDefinitionMap.put("/dispatcher/changeStatus", "anon");
         filterChainDefinitionMap.put("/driver/getUnderWayDriver", "anon");
         filterChainDefinitionMap.put("/login", "anon");
