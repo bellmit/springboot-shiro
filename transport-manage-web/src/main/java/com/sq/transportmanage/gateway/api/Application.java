@@ -1,7 +1,6 @@
 package com.sq.transportmanage.gateway.api;
 
 import com.sq.transportmanage.gateway.api.web.filter.AccessFilter;
-import com.sq.transportmanage.gateway.api.web.filter.TraceIdFilter;
 import com.sq.transportmanage.gateway.api.web.interceptor.LoginoutListener;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +32,16 @@ public class Application {
     @Bean
     public AccessFilter accessFilter() {
         return new AccessFilter();
+    }
+
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);//这两句不加不能跨域上传文件，
+        corsConfiguration.setMaxAge(3600L);//加上去就可以了
+        return corsConfiguration;
     }
 
     @Bean
