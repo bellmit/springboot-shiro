@@ -56,16 +56,4 @@ public class LoginoutListener extends RedisSessionDAO   implements SessionListen
     }
 
 
-
-    /*@Override
-    public void sessionCreated(HttpSessionEvent se) {
-        onlineCount++;
-        logger.info("创建start====== ===" + se.getSession().getId());
-        mapUser.put(se.getSession().getCreationTime(),se.getSession().getId());
-    }
-
-    @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-        logger.info("销毁session=============");
-    }*/
 }

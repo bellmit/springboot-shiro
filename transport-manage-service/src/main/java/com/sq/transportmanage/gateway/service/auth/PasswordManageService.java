@@ -28,12 +28,12 @@ import java.util.Random;
 
 /**
  * @Author fanht
- * @Description
+ * @Description 密码找回相关操作
  * @Date 2020/3/3 下午9:20
  * @Version 1.0
  */
 @Service
-public class AuthManageService {
+public class PasswordManageService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
