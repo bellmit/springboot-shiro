@@ -77,7 +77,7 @@ auth.appid: 18
 
 resetpassword.msgnotify.switch: false
 user.password.indexOfPhone: 9,5,3,7,1,4,8,2
-login.checkMsgCode.switch: false
+login.checkMsgCode.switch: ON
 
 loginpage.url: https://test-saas.guobindui.cn/
 
