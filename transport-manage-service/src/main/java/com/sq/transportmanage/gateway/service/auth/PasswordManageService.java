@@ -82,22 +82,13 @@ public class PasswordManageService {
         String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
         // 5分钟后过期
 
-        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,5*60);
+        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,Constants.EXPIRE_TIME);
 
 
         String emailCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
-        String key = "";
-        try {
-             key = MD5Utils.getMD5Digest(emailCode).toString();
-            if(StringUtils.isNotEmpty(key)){
-                redisUtil.set(Constants.RESET_EMAIL_CODE+email,key,5*60);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            logger.info("加密异常" +e);
-        }
-        if(StringUtils.isEmpty(key)){
-            key = emailCode;
-        }
+
+        redisUtil.set(Constants.RESET_EMAIL_CODE+email,emailCode,Constants.EXPIRE_TIME);
+
 
         //将验证码 和 过期时间更新到数据库
 
@@ -106,7 +97,7 @@ public class PasswordManageService {
         stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
         stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的连接修改用户密码").append("<br/>");
         stringBuilder.append("</br>");
-        stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(key).append("<br/>");
+        stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
         stringBuilder.append("(如果您无法点击这个链接,请将次连接复制到浏览器地址栏后访问)<br/>");
         stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
         stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
