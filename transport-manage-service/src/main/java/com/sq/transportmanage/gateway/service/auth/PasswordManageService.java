@@ -6,12 +6,11 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapp
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCache;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
-import com.sq.transportmanage.gateway.service.util.DateUtil;
-import com.sq.transportmanage.gateway.service.util.NumberUtil;
-import com.sq.transportmanage.gateway.service.util.PasswordUtil;
-import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
+import com.sq.transportmanage.gateway.service.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +22,19 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Author fanht
- * @Description
+ * @Description 密码找回相关操作
  * @Date 2020/3/3 下午9:20
  * @Version 1.0
  */
 @Service
-public class AuthManageService {
+public class PasswordManageService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -61,7 +62,8 @@ public class AuthManageService {
     private String resetPasswordUrl;
 
 
-
+    @Autowired
+    private RedisSessionDAO redisSessionDAO;
 
 
     /**
@@ -80,7 +82,12 @@ public class AuthManageService {
         String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
         // 5分钟后过期
 
-        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,5*60);
+        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,Constants.EXPIRE_TIME);
+
+
+        String emailCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
+
+        redisUtil.set(Constants.RESET_EMAIL_CODE+email,emailCode,Constants.EXPIRE_TIME);
 
 
         //将验证码 和 过期时间更新到数据库
@@ -89,8 +96,8 @@ public class AuthManageService {
         stringBuilder.append("<html><head><title>首汽约车——用户密码找回</title></head><body>");
         stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
         stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的连接修改用户密码").append("<br/>");
-        stringBuilder.append("/br");
-        stringBuilder.append(""+resetPasswordUrl+"").append("?").append(email).append("<br/>");
+        stringBuilder.append("</br>");
+        stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
         stringBuilder.append("(如果您无法点击这个链接,请将次连接复制到浏览器地址栏后访问)<br/>");
         stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
         stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
@@ -116,7 +123,7 @@ public class AuthManageService {
      * 判断是否过期
      * @return
      */
-    public AjaxResponse isExpire(String type,String param){
+    public AjaxResponse isExpire(String type,String param,String emailKey){
         logger.info("===判断是否过期===" );
 
         if(!Constants.EMAIL.equals(type) && !Constants.PHONE.equals(type) ) {
@@ -136,6 +143,11 @@ public class AuthManageService {
             if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+param)){
                 logger.info("======邮箱验证码已过期=====");
                 return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
+            }
+
+            if(emailKey == null || !emailKey.equals(redisUtil.get(Constants.RESET_EMAIL_CODE+param))){
+                logger.info("======邮箱验证码不匹配=====");
+                return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_ERROR);
             }
 
         }
@@ -280,6 +292,8 @@ public class AuthManageService {
 
         if(upCode > 0){
             logger.info("=======更改密码成功end========");
+            //调用监听用户退出登录
+            redisSessionDAO.clearRelativeSession(null,null, carAdmUser.getUserId());
             return AjaxResponse.success(null);
         }else {
             return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);

@@ -72,7 +72,7 @@ public class MainController {
 	@Value("${homepage.url}")
 	private String homepageUrl; //前端UI首页页面
 	@Value("${login.checkMsgCode.switch}")
-	private String loginCheckMsgCodeSwitch = "OFF";//登录时是否进行短信验证的开关
+	private String loginCheckMsgCodeSwitch;//登录时是否进行短信验证的开关
 
 
 	private static final String CACHE_PREFIX_MSGCODE_CONTROL = "mp_star_fire_login_cache_msgcode_control_";
@@ -372,7 +372,7 @@ public class MainController {
 	/*修改密码*/
 	@RequestMapping("/changePassword")
 	@ResponseBody
-	public AjaxResponse changePassword( @Verify(param="oldPassword",rule="required") String oldPassword, @Verify(param="newPassword",rule="required") String newPassword ){
+	public AjaxResponse changePassword( @Verify(param="oldPassword",rule="required") String oldPassword, @Verify(param="newPassword",rule="required|resetPassword(^[a-zA-Z0-9_\\-]{8,50}$)") String newPassword ){
 		SSOLoginUser ssoLoginUser  =  WebSessionUtil.getCurrentLoginUser();
 		CarAdmUser   carAdmUser    =  carAdmUserMapper.selectByPrimaryKey( ssoLoginUser.getId()  );
 		//A:用户不存在
@@ -382,7 +382,7 @@ public class MainController {
 		//B:密码不正确
 		String enc_pwd = PasswordUtil.md5(oldPassword, carAdmUser.getAccount());
 		if(!enc_pwd.equalsIgnoreCase(carAdmUser.getPassword())) {
-			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
+			return AjaxResponse.fail(RestErrorCode.OLD_PASSWORD_WRONG) ;
 		}
 		//C:执行
 		String new_enc_pwd = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
@@ -390,6 +390,7 @@ public class MainController {
 		carAdmUserForUpdate.setUserId(carAdmUser.getUserId());
 		carAdmUserForUpdate.setPassword(new_enc_pwd);
 		carAdmUserMapper.updateByPrimaryKeySelective(carAdmUserForUpdate);
+		redisSessionDAO.clearRelativeSession(null,null,carAdmUser.getUserId());
 		return AjaxResponse.success( null );
 	}
 

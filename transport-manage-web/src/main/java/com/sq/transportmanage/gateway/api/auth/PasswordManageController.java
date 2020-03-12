@@ -1,7 +1,7 @@
 package com.sq.transportmanage.gateway.api.auth;
 
 
-import com.sq.transportmanage.gateway.service.auth.AuthManageService;
+import com.sq.transportmanage.gateway.service.auth.PasswordManageService;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import org.slf4j.Logger;
@@ -22,12 +22,12 @@ import java.text.MessageFormat;
  */
 @RestController
 @RequestMapping("/authManageController")
-public class AuthManageController {
+public class PasswordManageController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private AuthManageService authManageService;
+    private PasswordManageService authManageService;
 
     /**
      * 根据邮箱找回密码
@@ -53,9 +53,10 @@ public class AuthManageController {
     @ResponseBody
     @RequestMapping("/isExpire")
     public AjaxResponse isExpire(@Verify(param = "type",rule = "required") String type,
-                                 @Verify(param = "param",rule = "required")String param) {
-        logger.info("判断是否过期入参：type:" + type + ",param:" + param);
-        return authManageService.isExpire(type,param);
+                                 @Verify(param = "param",rule = "required")String param,
+                                 String emailKey) {
+        logger.info("判断是否过期入参：type:" + type + ",param:" + param + ",emailKey:" + emailKey);
+        return authManageService.isExpire(type,param,emailKey);
     }
 
 
@@ -105,7 +106,7 @@ public class AuthManageController {
     }
 
     /**
-     * 验证验证码是否正确
+     * 手机重置密码
      * @param phone
      * @return
      * @throws MessagingException
