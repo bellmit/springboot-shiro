@@ -53,9 +53,10 @@ public class PasswordManageController {
     @ResponseBody
     @RequestMapping("/isExpire")
     public AjaxResponse isExpire(@Verify(param = "type",rule = "required") String type,
-                                 @Verify(param = "param",rule = "required")String param) {
-        logger.info("判断是否过期入参：type:" + type + ",param:" + param);
-        return authManageService.isExpire(type,param);
+                                 @Verify(param = "param",rule = "required")String param,
+                                 String emailKey) {
+        logger.info("判断是否过期入参：type:" + type + ",param:" + param + ",emailKey:" + emailKey);
+        return authManageService.isExpire(type,param,emailKey);
     }
 
 
@@ -105,7 +106,7 @@ public class PasswordManageController {
     }
 
     /**
-     * 验证验证码是否正确
+     * 手机重置密码
      * @param phone
      * @return
      * @throws MessagingException
