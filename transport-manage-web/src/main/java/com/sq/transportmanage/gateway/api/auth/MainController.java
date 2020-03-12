@@ -382,7 +382,7 @@ public class MainController {
 		//B:密码不正确
 		String enc_pwd = PasswordUtil.md5(oldPassword, carAdmUser.getAccount());
 		if(!enc_pwd.equalsIgnoreCase(carAdmUser.getPassword())) {
-			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
+			return AjaxResponse.fail(RestErrorCode.OLD_PASSWORD_WRONG) ;
 		}
 		//C:执行
 		String new_enc_pwd = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
@@ -390,6 +390,7 @@ public class MainController {
 		carAdmUserForUpdate.setUserId(carAdmUser.getUserId());
 		carAdmUserForUpdate.setPassword(new_enc_pwd);
 		carAdmUserMapper.updateByPrimaryKeySelective(carAdmUserForUpdate);
+		redisSessionDAO.clearRelativeSession(null,null,carAdmUser.getUserId());
 		return AjaxResponse.success( null );
 	}
 

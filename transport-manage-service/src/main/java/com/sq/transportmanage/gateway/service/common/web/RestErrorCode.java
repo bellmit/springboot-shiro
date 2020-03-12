@@ -82,6 +82,11 @@ public final class RestErrorCode{
 	public static final int CAN_NOT_CHANGE_MENU                          = 1201;
 
 
+	@ResultMessage("原密码不正确")
+	public static final int OLD_PASSWORD_WRONG      = 1210;
+
+
+
 	//----------------------------------------------权限管理
 	@ResultMessage("父权限不存在")
 	public static final int PARENT_PERMISSION_NOT_EXIST           = 10001;
