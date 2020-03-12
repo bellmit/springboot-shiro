@@ -1,7 +1,7 @@
 package com.sq.transportmanage.gateway.api.auth;
 
 
-import com.sq.transportmanage.gateway.service.auth.AuthManageService;
+import com.sq.transportmanage.gateway.service.auth.PasswordManageService;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import org.slf4j.Logger;
@@ -22,12 +22,12 @@ import java.text.MessageFormat;
  */
 @RestController
 @RequestMapping("/authManageController")
-public class AuthManageController {
+public class PasswordManageController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private AuthManageService authManageService;
+    private PasswordManageService authManageService;
 
     /**
      * 根据邮箱找回密码

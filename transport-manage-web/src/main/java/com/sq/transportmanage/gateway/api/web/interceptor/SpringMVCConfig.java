@@ -28,26 +28,10 @@ public class SpringMVCConfig extends WebMvcConfigurationSupport {
     @Autowired
     private HttpParamVerifyInterceptor httpParamVerifyInterceptor;
 
-/*    @Autowired
-    private LoginoutListener loginoutListener;*/
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(httpParamVerifyInterceptor).addPathPatterns("/**");
     }
 
-
-
-    /*@Bean
-    public ServletListenerRegistrationBean listenerRegistrationBean(){
-
-        ServletListenerRegistrationBean srb = new ServletListenerRegistrationBean();
-        //防止Spring内存溢出监听器
-        srb.setListener(new IntrospectorCleanupListener());
-        srb.setListener(new LoginoutListener());
-        //request监听器 主要需要配置这个监听器
-        srb.setListener(new RequestContextListener());
-        log.info("==========listen start=======");
-        return srb;
-    }*/
 }
