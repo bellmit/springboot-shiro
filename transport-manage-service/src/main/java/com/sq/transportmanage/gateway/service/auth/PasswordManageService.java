@@ -6,6 +6,7 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapp
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCache;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.util.DateUtil;
@@ -61,7 +62,8 @@ public class PasswordManageService {
     private String resetPasswordUrl;
 
 
-
+    @Autowired
+    private RedisSessionDAO redisSessionDAO;
 
 
     /**
@@ -280,6 +282,8 @@ public class PasswordManageService {
 
         if(upCode > 0){
             logger.info("=======更改密码成功end========");
+            //调用监听用户退出登录
+            redisSessionDAO.clearRelativeSession(null,null, carAdmUser.getUserId());
             return AjaxResponse.success(null);
         }else {
             return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
