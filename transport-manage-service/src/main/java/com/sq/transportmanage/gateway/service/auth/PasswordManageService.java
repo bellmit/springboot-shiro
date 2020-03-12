@@ -89,7 +89,7 @@ public class PasswordManageService {
         stringBuilder.append("<html><head><title>首汽约车——用户密码找回</title></head><body>");
         stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
         stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的连接修改用户密码").append("<br/>");
-        stringBuilder.append("/br");
+        stringBuilder.append("</br>");
         stringBuilder.append(""+resetPasswordUrl+"").append("?").append(email).append("<br/>");
         stringBuilder.append("(如果您无法点击这个链接,请将次连接复制到浏览器地址栏后访问)<br/>");
         stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
