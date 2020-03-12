@@ -192,7 +192,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
-        //filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
