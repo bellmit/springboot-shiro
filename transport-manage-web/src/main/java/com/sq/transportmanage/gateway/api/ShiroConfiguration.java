@@ -187,6 +187,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/updateLevel", "anon");
         filterChainDefinitionMap.put("/permission/levelList", "anon");
+        filterChainDefinitionMap.put("/mp/car/batchImport", "anon");
         //注意此处：如果是h5放开的话 会出现跨域问题
         filterChainDefinitionMap.put("/unauthorized", "anon");
         filterChainDefinitionMap.put("/getMsgCode", "anon");
