@@ -169,9 +169,9 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSuccessUrl(homepageUrl);
 
         //添加ajax请求时候统一拦截
-        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+/*        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
         filters.put("authAjax",new ShiroFormAuthenticationFilter());
-        shiroFilterFactoryBean.setFilters(filters);
+        shiroFilterFactoryBean.setFilters(filters);*/
         //filters.put("casFilter", casFilter);
 //        shiroFilterFactoryBean.setFilters(filters);
         //注意此处使用的是LinkedHashMap，是有顺序的，shiro会按从上到下的顺序匹配验证，匹配了就不再继续验证
@@ -195,7 +195,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
-        filterChainDefinitionMap.put("/**","authAjax");
+        //filterChainDefinitionMap.put("/**","authAjax");
         //filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
