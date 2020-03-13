@@ -49,7 +49,7 @@ public final class SaasConst {
 		//----------------------------------------------------系统管理
 		SYSTEM_PERMISSIONS.add("SYSTEM_MANAGEMENT");
 		//----------------------------------------------------用户管理
-		/*SYSTEM_PERMISSIONS.add("USER_MANAGEMENT");
+		SYSTEM_PERMISSIONS.add("USER_MANAGEMENT");
 		SYSTEM_PERMISSIONS.add("QUERY_USER_LIST");               //用户列表
 		SYSTEM_PERMISSIONS.add("UserManages_look");             //查看
 		SYSTEM_PERMISSIONS.add("ADD_USER");                          //增加一个用户
@@ -79,7 +79,7 @@ public final class SaasConst {
 		SYSTEM_PERMISSIONS.add("ADD_SAAS_PERMISSION");                 //增加一个权限
 		SYSTEM_PERMISSIONS.add("DISABLE_SAAS_PERMISSION");            //禁用一个权限
 		SYSTEM_PERMISSIONS.add("ENABLE_SAAS_PERMISSION");             //启用一个权限
-		SYSTEM_PERMISSIONS.add("CHANGE_SAAS_PERMISSION");           //修改一个权限*/
+		SYSTEM_PERMISSIONS.add("CHANGE_SAAS_PERMISSION");           //修改一个权限
 	}
 
 	public static Set<String> MENU_PERMISSION = new HashSet<>(64);

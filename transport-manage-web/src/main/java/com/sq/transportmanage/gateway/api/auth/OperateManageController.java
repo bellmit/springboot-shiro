@@ -275,7 +275,7 @@ public class OperateManageController {
                 pemission.setUpdateTime(new Date());
                 pemission = this.addSaasPermission(pemission);
                 if(pemission != null &&  pemission.getPermissionId() > 0){
-                    JSONArray arraySun = jsonData.getJSONArray("routes");
+                    JSONArray arraySun = jsonData.getJSONArray("children");
                     if(arraySun != null && arraySun.size() > 0){
                         SaasPermission finalPemission = pemission;
                         arraySun.forEach(sun ->{
@@ -296,7 +296,7 @@ public class OperateManageController {
                             sunPermission = this.addSaasPermission(sunPermission);
 
                             if(sunPermission != null && sunPermission.getPermissionId() > 0){
-                                JSONArray jsonThird = jsonSun.getJSONArray("routes");
+                                JSONArray jsonThird = jsonSun.getJSONArray("children");
                                 if(jsonThird != null && jsonThird.size() > 0){
                                     SaasPermission thirdSaas = sunPermission;
                                     jsonThird.forEach(third ->{
