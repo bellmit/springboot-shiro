@@ -101,7 +101,7 @@ public class RolemanagementController{
 
 	/**六、查询一个角色中的权限ID**/
 	@RequestMapping("/getAllPermissionIds")
-	@RequiresPermissions(value = { "GET_PERMISSIONIDS_OF_ROLE" } )
+	@RequiresPermissions(value = { "GET_ALL_ROLE_PERMISSIONS" } )
 	@RequestFunction(menu = ROLE_PERMISSION_IDS)
 	public AjaxResponse getAllPermissionIds( @Verify(param="roleId",rule="required|min(1)") Integer roleId){
 		List<String> permissionIds = permissionManagementService.queryPermissionsOfRoleId(roleId);
@@ -112,7 +112,7 @@ public class RolemanagementController{
 
 	/**六、查询一个角色中的权限ID 以Integer类型返回**/
 	@RequestMapping("/getAllPermissionIdsOfInteger")
-	@RequiresPermissions(value = { "GET_PERMISSIONIDS_OF_ROLE" } )
+	@RequiresPermissions(value = { "GET_ALL_ROLE_PERMISSIONS" } )
 	@RequestFunction(menu = ROLE_PERMISSION_IDS)
 	public AjaxResponse getAllPermissionIdsOfInteger( @Verify(param="roleId",rule="required|min(1)") Integer roleId){
 		List<Integer> permissionIds = roleManagementService.getAllPermissionIds(roleId);
@@ -121,7 +121,7 @@ public class RolemanagementController{
 	
 	/**七、保存一个角色中的权限ID**/
 	@RequestMapping("/savePermissionIds")
-	@RequiresPermissions(value = { "SAVE_ROLE_PERMISSIONIDS" } )
+	@RequiresPermissions(value = { "GET_ALL_ROLE_PERMISSIONS" } )
 	@RequestFunction(menu = ROLE_PERMISSION_SAVE)
 	public AjaxResponse savePermissionIds(@Verify(param="roleId",rule="required|min(1)") Integer roleId,
 										  @Verify(param="permissionIds",rule="required") String permissionIds) {
@@ -228,6 +228,7 @@ public class RolemanagementController{
 	 */
 	@RequestMapping("/getRoleDetail")
 	@ResponseBody
+	@RequiresPermissions(value = {"GET_ALL_ROLE_PERMISSIONS"})
 	public AjaxResponse getRoleDetail(@Verify(param = "roleId",rule="required|min(1)") Integer roleId){
 		SaasRole saasRole = roleManagementService.findByPrimaryKey(roleId);
 		return AjaxResponse.success(saasRole);

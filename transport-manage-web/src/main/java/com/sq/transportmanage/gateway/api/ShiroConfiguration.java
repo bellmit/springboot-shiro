@@ -5,6 +5,7 @@ import com.sq.transportmanage.gateway.api.web.interceptor.LoginoutListener;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceConfig;
 import com.sq.transportmanage.gateway.service.common.shiro.PlatformShiroFilterFactoryBean;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCacheManager;
+import com.sq.transportmanage.gateway.service.common.shiro.filter.ShiroFormAuthenticationFilter;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswordRealm;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.UuIdSessionIdGenerator;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.Filter;
 import java.util.*;
 
 /**
@@ -163,13 +165,14 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         shiroFilterFactoryBean.setLoginUrl("/unauthorized");
         //shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
-        //shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
-        //shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
+        // shiroFilterFactoryBean.setLoginUrl(unauthorizedUrl);
         shiroFilterFactoryBean.setSuccessUrl(homepageUrl);
-       // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 
-//        Map<String, Filter> filters = new HashMap<>();
-//        //filters.put("casFilter", casFilter);
+        //添加ajax请求时候统一拦截
+        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+        filters.put("authAjax",new ShiroFormAuthenticationFilter());
+        shiroFilterFactoryBean.setFilters(filters);
+        //filters.put("casFilter", casFilter);
 //        shiroFilterFactoryBean.setFilters(filters);
         //注意此处使用的是LinkedHashMap，是有顺序的，shiro会按从上到下的顺序匹配验证，匹配了就不再继续验证
         //所以上面的url要苛刻，宽松的url要放在下面，尤其是"/**"要放到最下面，如果放前面的话其后的验证规则就没作用了。
@@ -191,6 +194,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/dologout", "anon");
         filterChainDefinitionMap.put("/logout.html", "logout");
         filterChainDefinitionMap.put("/**", "user");
+        filterChainDefinitionMap.put("/**","authAjax");
         //filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

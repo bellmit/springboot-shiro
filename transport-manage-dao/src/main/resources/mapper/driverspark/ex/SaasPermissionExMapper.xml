@@ -14,10 +14,11 @@
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="permission_api" property="permissionApi" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     permission_id, parent_permission_id, permission_code, permission_type, permission_name, 
-    menu_url, menu_open_mode, valid, sort_seq,merchant_id, create_time, update_time
+    menu_url, menu_open_mode, valid, sort_seq,merchant_id, create_time, update_time,permission_api
   </sql>
   
   <!-- 查询父权限下所有子权限的最大排序序号 -->
@@ -165,6 +166,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="permissionApi != null" >
+        permission_api,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="permissionId != null" >
@@ -202,6 +206,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="permissionApi != null" >
+        #{permissionApi,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

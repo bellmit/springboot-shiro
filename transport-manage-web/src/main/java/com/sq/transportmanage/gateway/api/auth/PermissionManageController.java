@@ -34,7 +34,8 @@ public class PermissionManageController {
 			@Verify(param="permissionCode",rule="required") String permissionCode, 
 			@Verify(param="permissionType",rule="required") Byte permissionType, 
 			String menuUrl, 
-			Byte menuOpenMode ) {
+			Byte menuOpenMode,
+			String permissionApi) {
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		SaasPermission pemission =  new SaasPermission();
 		pemission.setParentPermissionId(parentPermissionId);
@@ -46,6 +47,7 @@ public class PermissionManageController {
 		pemission.setMerchantId(ssoLoginUser.getMerchantId());
 		pemission.setCreateTime(new Date());
 		pemission.setUpdateTime(new Date());
+		pemission.setPermissionApi(permissionApi == null ? "" : permissionApi.trim());
 		return permissionManagementService.addSaasPermission(pemission);
 	}
 	
@@ -75,7 +77,8 @@ public class PermissionManageController {
 			@Verify(param="permissionCode",rule="required") String permissionCode, 
 			@Verify(param="permissionType",rule="required") Byte permissionType, 
 			String menuUrl, 
-			Byte menuOpenMode ) {
+			Byte menuOpenMode,
+			String permissionApi) {
 		SaasPermission pemissionForupdate = new SaasPermission();
 		pemissionForupdate.setPermissionId(permissionId);
 		pemissionForupdate.setPermissionName(permissionName);
@@ -83,6 +86,7 @@ public class PermissionManageController {
 		pemissionForupdate.setPermissionType(permissionType);
 		pemissionForupdate.setMenuUrl(menuUrl==null? "": menuUrl.trim());
 		pemissionForupdate.setMenuOpenMode(menuOpenMode);
+		pemissionForupdate.setPermissionApi(permissionApi==null?"":permissionApi.trim());
 		return permissionManagementService.changeSaasPermission(pemissionForupdate);
 	}
 

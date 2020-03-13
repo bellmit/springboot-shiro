@@ -14,10 +14,11 @@
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="permission_api" property="permissionApi" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     permission_id, parent_permission_id, permission_code, permission_type, permission_name, 
-    menu_url, menu_open_mode, valid, sort_seq, merchant_id, create_time, update_time
+    menu_url, menu_open_mode, valid, sort_seq, merchant_id, create_time, update_time,permission_api
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -30,12 +31,12 @@
       permission_code, permission_type, permission_name, 
       menu_url, menu_open_mode, valid, 
       sort_seq, merchant_id, create_time, 
-      update_time)
+      update_time,permission_api)
     values (#{permissionId,jdbcType=INTEGER}, #{parentPermissionId,jdbcType=INTEGER}, 
       #{permissionCode,jdbcType=VARCHAR}, #{permissionType,jdbcType=TINYINT}, #{permissionName,jdbcType=VARCHAR}, 
       #{menuUrl,jdbcType=VARCHAR}, #{menuOpenMode,jdbcType=TINYINT}, #{valid,jdbcType=BIT}, 
       #{sortSeq,jdbcType=INTEGER}, #{merchantId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP},#{permissionApi,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission" >
     insert into auth_saas_permission
@@ -76,6 +77,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="permissionApi != null" >
+        permission_api,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="permissionId != null" >
@@ -113,6 +117,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="permissionApi != null" >
+        #{permissionApi,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -152,6 +159,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="permissionApi != null" >
+        permission_api = #{permissionApi,jdbcType=VARCHAR},
+      </if>
     </set>
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
@@ -167,7 +177,8 @@
       sort_seq = #{sortSeq,jdbcType=INTEGER},
       merchant_id = #{merchantId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      permission_api = #{permissionApi,jdbcType=VARCHAR}
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
 

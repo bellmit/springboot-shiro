@@ -27,6 +27,8 @@ public class SaasPermission {
 
     private Date updateTime;
 
+    private String permissionApi;
+
     public Integer getPermissionId() {
         return permissionId;
     }
@@ -121,5 +123,13 @@ public class SaasPermission {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getPermissionApi() {
+        return permissionApi;
+    }
+
+    public void setPermissionApi(String permissionApi) {
+        this.permissionApi = permissionApi;
     }
 }
