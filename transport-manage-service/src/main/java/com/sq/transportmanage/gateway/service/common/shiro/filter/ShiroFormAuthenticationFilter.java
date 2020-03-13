@@ -1,8 +1,12 @@
 package com.sq.transportmanage.gateway.service.common.shiro.filter;
 
 import org.apache.http.HttpStatus;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +18,9 @@ import javax.servlet.http.HttpServletResponse;
  * @Description:
  */
 public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
+
+    @Value(value = "${homepage.url}")
+    private String homePageUrl;
 
     public ShiroFormAuthenticationFilter() {
         super();
@@ -47,5 +54,19 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
         return "XMLHttpRequest".equals(requestHeader);
     }
 
+
+
+    @Override
+    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletResponse rep = toHttp(response);
+        rep.setStatus(302);
+        rep.setHeader("Location", homePageUrl);
+        return false;
+    }
+
+
+    public  HttpServletResponse toHttp(ServletResponse response) {
+        return (HttpServletResponse)response;
+    }
 
 }
