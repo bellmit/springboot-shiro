@@ -121,6 +121,7 @@ public class OperateManageController {
                 role.setRoleName("系统管理员");
                 role.setValid(true);
                 role.setMerchantId(merchantId);
+                role.setCreaterId(user.getUserId());
 
 
                 List<SaasRole> roles = saasRoleService.queryRoles(loginUser.getMerchantId(),null, role.getRoleCode(), null, null);
