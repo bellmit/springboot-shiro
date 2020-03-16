@@ -102,6 +102,7 @@ public class OperateManageController {
             user.setPhone(phone);
             user.setEmail(email);
             user.setRoleId(1);
+            user.setLevel(1);
             ////管理员
             user.setAccountType(AuthEnum.MANAGE.getAuthId());
             //String merchantId = System.currentTimeMillis()+ UUID.randomUUID().toString().replaceAll("-","");
