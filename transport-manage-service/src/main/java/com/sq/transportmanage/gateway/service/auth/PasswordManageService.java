@@ -202,7 +202,8 @@ public class PasswordManageService {
 
         if(upCode > 0){
             logger.info("=======更改密码成功end========");
-            redisUtil.delete(email);
+            redisUtil.delete(Constants.RESET_EMAIL_KEY+email);
+            redisUtil.delete(Constants.RESET_EMAIL_CODE+email);
             return AjaxResponse.success(null);
         }else {
             return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
@@ -228,7 +229,7 @@ public class PasswordManageService {
             msgcode = NumberUtil.genRandomCode(8);
         }
 
-        redisUtil.set(key,msgcode,2*60*1000);
+        redisUtil.set(key,msgcode,2*60);
         String content = "尊敬的用户，您重置密码验证码为" + msgcode + ",有效期120秒";
 
         SmsSendUtil.send(phone,content);
@@ -291,6 +292,7 @@ public class PasswordManageService {
         int upCode = carAdmUserMapper.updateByPrimaryKey(carAdmUser);
 
         if(upCode > 0){
+            redisUtil.delete(Constants.RESET_PHONE_KEY +phone);
             logger.info("=======更改密码成功end========");
             //调用监听用户退出登录
             redisSessionDAO.clearRelativeSession(null,null, carAdmUser.getUserId());
