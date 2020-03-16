@@ -226,7 +226,7 @@ public class PasswordManageService {
 
         String  msgcode = redisUtil.get(key);
         if(msgcode == null){
-            msgcode = NumberUtil.genRandomCode(8);
+            msgcode = NumberUtil.genRandomCode(6);
         }
 
         redisUtil.set(key,msgcode,2*60);
