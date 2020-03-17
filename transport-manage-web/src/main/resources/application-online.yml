@@ -57,7 +57,7 @@ spring:
       driversparkmaster:
         name: dev
         jdbc-url: jdbc:mysql://mysql-m5353-driver-spark-online.guobindui.cn:5353/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
+        username: mp_manage_web
         password: EOp!hEjUAamIIC4B
         minimum-idle: 5
         idle-timeout: 300000
@@ -70,7 +70,7 @@ spring:
       driversparkslave:
         name: dev
         jdbc-url: jdbc:mysql://mysql-s5353-driver-spark-online.guobindui.cn:5353/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
-        username: dev_sqhc_rentcar
+        username: mp_manage_web
         password: EOp!hEjUAamIIC4B
         minimum-idle: 5
         idle-timeout: 300000
