@@ -90,8 +90,39 @@ spring:
       nodes: SJ-redis-cluster-c1-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c3-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c5-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c2-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c4-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c6-ncds-online-db.01zhuanche.com:8002
     password: ysBhqkYHDifB
 
-#h5找回密码域名
-reset.password.url: https://saas.guobindui.cn/forgot?email=
+#钉钉报警开关
+ding.ding.switch: false
+#钉钉报警url
+ding.ding.monitor.url: https://oapi.dingtalk.com/robot/send?access_token=adba3f805eeaec5d6b87f85d7cd93b850aa6055d54a4079a87e2d79b2265746d
+
+#应该是用不到
+
+auth.finduser.url: http://inside-auth.01zhuanche.com/findUser.html
+
+auth.permission.url: http://inside-auth.01zhuanche.com/findPermission.html
+
+auth.appid: 18
+
+resetpassword.msgnotify.switch: true
+user.password.indexOfPhone: 9,5,3,7,1,4,8,2
+login.checkMsgCode.switch: true
+
+loginpage.url: https://saas.guobindui.cn/
+
+homepage.url: https://saas.guobindui.cn/#/Manage
+
+login.url: https://saas-spark.guobindui.cn/signin
 
 #没有权限地址
 unauthorized.url: https://saas.guobindui.cn/unauthorized
+
+#短信发送相关
+short_message_url: http://inside-mp.01zhuanche.com/api/v1/message/content/send
+short_message_appkey: 04F934A9C93E4376ACC51CBE4B5FDCCC
+short_message_appsecret: B89E2C9C203D4CAE88383431A2C4CC6E
+template_short_message_url: http://inside-mp.01zhuanche.com/api/v1/message/template/send
+
+
+#h5找回密码域名
+reset.password.url: https://saas.guobindui.cn/forgot?email=
+

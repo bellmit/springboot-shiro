@@ -159,8 +159,10 @@ public class RolemanagementController{
 			@Verify(param="pageSize",rule="required|min(10)") Integer pageSize,  
 			String roleCode , 
 			String roleName, 
-			Byte valid ) {
-		PageDTO pageDto = roleManagementService.queryRoleList(page, pageSize, roleCode, roleName, valid);
+			Byte valid,
+			String createStartTime,
+			String createEndTime) {
+		PageDTO pageDto = roleManagementService.queryRoleList(page, pageSize, roleCode, roleName, valid,createStartTime,createEndTime);
 		return AjaxResponse.success( pageDto );
 	}
 	

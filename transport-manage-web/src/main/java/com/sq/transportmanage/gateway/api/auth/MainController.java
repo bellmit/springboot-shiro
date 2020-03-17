@@ -288,7 +288,7 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
 		}
 		//D: 查询验证码，并判断是否正确
-		if("ON".equalsIgnoreCase(loginCheckMsgCodeSwitch)) {
+		if("true".equalsIgnoreCase(loginCheckMsgCodeSwitch)) {
 
 
 			long score = System.currentTimeMillis();
@@ -305,14 +305,13 @@ public class MainController {
 
 			int countLimit = 5;
 			logger.info("登录-用户"+username+"在"+statistics+"分钟内第"+count+"次登录");
-			if(count  > countLimit) {
+         /*			if(count  > countLimit) {
 				logger.info("登录-用户"+username+"在"+statistics+"分钟内登录"+count+"次,超过限制"+countLimit+",需要等待"+statistics+"分钟");
 				return AjaxResponse.fail(RestErrorCode.DO_LOGIN_FREQUENTLY,statistics);
-			}
+			}*/
 			//验证验证码是否正确
 			String  msgcodeInCache = redisUtil.get(CACHE_PREFIX_MSGCODE+username);
 
-			//String  msgcodeInCache = RedisCacheUtil.get(CACHE_PREFIX_MSGCODE+username, String.class);
 			if(msgcodeInCache==null) {
 				return AjaxResponse.fail(RestErrorCode.MSG_CODE_INVALID) ;
 			}

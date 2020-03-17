@@ -85,6 +85,13 @@
         <if test="merchantId!=null">
             and t.merchant_id = #{merchantId}
         </if>
+        <if test="createStartTime !=null">
+            AND t.create_time  &gt;=STR_TO_DATE(#{createStartTime},'%Y-%m-%d')
+        </if>
+        <if test="createEndTime !=null">
+            and t.create_time &lt;=STR_TO_DATE(#{createEndTime},'%Y-%m-%d')
+        </if>
+
         order by t.role_id
     </select>
 

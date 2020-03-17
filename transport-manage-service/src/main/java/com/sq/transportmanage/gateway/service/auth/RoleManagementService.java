@@ -211,7 +211,8 @@ public class RoleManagementService{
 	
 	/**八、查询角色列表**/
 	@SuppressWarnings("rawtypes")
-	public PageDTO queryRoleList( Integer page, Integer pageSize,  String roleCode , String roleName, Byte valid ) {
+	public PageDTO queryRoleList( Integer page, Integer pageSize,  String roleCode , String roleName, Byte valid,String createStartTime,
+								  String createEndTime ) {
     	//一、参数修正
 		if(page==null || page.intValue()<=0) {
 			page = new Integer(1);
@@ -239,7 +240,8 @@ public class RoleManagementService{
     	try{
     		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
 
-			roles = saasRoleExMapper.queryRoleList(loginUser.getSuper()== true ? null:loginUser.getMerchantId(),null, roleCode, roleName, valid);
+			roles = saasRoleExMapper.queryRoleList(loginUser.getSuper()== true ? null:loginUser.getMerchantId(),null, roleCode, roleName, valid,
+					createStartTime,createEndTime);
         	total    = (int)p.getTotal();
     	}finally {
         	PageHelper.clearPage();

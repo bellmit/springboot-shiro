@@ -15,7 +15,9 @@ public interface SaasRoleExMapper{
 									@Param("roleIds") List<Integer> roleIds,
 									@Param("roleCode") String roleCode,
 									@Param("roleName") String roleName,
-									@Param("valid") Byte valid);
+									@Param("valid") Byte valid,
+									@Param("createStartTime") String createStartTime,
+									@Param("createEndTime") String createEndTime);
 
 
 	/**根据用户ID，查询其拥有的所有有效的角色ID**/
