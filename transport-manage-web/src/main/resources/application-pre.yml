@@ -90,6 +90,30 @@ spring:
       nodes: redis-c7021-n1-driver-spark-online.guobindui.cn:7021,redis-c7021-n2-driver-spark-online.guobindui.cn:7021,redis-c7021-n3-driver-spark-online.guobindui.cn:7021,redis-c7021-n4-driver-spark-online.guobindui.cn:7021,redis-c7021-n5-driver-spark-online.guobindui.cn:7021,redis-c7021-n6-driver-spark-online.guobindui.cn:7021
     password: AcomCdgN05srE
 
+zuul:
+  routes:
+    chargeapi:
+      path: /charge/**
+      url: http://pre-inside-saas-charge.guobindui.cn/charge/
+    orderapi:
+      path: /order/**
+      url: http://pre-inside-order-spark.guobindui.cn/order/
+    dispatchapi:
+      path: /dispatch/**
+      url: http://pre-inside-spark-dispatch-cms.guobindui.cn/
+    mpapi:
+      path: /mp/**
+      url: http://pre-inside-mp-spark-manage.guobindui.cn/
+    uploadPhoto:
+      path: /common/uploadPhoto/**
+      url: http://pre-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
+    thirdapi:
+      path: /common/upload/**
+      url: http://pre-inside-third-api.01zhuanche.com/file/upload
+    shareapi:
+      path: /share/**
+      url: http://pre-inside-saas-share.guobindui.cn/share/
+
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
