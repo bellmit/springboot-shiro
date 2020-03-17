@@ -133,7 +133,8 @@ public class UserManagementService{
 
 			//return AjaxResponse.success( null );
 
-			return AjaxResponse.success( this.findByUuid(user.getMerchantId()) );
+			user = this.findByUuid(user.getMerchantId());
+			return AjaxResponse.success(user);
 		} catch (Exception e) {
 			logger.error("创建用户异常" + e);
 			return AjaxResponse.fail(RestErrorCode.UNKNOWN_ERROR);
