@@ -56,9 +56,9 @@ spring:
         connection-test-query: SELECT 1
       driversparkmaster:
         name: dev
-        jdbc-url: jdbc:mysql://mysql-m-wr-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        jdbc-url: jdbc:mysql://mysql-m5353-driver-spark-online.guobindui.cn:5353/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
         username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
+        password: EOp!hEjUAamIIC4B
         minimum-idle: 5
         idle-timeout: 300000
         maximum-pool-size: 50
@@ -69,9 +69,9 @@ spring:
         connection-test-query: SELECT 1
       driversparkslave:
         name: dev
-        jdbc-url: jdbc:mysql://mysql-s-ro-car-all-dev-new-db.01zhuanche.com:3307/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
+        jdbc-url: jdbc:mysql://mysql-s5353-driver-spark-online.guobindui.cn:5353/driver_spark?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectTimeout=1000&amp;socketTimeout=15000
         username: dev_sqhc_rentcar
-        password: dev_BzkmQM%O^U7Dy8X3
+        password: EOp!hEjUAamIIC4B
         minimum-idle: 5
         idle-timeout: 300000
         maximum-pool-size: 50
@@ -87,8 +87,8 @@ spring:
       max-active: 200
       max-idle: 50
     cluster:
-      nodes: SJ-redis-cluster-c1-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c3-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c5-ncds-online-db.01zhuanche.com:7002,SJ-redis-cluster-c2-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c4-ncds-online-db.01zhuanche.com:8002,SJ-redis-cluster-c6-ncds-online-db.01zhuanche.com:8002
-    password: ysBhqkYHDifB
+      nodes: redis-c7021-n1-driver-spark-online.guobindui.cn:7021,redis-c7021-n2-driver-spark-online.guobindui.cn:7021,redis-c7021-n3-driver-spark-online.guobindui.cn:7021,redis-c7021-n4-driver-spark-online.guobindui.cn:7021,redis-c7021-n5-driver-spark-online.guobindui.cn:7021,redis-c7021-n6-driver-spark-online.guobindui.cn:7021
+    password: AcomCdgN05srE
 
 #钉钉报警开关
 ding.ding.switch: false
