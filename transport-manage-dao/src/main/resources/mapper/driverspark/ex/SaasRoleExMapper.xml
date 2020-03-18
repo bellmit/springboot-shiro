@@ -91,7 +91,7 @@
         <if test="createEndTime !=null">
             and t.create_time &lt;=STR_TO_DATE(#{createEndTime},'%Y-%m-%d')
         </if>
-
+        and t.role_id not in  (SELECT min(role_id) FROM auth_saas_role WHERE merchant_id = #{merchantId})
         order by t.role_id
     </select>
 
