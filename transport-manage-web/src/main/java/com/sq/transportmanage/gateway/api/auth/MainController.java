@@ -53,6 +53,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -88,7 +90,7 @@ public class MainController {
 	private SaasPermissionExMapper saasPermissionExMapper;
 	@Autowired
 	private UsernamePasswordRealm usernamePasswordRealm;
-	@Autowired
+	@Resource(name = "sessionDAO")
 	private RedisSessionDAO redisSessionDAO;
 
 	@Autowired

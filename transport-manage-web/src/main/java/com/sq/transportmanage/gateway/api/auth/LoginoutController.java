@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class LoginoutController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    @Autowired
+    @Resource(name = "sessionDAO")
     private RedisSessionDAO redisSessionDAO;
 
     @RequestMapping("/userLoginOut")

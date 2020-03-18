@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class RoleManagementService{
 	private SaasRolePermissionRalationExMapper saasRolePermissionRalationExMapper;
 	@Autowired
 	private SaasPermissionExMapper saasPermissionExMapper;
-	@Autowired
+	@Resource(name = "sessionDAO")
 	private RedisSessionDAO redisSessionDAO;
 	
 	/**一、增加一个角色**/

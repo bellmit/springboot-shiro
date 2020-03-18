@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**权限管理功能**/
@@ -28,7 +29,7 @@ public class PermissionManagementService {
 	private SaasPermissionExMapper saasPermissionExMapper;
 	@Autowired
 	private SaasRolePermissionRalationExMapper saasRolePermissionRalationExMapper;
-	@Autowired
+	@Resource(name = "sessionDAO")
 	private RedisSessionDAO redisSessionDAO;
 
 	/**
