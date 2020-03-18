@@ -2,9 +2,13 @@ package com.sq.transportmanage.gateway.service.common.shiro.cache;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * 基于REDIS而实现SHIRO的Cache实现类
  * @author zhaoyali
  */
-public class RedisCache<K, V> implements Cache<K, V> {
+public class RedisCache<K, V>  implements Cache<K, V> {
     private static final Logger log = LoggerFactory.getLogger(RedisCache.class);
     private String cachename;              //缓存名称
     private RedisTemplate<String, Serializable>    redisTemplate;
@@ -133,4 +137,5 @@ public class RedisCache<K, V> implements Cache<K, V> {
             throw new CacheException(t);
         }
     }
+
 }

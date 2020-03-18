@@ -43,6 +43,8 @@ public final class Constants {
 
     public static final Integer EXPIRE_TIME = 24*60*60;
 
+    /**session失效时间**/
+    public static final Integer SESSION_REPIRE_TIME = 24*60*60*1000;
 
     /**邮箱**/
     public static final String EMAIL = "1";

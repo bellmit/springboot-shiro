@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,7 +59,8 @@ public class UserManagementService{
 		return carAdmUserMapper.selectByPrimaryKey(userId);
 	}
 
-	@Autowired
+	//@Autowired
+	@Resource(name = "sessionDAO")
 	private RedisSessionDAO redisSessionDAO;
 	
 	/**一、增加一个用户**/
@@ -125,7 +127,7 @@ public class UserManagementService{
 			Integer uId = carAdmUserMapper.insertSelective(user);
 
 			//短信通知
-			String text =  "您已注册聚合平台账号"+user.getAccount()+"，初始密码为："+initPassword+"（请前往登录并及时修改密码）";
+			String text =  "您已注册用心出行平台账号"+user.getAccount()+"，初始密码为："+initPassword+"（请前往登录并及时修改密码）";
 			SmsSendUtil.send( user.getPhone() , text);
 
 

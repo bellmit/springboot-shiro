@@ -2,13 +2,15 @@ package com.sq.transportmanage.gateway.api;
 
 
 import com.sq.transportmanage.gateway.api.web.interceptor.LoginoutListener;
+import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceConfig;
 import com.sq.transportmanage.gateway.service.common.shiro.PlatformShiroFilterFactoryBean;
+import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCache;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCacheManager;
-import com.sq.transportmanage.gateway.service.common.shiro.filter.ShiroFormAuthenticationFilter;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswordRealm;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.UuIdSessionIdGenerator;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
@@ -22,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
-import javax.servlet.Filter;
 import java.util.*;
 
 /**
@@ -48,13 +49,25 @@ public class ShiroConfiguration {
     @Resource(name = "ncdsSerRedisTemplate")
     private RedisTemplate ncdsSerRedisTemplate;
 
-    @Bean(name = "shiroCacheManager")
+    /*@Bean(name = "shiroCacheManager")
     public RedisCacheManager shiroCacheManager() {
         RedisCacheManager shiroCacheManager = new RedisCacheManager();
         shiroCacheManager.setRedisTemplate(ncdsSerRedisTemplate);
         shiroCacheManager.setExpireSeconds(1800);
         return shiroCacheManager;
+    }*/
+
+
+
+    @Bean(name = "redisCache")
+    public RedisCache redisCache(){
+        RedisCache redisCache = new RedisCache("",ncdsSerRedisTemplate,3600*24);
+        return redisCache;
     }
+
+
+
+
 
 
     @Bean(name = "sessionIdGenerator")
@@ -71,13 +84,17 @@ public class ShiroConfiguration {
         return sessionIdCookie;
     }
 
+
+
     @Bean(name = "sessionDAO")
-    public RedisSessionDAO sessionDAO(UuIdSessionIdGenerator sessionIdGenerator, UsernamePasswordRealm shiroRealm) {
+    public RedisSessionDAO sessionDAO(UuIdSessionIdGenerator sessionIdGenerator, UsernamePasswordRealm shiroRealm, RedisCache redisCache) {
         RedisSessionDAO sessionDAO = new RedisSessionDAO();
         sessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
         sessionDAO.setSessionIdGenerator(sessionIdGenerator);
         sessionDAO.setRedisTemplate(ncdsSerRedisTemplate);
         sessionDAO.setAuthorizingRealm(shiroRealm);
+        sessionDAO.setActiveSessionsCache(redisCache);
+        sessionDAO.setActiveSessions(redisCache);
         return sessionDAO;
     }
 
@@ -85,6 +102,7 @@ public class ShiroConfiguration {
     @Bean
     public UsernamePasswordRealm shiroRealm() {
         UsernamePasswordRealm shiroRealm = new UsernamePasswordRealm();
+        //shiroRealm.setName("authorizingRealm");
         shiroRealm.setName("ConferenceUsernamePasswordRealm");
         //<!-- 是否启用授权缓存（生产环境可调节此参数进行调优） -->
         //此属性如果设置为true，为用shiro默认的30min缓存，退出或者修改角色权限导致
@@ -95,20 +113,20 @@ public class ShiroConfiguration {
 
 
     @Bean("sessionManager")
-    public DefaultWebSessionManager sessionManager(RedisSessionDAO sessionDAO, SimpleCookie sessionIdCookie) {
+    public DefaultWebSessionManager sessionManager(RedisSessionDAO sessionDAO, SimpleCookie sessionIdCookie, CacheManager cacheManager) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //session存活时间60分钟
-        sessionManager.setGlobalSessionTimeout(3600000);
+        sessionManager.setGlobalSessionTimeout(Constants.SESSION_REPIRE_TIME);
         sessionManager.setDeleteInvalidSessions(true);
         //自定义监听 fht 不能使用@WebListern的 HttpSessionListerner 因为shiro重写了session 2020-03-05
         Collection<SessionListener> sessionListeners = new ArrayList<>();
         sessionListeners.add(sessionListener());
         sessionManager.setSessionListeners(sessionListeners);
-        //sessionManager.setSessionValidationSchedulerEnabled(true);
-        //sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
+         //sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
         sessionManager.setSessionDAO(sessionDAO);
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(sessionIdCookie);
+        sessionManager.setCacheManager(cacheManager);
         return sessionManager;
     }
 
