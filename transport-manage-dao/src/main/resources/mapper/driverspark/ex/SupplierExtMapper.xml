@@ -40,7 +40,7 @@
   </sql>
 
   <select id="selectListByMerchantId"  resultType="java.lang.Integer" parameterType="java.lang.Integer">
-    select supplier_id from base_supplier where status = 0 and merchant_id =#{merchantId}
+    select supplier_id from base_supplier where  merchant_id =#{merchantId}
   </select>
 
 </mapper>
