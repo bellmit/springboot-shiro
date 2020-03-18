@@ -4,12 +4,15 @@ import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.common.shiro.cache.RedisCache;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.UsernamePasswordRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,19 +51,19 @@ public class RedisSessionDAO extends CachingSessionDAO{
 
 
 
-	/*private AuthorizingRealm authorizingRealm;
+	private AuthorizingRealm authorizingRealm;
 
 	public void setAuthorizingRealm(AuthorizingRealm authorizingRealm) {
 		this.authorizingRealm = authorizingRealm;
-	}*/
+	}
 
-	@Autowired
+	/*@Autowired
 	@Qualifier("usernamePasswordRealm")
 	private UsernamePasswordRealm authorizingRealm;
 
 	public  void setAuthorizingRealm(UsernamePasswordRealm authorizingRealm) {
 		this.authorizingRealm = authorizingRealm;
-	}
+	}*/
 
 	@Autowired
 	private RedisCache activeSessions;
@@ -115,8 +118,8 @@ public class RedisSessionDAO extends CachingSessionDAO{
 	/**二、当权限信息、角色信息、用户信息发生变化时，同时清理与之相关联的会话**/
 	@MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
 	public void clearRelativeSession( final Integer permissionId, final  Integer roleId, final  Integer userId ) {
-		//final Cache<Serializable, Session> cache = super.getActiveSessionsCache();
-		final Cache<Serializable, Session> cache = activeSessions;
+		final Cache<Serializable, Session> cache = super.getActiveSessionsCache();
+		//final Cache<Serializable, Session> cache = activeSessions;
 		new Thread(new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
@@ -178,18 +181,18 @@ public class RedisSessionDAO extends CachingSessionDAO{
 					//E3：执行清理shiro 认证与授权缓存
 					for( String account : accounts) {
 						logger.info("执行清理shiro 认证与授权缓存account={}",account);
-						//todo 此处不合理,应该用下面的代码 这个是临时方案:执行退出的操作 相当于手动点击退出
-						Subject subject = SecurityUtils.getSubject();
+						//todo 此处不合理,应该用下面的代码 这个是临时方案:执行退出的操作 相当于手动点击退出 这个触发条件太广泛了 要加很多逻辑判断那些人需要退出
+						/*Subject subject = SecurityUtils.getSubject();
 						if(subject.isAuthenticated()) {
 							subject.logout();
-						}
+						}*/
 
-						/*SSOLoginUser principal  = new SSOLoginUser();
+						SSOLoginUser principal  = new SSOLoginUser();
 						principal.setLoginName(  account );
 
 						SimplePrincipalCollection simplePrincipalCollection = new SimplePrincipalCollection( );
 						simplePrincipalCollection.add(principal, authorizingRealm.getName() );
-						((UsernamePasswordRealm)authorizingRealm).clearCache( simplePrincipalCollection );*/
+						((UsernamePasswordRealm)authorizingRealm).clearCache( simplePrincipalCollection );
 					}
 				}catch(Exception ex) {
 					logger.error("清除缓存异常",ex);
