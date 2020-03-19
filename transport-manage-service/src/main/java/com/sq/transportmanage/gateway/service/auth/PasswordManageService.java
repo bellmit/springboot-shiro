@@ -296,8 +296,7 @@ public class PasswordManageService {
             return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
         }
 
-        String redisValue = redisUtil.get(phoneCode);
-        if(!msgCode.equals(redisValue)){
+        if(!msgCode.equals(phoneCode)){
             logger.info("======手机验证码不匹配=====");
             return AjaxResponse.fail(RestErrorCode.PHONE_CODE_UNSPECIAL);
         }
