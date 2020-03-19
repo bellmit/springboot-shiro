@@ -9,16 +9,24 @@ import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.util.MD5Utils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -42,6 +50,10 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 
 	@Autowired
 	private SaasRoleExMapper saasRoleExMapper;
+
+	@Autowired
+	@Qualifier("sessionDAO")
+	private RedisSessionDAO redisSessionDAO;
 	
     /**重写：获取用户的身份认证信息**/
 	@Override
@@ -50,6 +62,16 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 		try {
 			UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
 			CarAdmUser adMUser = myDataSourceService.queryByAccount(token.getUsername());
+
+
+			//处理session 防止一个账号多处登录
+			try {
+				redisSessionDAO.clearRelativeSession(null,null,adMUser.getUserId());
+			} catch (Exception e) {
+				logger.info("=========清除session异常============");
+			}
+
+
 			SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
 			loginUser.setId( adMUser.getUserId() );                //用户ID
 			loginUser.setLoginName( adMUser.getAccount() );//登录名
@@ -145,6 +167,8 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 		SSOLoginUser loginUser = (SSOLoginUser) principalCollection.getPrimaryPrincipal();
 		String account = loginUser.getLoginName(); //登录名
+
+
 
 		List<String> perms_string = saasPermissionExMapper.queryPermissionCodesOfUser(  loginUser.getId() );
 		List<String> roles_string   = saasRoleExMapper.queryRoleCodesOfUser( loginUser.getId() );

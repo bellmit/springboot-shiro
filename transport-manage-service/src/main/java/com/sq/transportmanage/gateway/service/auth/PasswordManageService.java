@@ -100,7 +100,7 @@ public class PasswordManageService {
         stringBuilder.append("</br>");
         stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
         stringBuilder.append("(如果您无法点击这个链接,请将此链接复制到浏览器地址栏后访问)<br/>");
-        stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
+        stringBuilder.append("为了保证您账号的安全性，该链接有效期为24小时，并且点击一次后将失效!<br/>");
         stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
         stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行任<br/>");
         stringBuilder.append("何操作，并可以放心的忽略此电子邮件。<br/>");
@@ -179,7 +179,7 @@ public class PasswordManageService {
      * 重置密码
      * @return
      */
-    public AjaxResponse resetPassword(String email,String newPassword){
+    public AjaxResponse resetPassword(String email,String newPassword,String msgCode){
         logger.info("====重置密码start=======入参：newPassword:" + newPassword +",email:" +email);
         CarAdmUser carAdmUser = carAdmUserExMapper.queryExist(email,null);
         if(carAdmUser == null){
@@ -190,6 +190,12 @@ public class PasswordManageService {
         if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+email)){
             logger.info("======邮箱验证码已过期=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
+        }
+
+        String emailKey = redisUtil.get(Constants.RESET_EMAIL_KEY+email);
+        if(!msgCode.equals(emailKey)){
+            logger.info("======邮箱验证码不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_ERROR);
         }
 
 
@@ -274,7 +280,7 @@ public class PasswordManageService {
      * 根据手机号重置密码
      * @return
      */
-    public AjaxResponse resetPasswordByPhone(String phone,String newPassword){
+    public AjaxResponse resetPasswordByPhone(String phone,String newPassword,String msgCode){
         logger.info("====手机号码重置密码start=======入参：newPassword:" + newPassword +",phone:" +phone);
         CarAdmUser carAdmUser = carAdmUserExMapper.queryExist(null,phone);
         if(carAdmUser == null){
@@ -282,6 +288,18 @@ public class PasswordManageService {
             return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
         }
 
+        String phoneCode = redisUtil.get(Constants.RESET_PHONE_KEY + phone);
+
+
+        if(!redisUtil.hasKey(Constants.RESET_PHONE_KEY + phone)){
+            logger.info("======验证码已过期=====");
+            return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
+        }
+
+        if(!msgCode.equals(phoneCode)){
+            logger.info("======手机验证码不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.PHONE_CODE_UNSPECIAL);
+        }
 
         String md5Password = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
 
