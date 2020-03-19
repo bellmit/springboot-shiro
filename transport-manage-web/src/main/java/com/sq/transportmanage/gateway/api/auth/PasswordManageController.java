@@ -69,10 +69,11 @@ public class PasswordManageController {
     @ResponseBody
     @RequestMapping("/resetPassword")
     public AjaxResponse resetPassword(@Verify(param = "email",rule = "required")String email,
-                                @Verify(param = "newPassword",rule = "required|resetPassword(^[a-zA-Z0-9-*/+.~!@#$%^&*()]{8,50}$)")String newPassword){
-        logger.info(MessageFormat.format("重置密码入参：email:{0},newPassword:{1}"
-                ,email,newPassword));
-        return authManageService.resetPassword(email,newPassword);
+                                @Verify(param = "newPassword",rule = "required|resetPassword(^[a-zA-Z0-9-*/+.~!@#$%^&*()]{8,50}$)")String newPassword,
+                                      @Verify(param = "msgCode",rule = "required")String msgCode){
+        logger.info(MessageFormat.format("重置密码入参：email:{0},newPassword:{1},msgCode:{2}"
+                ,email,newPassword,msgCode));
+        return authManageService.resetPassword(email,newPassword,msgCode);
     }
 
 
@@ -114,10 +115,11 @@ public class PasswordManageController {
     @ResponseBody
     @RequestMapping("/resetPasswordByPhone")
     public AjaxResponse resetPasswordByPhone(@Verify(param = "phone",rule = "required")String phone,
-                                @Verify(param = "newPassword",rule = "required")String newPassword) {
-        logger.info("验证验证码：" + phone + ",newPassword:" + newPassword);
+                                @Verify(param = "newPassword",rule = "required")String newPassword,
+                                             @Verify(param = "msgCode",rule = "required")String msgCode) {
+        logger.info("验证验证码：" + phone + ",newPassword:" + newPassword +",msgCode:" + msgCode);
 
-        return authManageService.resetPasswordByPhone(phone,newPassword);
+        return authManageService.resetPasswordByPhone(phone,newPassword,msgCode);
     }
 
 }

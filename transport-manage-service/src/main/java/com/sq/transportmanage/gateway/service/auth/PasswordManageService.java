@@ -179,7 +179,7 @@ public class PasswordManageService {
      * 重置密码
      * @return
      */
-    public AjaxResponse resetPassword(String email,String newPassword){
+    public AjaxResponse resetPassword(String email,String newPassword,String msgCode){
         logger.info("====重置密码start=======入参：newPassword:" + newPassword +",email:" +email);
         CarAdmUser carAdmUser = carAdmUserExMapper.queryExist(email,null);
         if(carAdmUser == null){
@@ -190,6 +190,12 @@ public class PasswordManageService {
         if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+email)){
             logger.info("======邮箱验证码已过期=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
+        }
+
+        String emailKey = redisUtil.get(Constants.RESET_EMAIL_KEY+email);
+        if(!msgCode.equals(emailKey)){
+            logger.info("======邮箱验证码不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_ERROR);
         }
 
 
@@ -274,7 +280,7 @@ public class PasswordManageService {
      * 根据手机号重置密码
      * @return
      */
-    public AjaxResponse resetPasswordByPhone(String phone,String newPassword){
+    public AjaxResponse resetPasswordByPhone(String phone,String newPassword,String msgCode){
         logger.info("====手机号码重置密码start=======入参：newPassword:" + newPassword +",phone:" +phone);
         CarAdmUser carAdmUser = carAdmUserExMapper.queryExist(null,phone);
         if(carAdmUser == null){
@@ -282,6 +288,19 @@ public class PasswordManageService {
             return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
         }
 
+        String phoneCode = redisUtil.get(Constants.RESET_PHONE_KEY + phone);
+
+
+        if(!redisUtil.hasKey(phoneCode)){
+            logger.info("======验证码已过期=====");
+            return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
+        }
+
+        String redisValue = redisUtil.get(phoneCode);
+        if(!msgCode.equals(redisValue)){
+            logger.info("======手机验证码不匹配=====");
+            return AjaxResponse.fail(RestErrorCode.PHONE_CODE_UNSPECIAL);
+        }
 
         String md5Password = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
 
