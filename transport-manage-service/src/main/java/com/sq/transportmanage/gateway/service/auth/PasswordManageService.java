@@ -79,11 +79,7 @@ public class PasswordManageService {
             logger.info("======邮箱不存在=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
         }
-        //生成验证码
-        String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
-        // 5分钟后过期
 
-        redisUtil.set(Constants.RESET_EMAIL_KEY + email,verifyCode,Constants.EXPIRE_TIME);
 
 
         String emailCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
@@ -141,7 +137,7 @@ public class PasswordManageService {
                 return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
             }
 
-            if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+param)){
+            if(!redisUtil.hasKey(Constants.RESET_EMAIL_CODE+param)){
                 logger.info("======邮箱验证码已过期=====");
                 return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
             }
@@ -187,12 +183,12 @@ public class PasswordManageService {
             return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
         }
 
-        if(!redisUtil.hasKey(Constants.RESET_EMAIL_KEY+email)){
+        if(!redisUtil.hasKey(Constants.RESET_EMAIL_CODE+email)){
             logger.info("======邮箱验证码已过期=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_EXPIRED);
         }
 
-        String emailKey = redisUtil.get(Constants.RESET_EMAIL_KEY+email);
+        String emailKey = redisUtil.get(Constants.RESET_EMAIL_CODE+email);
         if(!msgCode.equals(emailKey)){
             logger.info("======邮箱验证码不匹配=====");
             return AjaxResponse.fail(RestErrorCode.EMAIL_VERIFY_ERROR);
@@ -209,7 +205,7 @@ public class PasswordManageService {
 
         if(upCode > 0){
             logger.info("=======更改密码成功end========");
-            redisUtil.delete(Constants.RESET_EMAIL_KEY+email);
+            //redisUtil.delete(Constants.RESET_EMAIL_KEY+email);
             redisUtil.delete(Constants.RESET_EMAIL_CODE+email);
             return AjaxResponse.success(null);
         }else {
