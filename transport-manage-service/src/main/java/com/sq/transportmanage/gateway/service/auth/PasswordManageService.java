@@ -100,7 +100,7 @@ public class PasswordManageService {
         stringBuilder.append("</br>");
         stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
         stringBuilder.append("(如果您无法点击这个链接,请将此链接复制到浏览器地址栏后访问)<br/>");
-        stringBuilder.append("为了保证您账号的安全性，该连接有效期为24小时，并且点击一次后将失效!<br/>");
+        stringBuilder.append("为了保证您账号的安全性，该链接有效期为24小时，并且点击一次后将失效!<br/>");
         stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
         stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行任<br/>");
         stringBuilder.append("何操作，并可以放心的忽略此电子邮件。<br/>");

@@ -332,8 +332,8 @@ public class MainController {
 			UsernamePasswordToken token = new UsernamePasswordToken( username, password.toCharArray() );
 			currentLoginUser.login(token);
 			//记录登录用户的所有会话ID，以支持“系统管理”功能中的自动会话清理
-			//String sessionId =  (String)currentLoginUser.getSession().getId() ;
-			String sessionId = username;
+			String sessionId =  (String)currentLoginUser.getSession().getId() ;
+			//String sessionId = username;
 			redisSessionDAO.saveSessionIdOfLoginUser(username, sessionId);
 
 			redisTemplate.delete(redis_login_key);
