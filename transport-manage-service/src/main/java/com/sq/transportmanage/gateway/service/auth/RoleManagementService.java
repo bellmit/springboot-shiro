@@ -206,6 +206,7 @@ public class RoleManagementService{
 				records.add(ralation);
 			}
 			saasRolePermissionRalationExMapper.insertBatch(records);
+			System.out.println("====批量入库end==========");
 		}
 		redisSessionDAO.clearRelativeSession(null, roleId , null);//自动清理用户会话
 		return AjaxResponse.success( null );
