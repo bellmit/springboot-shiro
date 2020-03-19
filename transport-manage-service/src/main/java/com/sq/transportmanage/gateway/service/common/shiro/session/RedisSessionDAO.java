@@ -118,6 +118,7 @@ public class RedisSessionDAO extends CachingSessionDAO{
 	/**二、当权限信息、角色信息、用户信息发生变化时，同时清理与之相关联的会话**/
 	@MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
 	public void clearRelativeSession( final Integer permissionId, final  Integer roleId, final  Integer userId ) {
+		System.out.println("--------------------------------");
 		final Cache<Serializable, Session> cache = super.getActiveSessionsCache();
 		//final Cache<Serializable, Session> cache = activeSessions;
 		new Thread(new Runnable() {
@@ -125,6 +126,7 @@ public class RedisSessionDAO extends CachingSessionDAO{
 			@Override
 			public void run() {
 				try{
+					System.out.println("*************************");
 					//A：如果当权限发生变化时，查询所关联的全部角色ID
 					List<Integer> roleIds = new ArrayList<Integer>();
 					if( permissionId!=null ) {
