@@ -291,7 +291,7 @@ public class PasswordManageService {
         String phoneCode = redisUtil.get(Constants.RESET_PHONE_KEY + phone);
 
 
-        if(!redisUtil.hasKey(phoneCode)){
+        if(!redisUtil.hasKey(Constants.RESET_PHONE_KEY + phone)){
             logger.info("======验证码已过期=====");
             return AjaxResponse.fail(RestErrorCode.PHONE_CODE_EXPIRE);
         }
