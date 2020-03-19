@@ -69,7 +69,7 @@ public class PasswordManageController {
     @ResponseBody
     @RequestMapping("/resetPassword")
     public AjaxResponse resetPassword(@Verify(param = "email",rule = "required")String email,
-                                @Verify(param = "newPassword",rule = "required|resetPassword([a-zA-Z0-9-*/+.~!@#$%^&*()]{8,50}$)")String newPassword,
+                                @Verify(param = "newPassword",rule = "required")String newPassword,
                                       @Verify(param = "msgCode",rule = "required")String msgCode){
         logger.info(MessageFormat.format("重置密码入参：email:{0},newPassword:{1},msgCode:{2}"
                 ,email,newPassword,msgCode));
