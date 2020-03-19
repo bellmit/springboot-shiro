@@ -374,7 +374,7 @@ public class MainController {
 	/*修改密码*/
 	@RequestMapping("/changePassword")
 	@ResponseBody
-	public AjaxResponse changePassword( @Verify(param="oldPassword",rule="required") String oldPassword, @Verify(param="newPassword",rule="required|resetPassword([a-zA-Z0-9-*/+.~!@#$%^&*()]{8,50}$)") String newPassword ){
+	public AjaxResponse changePassword( @Verify(param="oldPassword",rule="required") String oldPassword, @Verify(param="newPassword",rule="required") String newPassword ){
 		SSOLoginUser ssoLoginUser  =  WebSessionUtil.getCurrentLoginUser();
 		CarAdmUser   carAdmUser    =  carAdmUserMapper.selectByPrimaryKey( ssoLoginUser.getId()  );
 		//A:用户不存在
