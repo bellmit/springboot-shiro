@@ -17,10 +17,7 @@ import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionD
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
-import com.sq.transportmanage.gateway.service.util.BeanUtil;
-import com.sq.transportmanage.gateway.service.util.NumberUtil;
-import com.sq.transportmanage.gateway.service.util.PasswordUtil;
-import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
+import com.sq.transportmanage.gateway.service.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -246,6 +243,9 @@ public class UserManagementService{
 		}
 		if( status!=null && status.intValue()!=100 && status.intValue()!=200 ) {
 			status = null;
+		}
+		if(StringUtils.isNotEmpty(createEndTime)){
+			createEndTime = DateUtil.afterNDay(createEndTime,1,DateUtil.DATE_FORMAT);
 		}
     	//二、开始查询DB
 		//2.1 查询出角色相关联的用户ID
