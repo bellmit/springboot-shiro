@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -81,37 +82,44 @@ public class PasswordManageService {
         }
 
 
+        try {
+            String emailCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
 
-        String emailCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase();
-
-        redisUtil.set(Constants.RESET_EMAIL_CODE+email,emailCode,Constants.EXPIRE_TIME);
+            redisUtil.set(Constants.RESET_EMAIL_CODE+email,emailCode,Constants.EXPIRE_TIME);
 
 
-        //将验证码 和 过期时间更新到数据库
+            //将验证码 和 过期时间更新到数据库
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<html><head><title>首汽约车——用户密码找回</title></head><body>");
-        stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
-        stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的链接修改用户密码").append("<br/>");
-        stringBuilder.append("</br>");
-        stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
-        stringBuilder.append("(如果您无法点击这个链接,请将此链接复制到浏览器地址栏后访问)<br/>");
-        stringBuilder.append("为了保证您账号的安全性，该链接有效期为24小时，并且点击一次后将失效!<br/>");
-        stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
-        stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行任<br/>");
-        stringBuilder.append("何操作，并可以放心的忽略此电子邮件。<br/>");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("<html><head><title>首汽约车——用户密码找回</title></head><body>");
+            stringBuilder.append("尊敬的").append(carAdmUser.getAccount()).append("<br/>");
+            stringBuilder.append("您在"+ DateUtil.getMailTimeString(new Date())+"提交找回密码请求,请点击下面的链接修改用户密码").append("<br/>");
+            stringBuilder.append("</br>");
+            stringBuilder.append(""+resetPasswordUrl+"").append(email).append("&emailKey=").append(emailCode).append("<br/>");
+            stringBuilder.append("(如果您无法点击这个链接,请将此链接复制到浏览器地址栏后访问)<br/>");
+            stringBuilder.append("为了保证您账号的安全性，该链接有效期为24小时，并且点击一次后将失效!<br/>");
+            stringBuilder.append("设置并牢记密码保护问题将更好的保障您的账号安全。<br/>");
+            stringBuilder.append("如果您误收到此电子邮件，则可能是其他用户在尝试账号设置的误操作，如果您未发起该请求，则无需再进行任<br/>");
+            stringBuilder.append("何操作，并可以放心的忽略此电子邮件。<br/>");
 
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
-        mimeMessageHelper.setFrom(mainUserName);//这里只是设置username 并没有设置host和password，因为host和password在springboot启动创建JavaMailSender实例的时候已经读取了
-        mimeMessageHelper.setTo(email);
-        mimeMessage.setSubject("首汽约车——用户密码找回");
-        mimeMessageHelper.setText(stringBuilder.toString(),true);
-        javaMailSender.send(mimeMessage);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true);
+            mimeMessageHelper.setFrom(mainUserName);//这里只是设置username 并没有设置host和password，因为host和password在springboot启动创建JavaMailSender实例的时候已经读取了
+            mimeMessageHelper.setTo(email);
+            mimeMessage.setSubject("首汽约车——用户密码找回");
+            mimeMessageHelper.setText(stringBuilder.toString(),true);
+            javaMailSender.send(mimeMessage);
 
-        logger.info("======邮件发送成功end========");
-        return AjaxResponse.success(null);
+            logger.info("======邮件发送成功end========");
+            return AjaxResponse.success(null);
+        } catch (MessagingException e) {
+            logger.error("发送异常" + e);
+
+        } catch (MailException e) {
+            logger.error("邮箱发送异常" + e);
+        }
+        return AjaxResponse.fail(RestErrorCode.EMAIL_UNEXIST);
     }
 
 
