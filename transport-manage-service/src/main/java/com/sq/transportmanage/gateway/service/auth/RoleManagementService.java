@@ -19,6 +19,7 @@ import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUti
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
+import com.sq.transportmanage.gateway.service.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,6 +236,10 @@ public class RoleManagementService{
 		}
 		if( valid!=null && valid.byteValue()!=0 && valid.byteValue()!=1 ) {
 			valid = null;
+		}
+
+		if(StringUtils.isNotEmpty(createEndTime)){
+			createEndTime = DateUtil.afterNDay(createEndTime,1,DateUtil.DATE_FORMAT);
 		}
     	//二、开始查询DB
     	int total = 0;
