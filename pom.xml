@@ -30,7 +30,7 @@
         <druid-spring-boot.version>1.1.9</druid-spring-boot.version>
         <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
         <pagehelper.version>5.1.2</pagehelper.version>
-        <alibaba.fastjson.version>1.2.54</alibaba.fastjson.version>
+        <alibaba.fastjson.version>1.2.67</alibaba.fastjson.version>
         <google.guava.version>22.0</google.guava.version>
         <common.lang3.version>3.6</common.lang3.version>
         <gson.version>2.8.5</gson.version>
@@ -40,6 +40,7 @@
         <sq.okhttp.version>1.3.5</sq.okhttp.version>
         <poi-oom.version>4.0.1</poi-oom.version>
         <zip4j.version>1.3.2</zip4j.version>
+        <configmanager.version>1.0.17-boot2</configmanager.version>
         <!--<mp-util-version>1.0.3-SNAPSHOT</mp-util-version>-->
         <!--<config-dict.version>1.3.1</config-dict.version>-->
         <!--<config-client.version>0.1.5</config-client.version>-->
@@ -93,6 +94,13 @@
                         <groupId>sq-arch</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.sq</groupId>
+                <artifactId>config-manger-spring-boot-starter</artifactId>
+                <version>${configmanager.version}</version>
             </dependency>
 
 

@@ -1,11 +1,13 @@
 package com.sq.transportmanage.gateway.api.web.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.sq.transportmanage.gateway.api.web.config.IPUtil;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -24,11 +26,13 @@ import javax.validation.ConstraintViolationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.SecureRandom;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 /**
  * 对异常进行捕获，进行统一返回
@@ -103,7 +107,7 @@ public class CustomExceptionAdvice {
 		String exceptionMessage = ex.getMessage() + " (ExceptionId: "+exceptionId+")";
 		logger.error(exceptionMessage, ex );
 
-       /*		int dingding_alerm_switch = Dicts.getInt("dingding_alerm_switch", 0);
+/*       	int dingding_alerm_switch = Dicts.getInt("dingding_alerm_switch", 0);
 		String dingding_token_url = Dicts.getString("dingding_token_url", "https://oapi.dingtalk.com/robot/send?access_token=747d5c066ec3b79c229721eff222aa1dd63a813be5e810dd934b1c284097ab39");
 		int dingding_alerm_timeout = Dicts.getInt("dingding_alerm_timeout", 3000);
 		if(dingding_alerm_switch == 0){
@@ -112,7 +116,7 @@ public class CustomExceptionAdvice {
 			try {
 				String envName = request.getServletContext().getInitParameter("env.name");
 				String mess = MessageFormat.format("接口异常报警:项目:{0},环境:{1},IP:{2},traceId:{3},接口地址:{4},请求方式:{5},错误信息:{6}",
-						"mp-manage",envName, IPUtil.initIp(),MDC.get("traceId"),request.getRequestURI(),request.getMethod(),ex.getMessage());
+						"transport-manage-web",envName, IPUtil.initIp(), MDC.get("traceId"),request.getRequestURI(),request.getMethod(),ex.getMessage());
 				logger.info(mess);
 				DingdingAlarmUtil.sendDingdingAlerm(mess,dingding_token_url);
 			} catch (Exception e) {

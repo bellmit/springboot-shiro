@@ -3,17 +3,9 @@ package com.sq.transportmanage.gateway.api.web.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.util.IntrospectorCleanupListener;
-
-import javax.servlet.http.HttpSessionAttributeListener;
-import java.awt.*;
-import java.util.EventListener;
 
 /**
  * @Author fanht
