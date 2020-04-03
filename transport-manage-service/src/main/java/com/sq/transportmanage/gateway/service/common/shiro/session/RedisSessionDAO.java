@@ -119,11 +119,12 @@ public class RedisSessionDAO extends CachingSessionDAO{
 	@MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
 	public void clearRelativeSession( final Integer permissionId, final  Integer roleId, final  Integer userId ) {
  		final Cache<Serializable, Session> cache = super.getActiveSessionsCache();
-		//final Cache<Serializable, Session> cache = activeSessions;
 		new Thread(new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
+				System.out.println("====================执行清除会话================");
+				logger.info("log====================执行清除会话================");
 				try{
  					//A：如果当权限发生变化时，查询所关联的全部角色ID
 					List<Integer> roleIds = new ArrayList<Integer>();

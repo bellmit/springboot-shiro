@@ -118,8 +118,10 @@ public class RoleManagementService{
 			}
 		}
 		//执行
-		saasRoleMapper.updateByPrimaryKeySelective(newrole);
-		redisSessionDAO.clearRelativeSession(null, newrole.getRoleId(), null);//自动清理用户会话
+		int result = saasRoleMapper.updateByPrimaryKeySelective(newrole);
+		if(result > 0){
+			redisSessionDAO.clearRelativeSession(null, newrole.getRoleId(), null);//自动清理用户会话
+		}
 		return AjaxResponse.success( newrole );
 	}
 	
@@ -206,10 +208,12 @@ public class RoleManagementService{
 				ralation.setPermissionId(permissionId);
 				records.add(ralation);
 			}
-			saasRolePermissionRalationExMapper.insertBatch(records);
+			int result = saasRolePermissionRalationExMapper.insertBatch(records);
 			System.out.println("====批量入库end==========");
+			if(result > 0){
+				redisSessionDAO.clearRelativeSession(null, roleId , null);//自动清理用户会话
+			}
 		}
-		redisSessionDAO.clearRelativeSession(null, roleId , null);//自动清理用户会话
 		return AjaxResponse.success( null );
 	}
 	
