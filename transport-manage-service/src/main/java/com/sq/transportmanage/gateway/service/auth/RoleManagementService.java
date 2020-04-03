@@ -188,7 +188,7 @@ public class RoleManagementService{
 	
 	/**七、保存一个角色中的权限ID**/
 	public AjaxResponse savePermissionIds( Integer roleId, List<Integer> permissionIds) {
-		CountDownLatch latchStart = new CountDownLatch(1);
+		CountDownLatch latchStart = new CountDownLatch(2);
 		System.out.println("==================countDownLatch=====start");
 		latchStart.countDown();
 
@@ -217,9 +217,11 @@ public class RoleManagementService{
 			System.out.println("====批量入库end==========");
 
 		}
+		latchStart.countDown();
 
 		try {
 			System.out.println("==================countDownLatch=====end");
+			redisSessionDAO.clearRelativeSession(null, roleId , null,latchStart);//自动清理用户会话
 
 			latchStart.await();
 
@@ -228,9 +230,6 @@ public class RoleManagementService{
 
 			e.printStackTrace();
 		}
-
-		redisSessionDAO.clearRelativeSession(null, roleId , null);//自动清理用户会话
-
 
 		return AjaxResponse.success( null );
 	}
