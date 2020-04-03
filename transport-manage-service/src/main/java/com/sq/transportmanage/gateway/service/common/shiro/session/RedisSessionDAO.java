@@ -123,7 +123,15 @@ public class RedisSessionDAO extends CachingSessionDAO{
 			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
-				System.out.println("====================执行清除会话================");
+				Thread thread = new Thread();
+				try {
+					System.out.println("====================before执行清除会话join================");
+					thread.join();
+					System.out.println("====================before执行清除会话end================");
+
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				logger.info("log====================执行清除会话================");
 				try{
  					//A：如果当权限发生变化时，查询所关联的全部角色ID
@@ -179,6 +187,7 @@ public class RedisSessionDAO extends CachingSessionDAO{
 							cache.remove(sessionId);
 						}
 					}
+					System.out.println("======执行清除shiro缓存====");
 					//E3：执行清理shiro 认证与授权缓存
 					for( String account : accounts) {
 						logger.info("执行清理shiro 认证与授权缓存account={}",account);
