@@ -9,6 +9,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -27,11 +28,14 @@ public class InterFilter extends OncePerRequestFilter {
 
         logger.info("========跨域处理start============");
 
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
         HttpServletResponse res = (HttpServletResponse) response;
+
 
         res.setContentType("text/html;charset=UTF-8");
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Origin", httpRequest.getHeader("Origin"));
 
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 
