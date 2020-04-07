@@ -429,7 +429,7 @@ public class MainController {
 			List<SaasPermissionDTO> menuPerms = (List<SaasPermissionDTO>)WebSessionUtil.getAttribute("xxx_menu_"+menuDataFormat);
 			if( menuPerms ==null ) {
                 //List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU });
-				List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU,SaasConst.PermissionType.BUTTON });
+				List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU,SaasConst.PermissionType.BUTTON,SaasConst.PermissionType.DATA_AREA });
 				menuPerms = this.getAllPermissions( ssoLoginUser.getId()  , permissionTypes, menuDataFormat);
                 if(menuPerms!=null && menuPerms.size()>0) {
                     WebSessionUtil.setAttribute("xxx_menu_"+menuDataFormat, menuPerms);
