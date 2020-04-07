@@ -111,7 +111,8 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 				permissionList.forEach(list ->{
 					map.put(list.getPermissionId(),list.getPermissionName());
 					//查询所有一级菜单下的子菜单 以树形结果返回
-					List<SaasPermissionDTO> menuPerms = this.getChildren( permissionIds , list.getPermissionId(), permissionTypes);
+					//List<SaasPermissionDTO> menuPerms = this.getChildren( permissionIds , list.getPermissionId(), permissionTypes);
+					List<SaasPermissionDTO> menuPerms = this.getChildren( permissionIds , list.getPermissionId(), null);
 					mapPermission.put(list.getPermissionId(),menuPerms);
 				});
 
