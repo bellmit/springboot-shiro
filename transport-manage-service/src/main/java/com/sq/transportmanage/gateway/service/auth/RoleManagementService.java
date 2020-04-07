@@ -119,7 +119,7 @@ public class RoleManagementService{
 		}
 		//执行
 		saasRoleMapper.updateByPrimaryKeySelective(newrole);
-		redisSessionDAO.clearRelativeSession(null, newrole.getRoleId(), null);//自动清理用户会话
+		//redisSessionDAO.clearRelativeSession(null, newrole.getRoleId(), null);//自动清理用户会话
 		return AjaxResponse.success( newrole );
 	}
 	
