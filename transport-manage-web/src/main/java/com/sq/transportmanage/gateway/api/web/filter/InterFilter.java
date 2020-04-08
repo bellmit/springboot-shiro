@@ -26,7 +26,6 @@ public class InterFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 
-        logger.info("========跨域处理start============");
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
