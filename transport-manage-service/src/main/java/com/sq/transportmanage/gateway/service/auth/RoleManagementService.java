@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**角色管理功能**/
 @Service
@@ -119,7 +120,7 @@ public class RoleManagementService{
 		}
 		//执行
 		saasRoleMapper.updateByPrimaryKeySelective(newrole);
-		redisSessionDAO.clearRelativeSession(null, newrole.getRoleId(), null);//自动清理用户会话
+
 		return AjaxResponse.success( newrole );
 	}
 	
@@ -185,6 +186,10 @@ public class RoleManagementService{
 	
 	/**七、保存一个角色中的权限ID**/
 	public AjaxResponse savePermissionIds( Integer roleId, List<Integer> permissionIds) {
+		CountDownLatch latchStart = new CountDownLatch(2);
+		System.out.println("==================countDownLatch=====start");
+		latchStart.countDown();
+
 		//角色不存在
 		SaasRole rawrole = saasRoleMapper.selectByPrimaryKey( roleId );
 		if( rawrole==null ) {
@@ -206,10 +211,24 @@ public class RoleManagementService{
 				ralation.setPermissionId(permissionId);
 				records.add(ralation);
 			}
-			saasRolePermissionRalationExMapper.insertBatch(records);
+			int result = saasRolePermissionRalationExMapper.insertBatch(records);
 			System.out.println("====批量入库end==========");
+
 		}
-		redisSessionDAO.clearRelativeSession(null, roleId , null);//自动清理用户会话
+		latchStart.countDown();
+
+		try {
+			System.out.println("==================countDownLatch=====end");
+			redisSessionDAO.clearRelativeSession(null, roleId , null,latchStart);//自动清理用户会话
+
+			latchStart.await();
+
+		} catch (InterruptedException e) {
+			System.out.println("====countDown异常==========");
+
+			e.printStackTrace();
+		}
+
 		return AjaxResponse.success( null );
 	}
 	

@@ -274,6 +274,14 @@ public class PermissionManagementService {
 			});
 			permissionList.forEach(permission->{
 				StringBuffer sb = getKey(map,permission.getPermissionId());
+				if(sb != null && sb.length() > 0){
+					String value = sb.substring(0,sb.length()-1);
+					String newStr = replaceStr(value);
+					strPermissionIds.add(newStr);
+				}
+			});
+			/*permissionList.forEach(permission->{
+				StringBuffer sb = getKey(map,permission.getPermissionId());
 				try {
 					if(sb != null && sb.length() > 0){
                         String value = sb.substring(0,sb.length()-1);
@@ -292,7 +300,7 @@ public class PermissionManagementService {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			});
+			});*/
 		}
 		return strPermissionIds;
 	}
