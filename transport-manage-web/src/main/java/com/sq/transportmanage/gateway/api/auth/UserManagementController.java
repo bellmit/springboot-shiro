@@ -96,7 +96,10 @@ public class UserManagementController {
 			@Verify(param="phone",rule="mobile") String phone,
 			 @Verify(param = "email",rule = "required")String email,
 			 String suppliers,
-			 Integer level
+			 Integer dataLevel,
+			 String cities,
+			String teamIds,
+			String groupIds
   		) {
 		CarAdmUser newUser = new CarAdmUser();
 		if(userId != null){
@@ -111,11 +114,20 @@ public class UserManagementController {
 		if(StringUtils.isNotEmpty(suppliers)){
 			newUser.setSuppliers(suppliers);
 		}
-		if(level != null){
-			newUser.setLevel(level);
+		if(dataLevel != null){
+			newUser.setDataLevel(dataLevel);
 		}
 		if(StringUtils.isNotEmpty(email)){
 			newUser.setEmail(email);
+		}
+		if(StringUtils.isNotEmpty(cities)){
+			newUser.setCities(cities);
+		}
+		if(StringUtils.isNotEmpty(teamIds)){
+			newUser.setTeamId(teamIds);
+		}
+		if(StringUtils.isNotEmpty(groupIds)){
+			newUser.setGroupIds(groupIds);
 		}
 		return userManagementService.changeUser(newUser);
 	}

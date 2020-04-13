@@ -20,7 +20,7 @@
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
-    <result column="data_level" property="DataLevel" jdbcType="INTEGER" />
+    <result column="data_level" property="dataLevel" jdbcType="INTEGER" />
 
   </resultMap>
   <sql id="Base_Column_List" >

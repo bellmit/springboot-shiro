@@ -6,4 +6,6 @@ public interface Constants {
 
     /**超级管理员md5加密**/
     String MANAGE_MD5 = "xMpCOKC5I4INzFCab3WEmw==";
+
+    String SPLIT = ",";
 }

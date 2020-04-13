@@ -22,7 +22,7 @@
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
-    <result column="data_level" property="DataLevel" jdbcType="INTEGER" />
+    <result column="data_level" property="dataLevel" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
@@ -49,7 +49,7 @@
       #{createDate,jdbcType=TIMESTAMP}, #{cities,jdbcType=VARCHAR}, #{suppliers,jdbcType=VARCHAR}, 
       #{teamId,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, 
       #{level,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=VARCHAR},#{merchantId,jdbcType=INTEGER},#{DataLevel,jdbcType=INTEGER})
+      #{updateUser,jdbcType=VARCHAR},#{merchantId,jdbcType=INTEGER},#{dataLevel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     insert into auth_car_adm_user

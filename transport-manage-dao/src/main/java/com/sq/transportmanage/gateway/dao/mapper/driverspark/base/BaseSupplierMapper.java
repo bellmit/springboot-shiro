@@ -1,4 +1,4 @@
-package com.sq.transportmanage.gateway.dao.mapper.driverspark;
+package com.sq.transportmanage.gateway.dao.mapper.driverspark.base;
 
 import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseSupplier;
 
