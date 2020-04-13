@@ -84,6 +84,12 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			loginUser.setLevel(adMUser.getLevel());
 			loginUser.setMerchantId(adMUser.getMerchantId());
 			loginUser.setSupplierIds(adMUser.getSuppliers());
+			loginUser.setCityIds(adMUser.getCities()); //城市
+			loginUser.setTeamIds(adMUser.getTeamId()); //车队
+			loginUser.setGroupIds(adMUser.getGroupIds()); //班组
+			loginUser.setDataLevel(adMUser.getDataLevel());
+
+
 			String md5= null;
 			try {
 				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());

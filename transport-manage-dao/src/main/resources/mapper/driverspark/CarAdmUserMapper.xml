@@ -22,11 +22,12 @@
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="data_level" property="DataLevel" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
     create_date, cities, suppliers, team_id, phone, group_ids, level, email, update_date, 
-    update_user,merchant_id
+    update_user,merchant_id,data_level
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -41,14 +42,14 @@
       create_date, cities, suppliers, 
       team_id, phone, group_ids, 
       level, email, update_date, 
-      update_user,merchant_id)
+      update_user,merchant_id,data_level)
     values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{accountType,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{cities,jdbcType=VARCHAR}, #{suppliers,jdbcType=VARCHAR}, 
       #{teamId,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, 
       #{level,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=VARCHAR},#{merchantId,jdbcType=INTEGER})
+      #{updateUser,jdbcType=VARCHAR},#{merchantId,jdbcType=INTEGER},#{DataLevel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser" >
     insert into auth_car_adm_user
@@ -113,6 +114,9 @@
       <if test="merchantId != null" >
         merchant_id,
       </if>
+      <if test="dataLevel != null" >
+        data_level,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -174,6 +178,9 @@
       </if>
       <if test="merchantId != null" >
         #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="dataLevel != null" >
+        #{dataLevel,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -237,6 +244,9 @@
       <if test="merchantId != null" >
         merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
+      <if test="dataLevel != null" >
+        data_level = #{dataLevel,jdbcType=INTEGER},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
@@ -259,7 +269,9 @@
       level = #{level,jdbcType=INTEGER},
       email = #{email,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=VARCHAR}
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      data_level = #{dataLevel,jdbcType=INTEGER}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>
