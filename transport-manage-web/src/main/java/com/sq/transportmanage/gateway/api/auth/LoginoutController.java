@@ -38,15 +38,11 @@ public class LoginoutController {
 
     @RequestMapping("/userLoginOut")
     @ResponseBody
-    public AjaxResponse userLoginOut(String userIds, HttpSession httpSession,
-                                     HttpServletRequest request){
+    public AjaxResponse userLoginOut(Integer permissionId){
 
-        logger.info("====通过监听让指定用户session失效====" + userIds);
+        logger.info("====通过监听让指定用户session失效====" + permissionId);
         try {
-            String userId[] = StringUtils.tokenizeToStringArray(userIds,",");
-            for(int i = 0;i<userId.length;i++){
-                redisSessionDAO.clearRelativeSession(null,null,Integer.valueOf(userId[i]));
-             }
+            redisSessionDAO.clearRelativeSession(permissionId,null,null);
             return AjaxResponse.success(null);
         } catch (NumberFormatException e) {
             e.printStackTrace();
