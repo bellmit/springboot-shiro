@@ -96,7 +96,7 @@ public class UserManagementController {
 			@Verify(param="phone",rule="mobile") String phone,
 			 @Verify(param = "email",rule = "required")String email,
 			 String suppliers,
-			 Integer dataLevel,
+			 @Verify(param = "dataLevel",rule="required") Integer dataLevel,
 			 String cities,
 			String teamIds,
 			String groupIds

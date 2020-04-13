@@ -138,7 +138,7 @@ public class BaseSupplierController {
         CarAdmUser carAdmUser = carAdmUserMapper.selectByPrimaryKey(userId);
         if(carAdmUser != null){
             Map<String,Object> map = Maps.newHashMap();
-            map.put("level",carAdmUser.getLevel());
+            //map.put("level",carAdmUser.getLevel());
             map.put("suppliers",carAdmUser.getSuppliers());
             map.put("dataLevel",carAdmUser.getDataLevel());
             map.put("cities",carAdmUser.getCities());
