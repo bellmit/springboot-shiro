@@ -64,6 +64,9 @@ zuul:
     kfapi:
       path: /kefu/**
       url: http://dev-inside-cs-spark-manage.guobindui.cn/api/web/
+    company:
+      path: /api/inside/**
+        url: http://dev-inside-bigdata-athena.01zhuanche.com
 
 #钉钉报警开关
 ding.ding.switch: false
