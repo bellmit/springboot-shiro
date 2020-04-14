@@ -99,8 +99,6 @@ public class MainController {
 	@Autowired
 	private RedisUtil redisUtil;
 
-	@Autowired
-	private BaseSupplierService baseSupplierService;
 
 	@Autowired
 	private SaasUserRoleRalationService saasUserRoleRalationService;
@@ -602,46 +600,7 @@ public class MainController {
 
 
 
-	/**
-	 * 查询当前用户所拥有的数据权限
-	 * @return
-	 */
-	@RequestMapping("/queryAllSuppliers")
-	@ResponseBody
-	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-	public AjaxResponse queryAllSuppliers(){
-		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
-		if(ssoLoginUser != null){
-			List<BaseSupplierVo> voList = baseSupplierService.listAllBaseSupplier(Integer.valueOf(ssoLoginUser.getMerchantId()));
-			return AjaxResponse.success(voList);
-		}else {
-			return AjaxResponse.success(null);
-		}
 
-	}
-
-
-
-	/**
-	 * 查询当前用户所有的运力商
-	 * @return
-	 */
-	@RequestMapping("/queryDataPermissions")
-	@ResponseBody
-	@MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-	public AjaxResponse queryDataPermissions(Integer userId){
-
-		CarAdmUser carAdmUser = carAdmUserMapper.selectByPrimaryKey(userId);
-		if(carAdmUser != null){
-			Map<String,Object> map = Maps.newHashMap();
-			map.put("level",carAdmUser.getLevel());
-			map.put("suppliers",carAdmUser.getSuppliers());
-			return AjaxResponse.success(map);
-		}else {
-			return AjaxResponse.success(null);
-		}
-
-	}
 
 
 

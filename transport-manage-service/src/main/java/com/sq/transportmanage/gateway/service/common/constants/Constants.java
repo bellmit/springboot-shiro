@@ -52,5 +52,7 @@ public final class Constants {
     /**手机**/
     public static final String PHONE = "2";
 
+    public static final String SPLIT = ",";
+
 
 }
