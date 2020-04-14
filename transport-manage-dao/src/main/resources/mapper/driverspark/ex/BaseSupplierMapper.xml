@@ -43,5 +43,7 @@
     <include refid="Base_Column_List" />
     from base_supplier
     where merchant_id = #{merchantId,jdbcType=INTEGER}
+
+    and status = 0
   </select>
 </mapper>

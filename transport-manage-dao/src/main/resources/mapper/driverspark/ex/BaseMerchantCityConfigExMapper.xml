@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseMerchantCityConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="update_name" property="updateName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="service_status" property="serviceStatus" jdbcType="INTEGER" />
+    <result column="region_number" property="regionNumber" jdbcType="VARCHAR" />
+    <result column="ineffective_desc" property="ineffectiveDesc" jdbcType="VARCHAR" />
+    <result column="pcode" property="pcode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchant_id, city_id, province_name, city_name, code, create_name, update_name, 
+    create_date, update_date, service_status, region_number, ineffective_desc, pcode
+  </sql>
+  <select id="queryServiceCity" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from base_merchant_city_config
+    where merchant_id = #{merchantId,jdbcType=INTEGER} and service_status = 1
+  </select>
+</mapper>

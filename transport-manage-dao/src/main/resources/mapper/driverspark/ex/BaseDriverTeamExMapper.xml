@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseDriverTeamExMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="one_charge_name" property="oneChargeName" jdbcType="VARCHAR" />
+    <result column="one_charge_phone" property="oneChargePhone" jdbcType="INTEGER" />
+    <result column="two_charge_name" property="twoChargeName" jdbcType="VARCHAR" />
+    <result column="two_charge_phone" property="twoChargePhone" jdbcType="INTEGER" />
+    <result column="three_charge_name" property="threeChargeName" jdbcType="VARCHAR" />
+    <result column="three_charge_phone" property="threeChargePhone" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ext1" property="ext1" jdbcType="INTEGER" />
+    <result column="ext2" property="ext2" jdbcType="VARCHAR" />
+    <result column="ext3" property="ext3" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, team_name, merchant_id, merchant_name, supplier_id, supplier_name, city_id, city_name, 
+    type, status, p_id, one_charge_name, one_charge_phone, two_charge_name, two_charge_phone, 
+    three_charge_name, three_charge_phone, nickname, remark, ext1, ext2, ext3, create_user, 
+    update_user, create_user_name, update_user_name, create_time, update_time
+  </sql>
+  <select id="queryServiceTeam" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_driver_team
+    where merchant_id = #{merchantId,jdbcType=INTEGER} and status = 1
+    <if test="supplierIds != null and supplierIds.size>0">
+      and supplier_id in
+      <foreach collection="supplierIds" open="(" close=")" item="supplierId" separator=",">
+        #{supplierId}
+      </foreach>
+    </if>
+
+    <if test="teamIds != null and teamIds.size>0">
+      and p_id in
+      <foreach collection="teamIds" open="(" close=")" item="teamId" separator=",">
+        #{teamId}
+      </foreach>
+    </if>
+    and type = #{type}
+  </select>
+</mapper>
