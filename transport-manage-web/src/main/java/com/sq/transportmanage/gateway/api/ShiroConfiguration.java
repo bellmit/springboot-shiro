@@ -117,8 +117,12 @@ public class ShiroConfiguration {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //session存活时间60分钟
         sessionManager.setGlobalSessionTimeout(Constants.SESSION_REPIRE_TIME);
-        sessionManager.setDeleteInvalidSessions(true);
-        //自定义监听 fht 不能使用@WebListern的 HttpSessionListerner 因为shiro重写了session 2020-03-05
+       // sessionManager.setDeleteInvalidSessions(true);
+        //是否开启删除无效的session对象  默认为true 此处改为不开启
+        sessionManager.setDeleteInvalidSessions(false);
+        //是否开启定时调度器进行检测过期session 默认为true 此处改为不检测
+        sessionManager.setSessionValidationSchedulerEnabled(false);
+         //自定义监听 fht 不能使用@WebListern的 HttpSessionListerner 因为shiro重写了session 2020-03-05
         Collection<SessionListener> sessionListeners = new ArrayList<>();
         sessionListeners.add(sessionListener());
         sessionManager.setSessionListeners(sessionListeners);
