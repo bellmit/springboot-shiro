@@ -38,7 +38,7 @@ public class InterFilter extends OncePerRequestFilter {
 
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 
-        res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Max-Age", "2592000");
 
         res.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
 
