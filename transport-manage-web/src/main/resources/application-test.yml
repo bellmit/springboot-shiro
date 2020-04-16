@@ -70,7 +70,7 @@ zuul:
       url: http://test-inside-bigdata-athena.01zhuanche.com
     activity:
       path: /sparkActivity/**
-      url: http://test-insied-spark-activity.guobindui.cn/
+      url: http://test-insied-spark-activity.guobindui.cn/sparkActivity/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
