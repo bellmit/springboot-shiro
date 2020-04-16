@@ -19,7 +19,7 @@ public class MyWebAppConfiger implements WebMvcConfigurer {
                 .allowedMethods("POST","GET","OPTIONS","DELETE","PUT")
                 .allowedOrigins("*")
                 .allowedHeaders("*")
-                .maxAge(3600);
+                .maxAge(2592000);
 
     }
 
