@@ -113,7 +113,15 @@ zuul:
     shareapi:
       path: /share/**
       url: http://inside-saas-share.guobindui.cn/share/
-
+    kfapi:
+      path: /kefu/**
+      url: http://inside-cs-spark-manage.guobindui.cn/api/web/
+    company:
+      path: /api/inside/**
+      url: http://inside-bigdata-athena.01zhuanche.com
+    activity:
+      path: /sparkActivity/**
+      url: http://insied-spark-activity.guobindui.cn/sparkActivity/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
