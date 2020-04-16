@@ -121,7 +121,7 @@ zuul:
       url: http://inside-bigdata-athena.01zhuanche.com
     activity:
       path: /sparkActivity/**
-      url: http://insied-spark-activity.guobindui.cn/
+      url: http://insied-spark-activity.guobindui.cn/sparkActivity/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
