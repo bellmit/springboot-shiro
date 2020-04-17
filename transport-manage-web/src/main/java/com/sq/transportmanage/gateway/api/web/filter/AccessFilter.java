@@ -11,6 +11,8 @@ import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUti
 import mp.mvc.logger.entity.LoggerDto;
 import mp.mvc.logger.message.MpLoggerMessage;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,8 +143,9 @@ public class AccessFilter extends ZuulFilter {
     private LoggerDto getBuiness(HttpServletRequest request , String traceId,  SSOLoginUser ssoLoginUser) {
         LoggerDto dto = new LoggerDto();
         dto.setCreateTime(System.currentTimeMillis());
-        String sessionIdKey = redisSessionDAO.getSessionIdOfLoginUser(ssoLoginUser.getLoginName());
-        dto.setSessionId(StringUtils.isNotBlank(sessionIdKey) ? sessionIdKey : "");
+        Subject currentLoginUser = SecurityUtils.getSubject();
+        String sessionId =  (String)currentLoginUser.getSession().getId() ;
+        dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
         dto.setUserAccount(StringUtils.isNotBlank(ssoLoginUser.getLoginName()) ? ssoLoginUser.getLoginName() : null);
         dto.setUserIp(IPv4Util2.getClientIpAddr(request));
         dto.setUserId(String.valueOf(ssoLoginUser.getId()));
