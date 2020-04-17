@@ -144,8 +144,12 @@ public class AccessFilter extends ZuulFilter {
         LoggerDto dto = new LoggerDto();
         dto.setCreateTime(System.currentTimeMillis());
         Subject currentLoginUser = SecurityUtils.getSubject();
-        String sessionId =  (String)currentLoginUser.getSession().getId() ;
-        dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
+        if(currentLoginUser.isAuthenticated()) {
+            String sessionId =  (String)currentLoginUser.getSession().getId() ;
+            dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
+        }else{
+            dto.setSessionId("");
+        }
         dto.setUserAccount(StringUtils.isNotBlank(ssoLoginUser.getLoginName()) ? ssoLoginUser.getLoginName() : null);
         dto.setUserIp(IPv4Util2.getClientIpAddr(request));
         dto.setUserId(String.valueOf(ssoLoginUser.getId()));
