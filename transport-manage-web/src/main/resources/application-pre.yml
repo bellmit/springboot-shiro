@@ -122,6 +122,9 @@ zuul:
     activity:
       path: /sparkActivity/**
       url: http://pre-inside-spark-activity.guobindui.cn/sparkActivity/
+    pay:
+      path: /pay/**
+      url: http://pre-inside-pay.01zhuanche.com/pay/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
