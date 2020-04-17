@@ -30,6 +30,17 @@ public final class SSOLoginUser implements Serializable{
 	private Integer accountType;
 	//---------------------------------------------------------------------------------------------------------数据权限BEGIN
 
+	/**此用户可以管理的城市ID**/
+	private String cityIds ;
+	/**此用户可以管理的车队ID**/
+	private String teamIds ;
+	/**此用户可以管理的班组ID***/
+	private String groupIds ;
+	/**此用户数据权限等级(参考PermissionLevelEnum枚举类型 1合作商 2城市 4车队 8班组 ) **/
+	private Integer dataLevel;
+
+
+
 	/**此用户可以管理的供应商ID**/
 	private String supplierIds;
 
@@ -159,6 +170,40 @@ public final class SSOLoginUser implements Serializable{
 		this.mapPermission = mapPermission;
 	}
 
+
+	public String getCityIds() {
+		return cityIds;
+	}
+
+	public void setCityIds(String cityIds) {
+		this.cityIds = cityIds;
+	}
+
+	public String getTeamIds() {
+		return teamIds;
+	}
+
+	public void setTeamIds(String teamIds) {
+		this.teamIds = teamIds;
+	}
+
+	public String getGroupIds() {
+		return groupIds;
+	}
+
+	public void setGroupIds(String groupIds) {
+		this.groupIds = groupIds;
+	}
+
+	public Integer getDataLevel() {
+		return dataLevel;
+	}
+
+	public void setDataLevel(Integer dataLevel) {
+		this.dataLevel = dataLevel;
+	}
+
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -170,14 +215,19 @@ public final class SSOLoginUser implements Serializable{
 				", type=" + type +
 				", status=" + status +
 				", accountType=" + accountType +
+				", cityIds='" + cityIds + '\'' +
+				", teamIds='" + teamIds + '\'' +
+				", groupIds='" + groupIds + '\'' +
+				", dataLevel=" + dataLevel +
 				", supplierIds='" + supplierIds + '\'' +
 				", level=" + level +
-				", merchantId='" + merchantId + '\'' +
+				", merchantId=" + merchantId +
 				", menuUrlList=" + JSONObject.toJSONString(menuUrlList) +
 				", menuPermissionMap=" + JSONObject.toJSONString(menuPermissionMap) +
 				", isSuper=" + isSuper +
-				", mapPermission=" +  JSONObject.toJSONString(mapPermission) +
+				", mapPermission=" + JSONObject.toJSONString(mapPermission) +
 				'}';
 	}
+
 }
 

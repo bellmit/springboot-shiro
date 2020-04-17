@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseDriverTeamMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="one_charge_name" property="oneChargeName" jdbcType="VARCHAR" />
+    <result column="one_charge_phone" property="oneChargePhone" jdbcType="INTEGER" />
+    <result column="two_charge_name" property="twoChargeName" jdbcType="VARCHAR" />
+    <result column="two_charge_phone" property="twoChargePhone" jdbcType="INTEGER" />
+    <result column="three_charge_name" property="threeChargeName" jdbcType="VARCHAR" />
+    <result column="three_charge_phone" property="threeChargePhone" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ext1" property="ext1" jdbcType="INTEGER" />
+    <result column="ext2" property="ext2" jdbcType="VARCHAR" />
+    <result column="ext3" property="ext3" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, team_name, merchant_id, merchant_name, supplier_id, supplier_name, city_id, city_name, 
+    type, status, p_id, one_charge_name, one_charge_phone, two_charge_name, two_charge_phone, 
+    three_charge_name, three_charge_phone, nickname, remark, ext1, ext2, ext3, create_user, 
+    update_user, create_user_name, update_user_name, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from base_driver_team
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into base_driver_team (team_name, merchant_id, merchant_name, 
+      supplier_id, supplier_name, city_id, 
+      city_name, type, status, 
+      p_id, one_charge_name, one_charge_phone, 
+      two_charge_name, two_charge_phone, three_charge_name, 
+      three_charge_phone, nickname, remark, 
+      ext1, ext2, ext3, create_user, 
+      update_user, create_user_name, update_user_name, 
+      create_time, update_time)
+    values (#{teamName,jdbcType=VARCHAR}, #{merchantId,jdbcType=INTEGER}, #{merchantName,jdbcType=VARCHAR}, 
+      #{supplierId,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR}, #{cityId,jdbcType=INTEGER}, 
+      #{cityName,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{pId,jdbcType=INTEGER}, #{oneChargeName,jdbcType=VARCHAR}, #{oneChargePhone,jdbcType=INTEGER}, 
+      #{twoChargeName,jdbcType=VARCHAR}, #{twoChargePhone,jdbcType=INTEGER}, #{threeChargeName,jdbcType=VARCHAR}, 
+      #{threeChargePhone,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{ext1,jdbcType=INTEGER}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{updateUser,jdbcType=INTEGER}, #{createUserName,jdbcType=VARCHAR}, #{updateUserName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into base_driver_team
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teamName != null" >
+        team_name,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="merchantName != null" >
+        merchant_name,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="pId != null" >
+        p_id,
+      </if>
+      <if test="oneChargeName != null" >
+        one_charge_name,
+      </if>
+      <if test="oneChargePhone != null" >
+        one_charge_phone,
+      </if>
+      <if test="twoChargeName != null" >
+        two_charge_name,
+      </if>
+      <if test="twoChargePhone != null" >
+        two_charge_phone,
+      </if>
+      <if test="threeChargeName != null" >
+        three_charge_name,
+      </if>
+      <if test="threeChargePhone != null" >
+        three_charge_phone,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="ext1 != null" >
+        ext1,
+      </if>
+      <if test="ext2 != null" >
+        ext2,
+      </if>
+      <if test="ext3 != null" >
+        ext3,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teamName != null" >
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="pId != null" >
+        #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="oneChargeName != null" >
+        #{oneChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="oneChargePhone != null" >
+        #{oneChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="twoChargeName != null" >
+        #{twoChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="twoChargePhone != null" >
+        #{twoChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="threeChargeName != null" >
+        #{threeChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="threeChargePhone != null" >
+        #{threeChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        #{ext1,jdbcType=INTEGER},
+      </if>
+      <if test="ext2 != null" >
+        #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null" >
+        #{ext3,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUserName != null" >
+        #{updateUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    update base_driver_team
+    <set >
+      <if test="teamName != null" >
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantName != null" >
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="pId != null" >
+        p_id = #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="oneChargeName != null" >
+        one_charge_name = #{oneChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="oneChargePhone != null" >
+        one_charge_phone = #{oneChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="twoChargeName != null" >
+        two_charge_name = #{twoChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="twoChargePhone != null" >
+        two_charge_phone = #{twoChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="threeChargeName != null" >
+        three_charge_name = #{threeChargeName,jdbcType=VARCHAR},
+      </if>
+      <if test="threeChargePhone != null" >
+        three_charge_phone = #{threeChargePhone,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        ext1 = #{ext1,jdbcType=INTEGER},
+      </if>
+      <if test="ext2 != null" >
+        ext2 = #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null" >
+        ext3 = #{ext3,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUserName != null" >
+        update_user_name = #{updateUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseDriverTeam" >
+    update base_driver_team
+    set team_name = #{teamName,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=INTEGER},
+      merchant_name = #{merchantName,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=INTEGER},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=INTEGER},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      p_id = #{pId,jdbcType=INTEGER},
+      one_charge_name = #{oneChargeName,jdbcType=VARCHAR},
+      one_charge_phone = #{oneChargePhone,jdbcType=INTEGER},
+      two_charge_name = #{twoChargeName,jdbcType=VARCHAR},
+      two_charge_phone = #{twoChargePhone,jdbcType=INTEGER},
+      three_charge_name = #{threeChargeName,jdbcType=VARCHAR},
+      three_charge_phone = #{threeChargePhone,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      ext1 = #{ext1,jdbcType=INTEGER},
+      ext2 = #{ext2,jdbcType=VARCHAR},
+      ext3 = #{ext3,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      update_user_name = #{updateUserName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

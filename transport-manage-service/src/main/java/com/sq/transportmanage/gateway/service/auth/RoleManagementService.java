@@ -121,7 +121,7 @@ public class RoleManagementService{
 		//执行
 		saasRoleMapper.updateByPrimaryKeySelective(newrole);
 
- 		return AjaxResponse.success( newrole );
+		return AjaxResponse.success( newrole );
 	}
 	
 	/**五、查询一个角色中的权限（返回的数据格式：列表、树形）**/

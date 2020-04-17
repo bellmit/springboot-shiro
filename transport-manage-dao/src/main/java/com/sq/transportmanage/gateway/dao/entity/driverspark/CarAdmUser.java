@@ -41,8 +41,9 @@ public class CarAdmUser {
 
     private String updateUser;
 
-
     private Integer merchantId;
+
+    private Integer dataLevel;
 
     public Integer getUserId() {
         return userId;
@@ -203,5 +204,13 @@ public class CarAdmUser {
 
     public void setMerchantId(Integer merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Integer getDataLevel() {
+        return dataLevel;
+    }
+
+    public void setDataLevel(Integer dataLevel) {
+        this.dataLevel = dataLevel;
     }
 }
