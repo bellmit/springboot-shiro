@@ -3,12 +3,13 @@ package com.sq.transportmanage.gateway.api.web.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.sq.transportmanage.gateway.api.common.AuthEnum;
-import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
+import com.sq.transportmanage.gateway.api.util.IPv4Util2;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
+import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
+import mp.mvc.logger.entity.LoggerDto;
+import mp.mvc.logger.message.MpLoggerMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -36,6 +36,10 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
+
+    @Resource(name = "sessionDAO")
+    private RedisSessionDAO redisSessionDAO;
+
 
     @Override
     public String filterType() {
@@ -119,7 +123,31 @@ public class AccessFilter extends ZuulFilter {
 //            logger.info("login_user :{}",data);
 //            ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
 //            ctx.addZuulRequestHeader("loginuser",data.toJSONString());
+
+        String traceId = request.getParameter("TRACE_ID");
+        if (StringUtils.isBlank(traceId)){
+            traceId = request.getHeader("X-Request-Id");
+        }
+        //增加用户行为
+        if(loginUser != null && StringUtils.isNotBlank(loginUser.getLoginName()) && loginUser.getId() != null){
+            //发送消息
+            LoggerDto dto = this.getBuiness(request,traceId,loginUser);
+            MpLoggerMessage.sendLoggerMessage(dto,request);
+        }
+
         return ctx;
     }
 
+    private LoggerDto getBuiness(HttpServletRequest request , String traceId,  SSOLoginUser ssoLoginUser) {
+        LoggerDto dto = new LoggerDto();
+        dto.setCreateTime(System.currentTimeMillis());
+        String sessionIdKey = redisSessionDAO.getSessionIdOfLoginUser(ssoLoginUser.getLoginName());
+        dto.setSessionId(StringUtils.isNotBlank(sessionIdKey) ? sessionIdKey : "");
+        dto.setUserAccount(StringUtils.isNotBlank(ssoLoginUser.getLoginName()) ? ssoLoginUser.getLoginName() : null);
+        dto.setUserIp(IPv4Util2.getClientIpAddr(request));
+        dto.setUserId(String.valueOf(ssoLoginUser.getId()));
+        dto.setRemark(StringUtils.isNotBlank(ssoLoginUser.getName()) ? ssoLoginUser.getName() : null);
+        dto.setTraceId(StringUtils.isNotBlank(traceId) ? traceId : "");
+        return dto;
+    }
 }

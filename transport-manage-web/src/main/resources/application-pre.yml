@@ -162,3 +162,15 @@ template_short_message_url: http://pre-inside-mp.01zhuanche.com/api/v1/message/t
 
 #h5找回密码域名
 reset.password.url: https://pre-saas.guobindui.cn/forgot?email=
+
+kafka:
+  client:
+    services: 10.130.20.46:9092,10.130.20.64:9092,10.130.20.66:9092
+    kafkaKeySerializer: apache.kafka.common.serialization.StringSerializer
+    kafkaValueSerializer: org.apache.kafka.common.serialization.StringSerializer
+    retries: 1
+    batchSize: 4096
+    lingerMs: 10
+    bufferMemory: 40960
+    acks: all
+    defaultTopic: mp-kafka-user-logger
