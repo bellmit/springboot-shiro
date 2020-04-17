@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
@@ -33,6 +35,9 @@ import java.util.List;
 public class AccessFilter extends ZuulFilter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessFilter.class);
+
+    @Autowired
+    private BaseMerchantMapper baseMerchantMapper;
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
@@ -78,15 +83,20 @@ public class AccessFilter extends ZuulFilter {
         if(bl){
             JSONObject data = new JSONObject();
             data.put("sysId","t_saas");//平台ID
+            data.put("id",loginUser.getId());//商户ID
             data.put("merchantId",loginUser.getMerchantId()+"");//商户ID
             data.put("account",loginUser.getLoginName());//用户名
+            BaseMerchant baseMerchant = baseMerchantMapper.selectByPrimaryKey(loginUser.getMerchantId());
             String decodeStr = "";
+            String merchantNameStr = "";
             try {
                 decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
+                merchantNameStr = URLEncoder.encode(baseMerchant.getMerchantName(),"UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             data.put("name", decodeStr);//用户名中文
+            data.put("merchantName", merchantNameStr);//用户名中文
             if(1==loginUser.getLevel()){
                 List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
                 if(!CollectionUtils.isEmpty(supplierIds)){
@@ -95,6 +105,9 @@ public class AccessFilter extends ZuulFilter {
             }else{
                 data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
             }
+            data.put("cityIds",loginUser.getCityIds());//城市数据权限
+            data.put("teamIds",loginUser.getTeamIds());//车队数据权限
+            data.put("groupIds",loginUser.getGroupIds());//班组数据权限
             logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
