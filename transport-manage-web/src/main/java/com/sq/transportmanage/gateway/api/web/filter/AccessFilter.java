@@ -111,7 +111,7 @@ public class AccessFilter extends ZuulFilter {
                 tracId = request.getHeader("x_requestId");
             }
            //发送消息
-            LoggerDto dto = this.getBuiness(request,tracId,loginUser,request.getSession().getId(),decodeStr);
+            LoggerDto dto = this.getBuiness(request,tracId,loginUser,request.getSession().getId());
             MpLoggerMessage.sendLoggerMessage(dto,request);
 
         }
@@ -119,14 +119,14 @@ public class AccessFilter extends ZuulFilter {
         return ctx;
     }
 
-    private LoggerDto getBuiness(HttpServletRequest request , String traceId, SSOLoginUser loginUser, String sessionId,String decodeStr) {
+    private LoggerDto getBuiness(HttpServletRequest request , String traceId, SSOLoginUser loginUser, String sessionId) {
         LoggerDto dto = new LoggerDto();
         dto.setCreateTime(System.currentTimeMillis());
         dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
         dto.setUserAccount(StringUtils.isNotBlank(loginUser.getLoginName()) ? loginUser.getLoginName() : null);
         dto.setUserIp(IPv4Util2.getClientIpAddr(request));
         dto.setUserId(String.valueOf(loginUser.getId()));
-        dto.setRemark(StringUtils.isNotBlank(decodeStr) ? decodeStr : null);
+        dto.setRemark(StringUtils.isNotBlank(loginUser.getName()) ? loginUser.getName() : null);
         dto.setTraceId(StringUtils.isNotBlank(traceId) ? traceId : "");
         return dto;
     }
