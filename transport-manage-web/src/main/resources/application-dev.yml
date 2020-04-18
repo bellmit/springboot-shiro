@@ -111,7 +111,7 @@ reset.password.url: https://dev-saas.guobindui.cn/forgot?email=
 kafka:
   client:
     services: 10.20.0.11:9092
-    kafkaKeySerializer: apache.kafka.common.serialization.StringSerializer
+    kafkaKeySerializer: org.apache.kafka.common.serialization.StringSerializer
     kafkaValueSerializer: org.apache.kafka.common.serialization.StringSerializer
     retries: 1
     batchSize: 4096
