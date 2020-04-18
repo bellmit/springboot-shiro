@@ -4,23 +4,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.sq.transportmanage.gateway.api.util.IPv4Util2;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
-import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import mp.mvc.logger.entity.LoggerDto;
 import mp.mvc.logger.message.MpLoggerMessage;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -38,11 +37,6 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
-
-    @Resource(name = "sessionDAO")
-    private RedisSessionDAO redisSessionDAO;
-
-
     @Override
     public String filterType() {
         return "pre";
@@ -81,12 +75,12 @@ public class AccessFilter extends ZuulFilter {
                 bl = true;
             }
         }*/
+        String decodeStr = "";
         if(bl){
             JSONObject data = new JSONObject();
             data.put("sysId","t_saas");//平台ID
             data.put("merchantId",loginUser.getMerchantId()+"");//商户ID
             data.put("account",loginUser.getLoginName());//用户名
-            String decodeStr = "";
             try {
                 decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
             } catch (UnsupportedEncodingException e) {
@@ -110,50 +104,29 @@ public class AccessFilter extends ZuulFilter {
             ctx.set("isSuccess", false);
         }
 
-//            JSONObject data = new JSONObject();
-//            data.put("sysId","t_saas");//平台ID
-//            data.put("merchantId",);//商户ID
-//            data.put("account","admin");//用户名
-//            String decodeStr = "";
-//            try {
-//                decodeStr = URLDecoder.decode("默认超级管理员","UTF-8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//            data.put("name", decodeStr);//用户名中文
-//            data.put("supplierIds","1,2,3,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,24,25,26");//用户名中文
-//            logger.info("login_user :{}",data);
-//            ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
-//            ctx.addZuulRequestHeader("loginuser",data.toJSONString());
-
-        String traceId = request.getParameter("TRACE_ID");
-        if (StringUtils.isBlank(traceId)){
-            traceId = request.getHeader("X-Request-Id");
-        }
         //增加用户行为
         if(loginUser != null && StringUtils.isNotBlank(loginUser.getLoginName()) && loginUser.getId() != null){
-            //发送消息
-            LoggerDto dto = this.getBuiness(request,traceId,loginUser);
+            String tracId = MDC.get("reqId");
+            if(StringUtils.isBlank(tracId)){
+                tracId = request.getHeader("x_requestId");
+            }
+           //发送消息
+            LoggerDto dto = this.getBuiness(request,tracId,loginUser,request.getSession().getId(),decodeStr);
             MpLoggerMessage.sendLoggerMessage(dto,request);
+
         }
 
         return ctx;
     }
 
-    private LoggerDto getBuiness(HttpServletRequest request , String traceId,  SSOLoginUser ssoLoginUser) {
+    private LoggerDto getBuiness(HttpServletRequest request , String traceId, SSOLoginUser loginUser, String sessionId,String decodeStr) {
         LoggerDto dto = new LoggerDto();
         dto.setCreateTime(System.currentTimeMillis());
-        Subject currentLoginUser = SecurityUtils.getSubject();
-        if(currentLoginUser.isAuthenticated()) {
-            String sessionId =  (String)currentLoginUser.getSession().getId() ;
-            dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
-        }else{
-            dto.setSessionId("");
-        }
-        dto.setUserAccount(StringUtils.isNotBlank(ssoLoginUser.getLoginName()) ? ssoLoginUser.getLoginName() : null);
+        dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
+        dto.setUserAccount(StringUtils.isNotBlank(loginUser.getLoginName()) ? loginUser.getLoginName() : null);
         dto.setUserIp(IPv4Util2.getClientIpAddr(request));
-        dto.setUserId(String.valueOf(ssoLoginUser.getId()));
-        dto.setRemark(StringUtils.isNotBlank(ssoLoginUser.getName()) ? ssoLoginUser.getName() : null);
+        dto.setUserId(String.valueOf(loginUser.getId()));
+        dto.setRemark(StringUtils.isNotBlank(decodeStr) ? decodeStr : null);
         dto.setTraceId(StringUtils.isNotBlank(traceId) ? traceId : "");
         return dto;
     }
