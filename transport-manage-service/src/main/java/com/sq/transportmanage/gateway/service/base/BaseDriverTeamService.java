@@ -41,7 +41,7 @@ public class BaseDriverTeamService {
             }
         }
 
-        List<Integer> teamIdList = null;
+        List<Integer> teamIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(teamIds)){
             teamIdList = Arrays.asList();
             String teamIdsArr[] = teamIds.split(Constants.SPLIT);
