@@ -125,6 +125,9 @@ zuul:
     pay:
       path: /pay/**
       url: http://pre-inside-pay.01zhuanche.com/pay/
+    lbs:
+      path: /lbs/**
+      url: http://pre-inside-spark-base-lbs.guobindui.cn/lbs/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
