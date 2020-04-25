@@ -118,7 +118,7 @@ zuul:
       url: http://pre-inside-cs-spark-manage.guobindui.cn/api/web/
     company:
       path: /api/inside/**
-      url: http://pre-inside-bigdata-athena.01zhuanche.com
+      url: http://pre-inside-bigdata-athena.01zhuanche.com/api/inside/
     activity:
       path: /sparkActivity/**
       url: http://pre-inside-spark-activity.guobindui.cn/sparkActivity/
