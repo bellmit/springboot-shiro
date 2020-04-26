@@ -118,13 +118,16 @@ zuul:
       url: http://inside-cs-spark-manage.guobindui.cn/api/web/
     company:
       path: /api/inside/**
-      url: http://inside-bigdata-athena.01zhuanche.com
+      url: http://inside-bigdata-athena.01zhuanche.com/api/inside/
     activity:
       path: /sparkActivity/**
       url: http://inside-spark-activity.guobindui.cn/sparkActivity/
     pay:
       path: /pay/**
       url: http://inside-pay.01zhuanche.com/pay/
+    lbs:
+      path: /lbs/**
+      url: http://inside-spark-base-lbs.guobindui.cn/lbs/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
