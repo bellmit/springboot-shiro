@@ -14,7 +14,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="p_id" property="pId" jdbcType="INTEGER" />
     <result column="one_charge_name" property="oneChargeName" jdbcType="VARCHAR" />
-    <result column="one_charge_phone" property="oneChargePhone" jdbcType="INTEGER" />
+    <result column="one_charge_phone" property="oneChargePhone" jdbcType="VARCHAR" />
     <result column="two_charge_name" property="twoChargeName" jdbcType="VARCHAR" />
     <result column="two_charge_phone" property="twoChargePhone" jdbcType="INTEGER" />
     <result column="three_charge_name" property="threeChargeName" jdbcType="VARCHAR" />
