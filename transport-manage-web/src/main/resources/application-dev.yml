@@ -95,6 +95,9 @@ homepage.url: https://dev-saas.guobindui.cn/#/Manage
 
 login.url: https://dev-saas.guobindui.cn/signin
 
+#选择商户页面
+query.merchant.url: https://dev-saas.guobindui.cn/signin
+
 #没有权限地址
 unauthorized.url: https://dev-saas.guobindui.cn/unauthorized
 

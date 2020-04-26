@@ -54,5 +54,7 @@ public final class Constants {
 
     public static final String SPLIT = ",";
 
+    /**超级管理员**/
+    public static final Integer SUPER_MANAGE = 1000;
 
 }

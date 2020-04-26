@@ -47,7 +47,6 @@ public class MyDataSourceService {
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public CarAdmUser queryByAccount(String account) {
-        //todo 此处uuid取值有问题，但是不知道怎么获取uuid
         return carAdmUserExMapper.queryByAccount(account,null);
     }
 
