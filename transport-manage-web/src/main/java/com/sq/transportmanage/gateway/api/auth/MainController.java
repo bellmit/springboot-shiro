@@ -380,7 +380,7 @@ public class MainController {
 		if( ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
  			//获取该商户下的id和名称返回给h5
 
-/*			Map<String,Object> map = Maps.newHashMap();
+			Map<String,Object> map = Maps.newHashMap();
 			map.put("merchantIds",ssoLoginUser.getMerchantArea());
 			String result  = MpOkHttpUtil.okHttpGet(zuulMpApiUrl + "/merchant/getMerchantNames",map,0,null);
 			logger.info("获取商户名称" + result);
@@ -389,7 +389,7 @@ public class MainController {
 				if(jsonObject.get("code") !=  null && jsonObject.getInteger("code") == 0){
 					return AjaxResponse.success(jsonObject.get("data"));
 				}
-			}*/
+			}
 			return  AjaxResponse.success(null);
 		}else {
 			logger.info("用户未登录");
