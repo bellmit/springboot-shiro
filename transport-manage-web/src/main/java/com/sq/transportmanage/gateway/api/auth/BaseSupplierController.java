@@ -83,19 +83,18 @@ public class BaseSupplierController {
 
 
     /**
-     * 查询当前商户下的所有的城市
+     * 查询当前商户下的所有的车队
      * @return
      */
     @RequestMapping("/queryAllTeams")
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-    public AjaxResponse queryAllTeams(String supplierIds,
-                                      String teamIds){
+    public AjaxResponse queryAllTeams(String supplierIds){
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser != null){
 
             List<BaseDriverTeamVo> voList = driverTeamService.queryServiceTeam(Integer.valueOf(ssoLoginUser.getMerchantId()),
-                    supplierIds,teamIds, TeamType.TEAM.getCode());
+                    supplierIds,null, TeamType.TEAM.getCode());
             return AjaxResponse.success(voList);
         }else {
             return AjaxResponse.success(null);
@@ -105,7 +104,7 @@ public class BaseSupplierController {
 
 
     /**
-     * 查询当前商户下的所有的城市
+     * 查询当前商户下的所有的班组
      * @return
      */
     @RequestMapping("/queryAllGroups")
@@ -138,7 +137,6 @@ public class BaseSupplierController {
         CarAdmUser carAdmUser = carAdmUserMapper.selectByPrimaryKey(userId);
         if(carAdmUser != null){
             Map<String,Object> map = Maps.newHashMap();
-            //map.put("level",carAdmUser.getLevel());
             map.put("suppliers",carAdmUser.getSuppliers());
             map.put("dataLevel",carAdmUser.getDataLevel());
             map.put("cities",carAdmUser.getCities());
