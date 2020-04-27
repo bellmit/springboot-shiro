@@ -49,5 +49,5 @@ spring.mail.username: syyc@01zhuanche.com
 spring.mail.password: cyys123$
 #spring.mail.port: 25
 
-spring.servlet.multipart.max-file-size: 100MB
+spring.servlet.multipart.max-file-size: 5MB
 spring.servlet.multipart.max-request-size: 100MB
