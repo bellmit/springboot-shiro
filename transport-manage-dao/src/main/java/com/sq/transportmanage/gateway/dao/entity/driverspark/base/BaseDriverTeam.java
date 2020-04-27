@@ -27,7 +27,7 @@ public class BaseDriverTeam {
 
     private String oneChargeName;
 
-    private Integer oneChargePhone;
+    private String oneChargePhone;
 
     private String twoChargeName;
 
@@ -155,11 +155,11 @@ public class BaseDriverTeam {
         this.oneChargeName = oneChargeName == null ? null : oneChargeName.trim();
     }
 
-    public Integer getOneChargePhone() {
+    public String getOneChargePhone() {
         return oneChargePhone;
     }
 
-    public void setOneChargePhone(Integer oneChargePhone) {
+    public void setOneChargePhone(String oneChargePhone) {
         this.oneChargePhone = oneChargePhone;
     }
 
