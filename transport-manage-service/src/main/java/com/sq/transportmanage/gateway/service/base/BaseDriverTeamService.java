@@ -43,7 +43,6 @@ public class BaseDriverTeamService {
 
         List<Integer> teamIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(teamIds)){
-            teamIdList = Arrays.asList();
             String teamIdsArr[] = teamIds.split(Constants.SPLIT);
             for(String teamId : teamIdsArr){
                 teamIdList.add(Integer.valueOf(teamId));
