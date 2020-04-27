@@ -10,11 +10,13 @@ import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.base.Merchant;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.service.auth.SaasRoleService;
 import com.sq.transportmanage.gateway.service.auth.SaasUserRoleRalationService;
+import com.sq.transportmanage.gateway.service.base.BaseMerchantService;
 import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
@@ -115,6 +117,9 @@ public class MainController {
 
 	@Autowired
 	private SaasRoleService saasRoleService;
+
+	@Autowired
+	private BaseMerchantService merchantService;
 
 
     /**运维监控心跳检测 **/
@@ -379,8 +384,8 @@ public class MainController {
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		if( ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
  			//获取该商户下的id和名称返回给h5
-
-			Map<String,Object> map = Maps.newHashMap();
+			List<Merchant> merchantList = merchantService.queryMerchantNames(ssoLoginUser.getMerchantArea());
+			/*Map<String,Object> map = Maps.newHashMap();
 			map.put("merchantIds",ssoLoginUser.getMerchantArea());
 			String result  = MpOkHttpUtil.okHttpGet(zuulMpApiUrl + "/merchant/getMerchantNames",map,0,null);
 			logger.info("获取商户名称" + result);
@@ -389,8 +394,17 @@ public class MainController {
 				if(jsonObject.get("code") !=  null && jsonObject.getInteger("code") == 0){
 					return AjaxResponse.success(jsonObject.get("data"));
 				}
+			}*/
+			JSONArray jsonArray = new JSONArray();
+			if(!CollectionUtils.isEmpty(merchantList)){
+				merchantList.forEach(list ->{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("merchantId",list.getMerchantId());
+					jsonObject.put("merchantName",list.getMerchantName());
+					jsonArray.add(jsonObject);
+				});
 			}
-			return  AjaxResponse.success(null);
+			return  AjaxResponse.success(jsonArray);
 		}else {
 			logger.info("用户未登录");
 			return  AjaxResponse.fail(RestErrorCode.USER_LOGIN_FAILED);

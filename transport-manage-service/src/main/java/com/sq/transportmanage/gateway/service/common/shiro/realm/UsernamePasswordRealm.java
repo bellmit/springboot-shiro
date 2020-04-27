@@ -77,6 +77,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			if(Constants.SUPER_MANAGE.equals(adMUser.getAccountType()) ){
 				logger.info( "[获取用户的身份认证信息]="+loginUser);
 				loginUser = this.ssoLoginUser(loginUser,adMUser);
+				loginUser.setMerchantArea(adMUser.getMerchantArea());
 				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
 			}
 			loginUser = this.ssoLoginUser(loginUser,adMUser);

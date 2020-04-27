@@ -236,6 +236,7 @@ public final class SSOLoginUser implements Serializable{
 				", menuPermissionMap=" + JSONObject.toJSONString(menuPermissionMap) +
 				", isSuper=" + isSuper +
 				", mapPermission=" + JSONObject.toJSONString(mapPermission) +
+				",merchantArea"+ JSONObject.toJSONString(merchantArea) +
 				'}';
 	}
 
