@@ -97,7 +97,7 @@ public class AccessFilter extends ZuulFilter {
             }
             data.put("name", decodeStr);//用户名中文
             data.put("merchantName", merchantNameStr);//用户名中文
-            if(1==loginUser.getLevel()){
+            if(1==loginUser.getLevel() && StringUtils.isEmpty(loginUser.getSupplierIds())){
                 List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
                 if(!CollectionUtils.isEmpty(supplierIds)){
                     data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
