@@ -36,6 +36,7 @@ public class BaseMerchantCityConfigService {
             BaseMerchantCityConfigVo vo = new BaseMerchantCityConfigVo();
             vo.setId(list.getCityId());
             vo.setCityName(list.getCityName());
+            vo.setCityId(list.getCityId());
             voList.add(vo);
         });
         return  voList;
