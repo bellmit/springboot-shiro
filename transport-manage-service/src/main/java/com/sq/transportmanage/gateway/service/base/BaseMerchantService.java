@@ -5,6 +5,8 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.MerchantExMapper
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,17 @@ public class BaseMerchantService {
     @Autowired
     private MerchantExMapper exMapper;
 
-    public List<Merchant> queryMerchantNames(String merchantIds){
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public List<Merchant> queryMerchantNames(String merchantIds,
+                                             String merchantName,
+                                             Integer status){
 
         if(StringUtils.isEmpty(merchantIds)){
             return null;
         }
+
+
 
         String[] str = merchantIds.split(Constants.SPLIT);
 
@@ -37,9 +45,9 @@ public class BaseMerchantService {
             try {
                 merchantIdSet.add(Integer.valueOf(merId));
             } catch (NumberFormatException e) {
-
+                logger.error("抓换异常" + e);
             }
         }
-        return  exMapper.queryMerchantNames(merchantIdSet);
+        return  exMapper.queryMerchantNames(merchantIdSet,merchantName,status);
     }
 }

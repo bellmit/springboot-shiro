@@ -45,13 +45,21 @@
   </sql>
 
   <select id="queryMerchantNames" resultMap="BaseResultMap" >
-    select merchant_id, merchant_name
+    select merchant_id, merchant_name,status
     from base_merchant where 1=1
     <if test="merchantIds != null and merchantIds.size > 0">
       and merchant_id in
       <foreach collection="merchantIds" item="merchantId" index="index" open="(" separator="," close=")">
         #{merchantId}
       </foreach>
+    </if>
+
+    <if test="merchantName != null and merchantName != '' ">
+      and merchant_name LIKE  CONCAT(#{merchantName,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="status != null  ">
+      and status = #{status}
     </if>
   </select>
 

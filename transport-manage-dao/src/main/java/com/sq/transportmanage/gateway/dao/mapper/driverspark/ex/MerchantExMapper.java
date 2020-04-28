@@ -18,5 +18,7 @@ public interface MerchantExMapper {
 
 
     /**查询商户名称**/
-    List<Merchant> queryMerchantNames(@Param("merchantIds") Set<Integer> merchantIds);
+    List<Merchant> queryMerchantNames(@Param("merchantIds") Set<Integer> merchantIds,
+                                      @Param("merchantName") String merchantName,
+                                      @Param("status") Integer status);
 }

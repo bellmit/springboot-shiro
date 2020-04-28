@@ -347,7 +347,7 @@ public class MainController {
 			UsernamePasswordToken token = new UsernamePasswordToken( username, password.toCharArray() );
 			currentLoginUser.login(token);
 			//response.sendRedirect(queryMerchantUrl); 交给h5控制
-			return AjaxResponse.success( null );
+			return AjaxResponse.success( "superManager" );
 		}
 		//F: 执行登录
 		try {
@@ -380,11 +380,14 @@ public class MainController {
 	/*如果是超级管理员，获取其下有哪些商户 */
 	@RequestMapping("/getAllMerchants")
 	@ResponseBody
-	public AjaxResponse getAllMerchants( HttpServletRequest request , HttpServletResponse response ) throws Exception{
+	public AjaxResponse getAllMerchants( HttpServletRequest request ,
+										 HttpServletResponse response,
+										 String merchantName,
+										 Integer status) throws Exception{
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		if( ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
  			//获取该商户下的id和名称返回给h5
-			List<Merchant> merchantList = merchantService.queryMerchantNames(ssoLoginUser.getMerchantArea());
+			List<Merchant> merchantList = merchantService.queryMerchantNames(ssoLoginUser.getMerchantArea(),merchantName,status);
 			/*Map<String,Object> map = Maps.newHashMap();
 			map.put("merchantIds",ssoLoginUser.getMerchantArea());
 			String result  = MpOkHttpUtil.okHttpGet(zuulMpApiUrl + "/merchant/getMerchantNames",map,0,null);
@@ -401,6 +404,7 @@ public class MainController {
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("merchantId",list.getMerchantId());
 					jsonObject.put("merchantName",list.getMerchantName());
+					jsonObject.put("status",list.getStatus());
 					jsonArray.add(jsonObject);
 				});
 			}
