@@ -7,6 +7,8 @@ import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,13 @@ public class BaseMerchantCityConfigService {
             return null;
         }
 
-        List<BaseMerchantCityConfigVo> voList = BeanUtil.copyList(configList,BaseMerchantCityConfigVo.class);
+        List<BaseMerchantCityConfigVo> voList = new ArrayList<>();
+        configList.forEach(list ->{
+            BaseMerchantCityConfigVo vo = new BaseMerchantCityConfigVo();
+            vo.setId(list.getCityId());
+            vo.setCityName(list.getCityName());
+            voList.add(vo);
+        });
         return  voList;
 
     }
