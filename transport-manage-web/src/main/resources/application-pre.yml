@@ -173,4 +173,4 @@ kafka:
     lingerMs: 10
     bufferMemory: 40960
     acks: all
-    defaultTopic: mp-kafka-user-logger
+    defaultTopic: pre-mp-kafka-user-logger
