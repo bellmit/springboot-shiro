@@ -7,6 +7,8 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
+import com.sq.transportmanage.gateway.service.auth.DataPermissionService;
+import com.sq.transportmanage.gateway.service.base.BaseDriverTeamService;
 import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
@@ -41,7 +43,7 @@ public class AccessFilter extends ZuulFilter {
     private SupplierExtMapper supplierExtMapper;
 
     @Autowired
-    private BaseMerchantCityConfigExMapper baseMerchantCityConfigExMapper;
+    private DataPermissionService dataPermissionService;
 
     @Override
     public String filterType() {
@@ -98,42 +100,13 @@ public class AccessFilter extends ZuulFilter {
             }
             data.put("name", decodeStr);//用户名中文
             data.put("merchantName", merchantNameStr);//用户名中文
-            /**运力商**/
-            if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getSupplierIds())){
-                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
-                if(!CollectionUtils.isEmpty(supplierIds)){
-                    data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
-                }
-            }else{
-                data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
-            }
-            /**城市**/
-            if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getCityIds())){
-                List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
-                if(!CollectionUtils.isEmpty(cityIds)){
-                    data.put("cityIds", StringUtils.join(cityIds.toArray(), ","));
-                }
-            }else{
-                data.put("cityIds",loginUser.getCityIds());//城市数据权限
-            }
-            /**车队**/
-            if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getTeamIds())){
-                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
-                if(!CollectionUtils.isEmpty(supplierIds)){
-                    data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
-                }
-            }else{
-                data.put("teamIds",loginUser.getTeamIds());//车队数据权限
-            }
-            /**班组**/
-            if(DataLevelEnum.GROUP_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getGroupIds())){
-                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
-                if(!CollectionUtils.isEmpty(supplierIds)){
-                    data.put("groupIds", StringUtils.join(supplierIds.toArray(), ","));
-                }
-            }else{
-                data.put("groupIds",loginUser.getGroupIds());//班组数据权限
-            }
+            //TODO  等1.3上线以后放到登录成功设置值的时候
+            dataPermissionService.populateLoginUser(loginUser);
+            data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
+            data.put("cityIds",loginUser.getCityIds());//城市商数据权限
+            data.put("teamIds",loginUser.getTeamIds());//车队数据权限
+            data.put("groupIds",loginUser.getGroupIds());//班组数据权限
+            data.put("dataLevl",loginUser.getDataLevel());//数据权限级别
             logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
@@ -142,22 +115,6 @@ public class AccessFilter extends ZuulFilter {
             ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!请先登录\"}");// 返回错误内容
             ctx.set("isSuccess", false);
         }
-
-//            JSONObject data = new JSONObject();
-//            data.put("sysId","t_saas");//平台ID
-//            data.put("merchantId",);//商户ID
-//            data.put("account","admin");//用户名
-//            String decodeStr = "";
-//            try {
-//                decodeStr = URLDecoder.decode("默认超级管理员","UTF-8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//            data.put("name", decodeStr);//用户名中文
-//            data.put("supplierIds","1,2,3,5,6,7,8,9,10,11,12,13,15,16,18,20,21,22,24,25,26");//用户名中文
-//            logger.info("login_user :{}",data);
-//            ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
-//            ctx.addZuulRequestHeader("loginuser",data.toJSONString());
         return ctx;
     }
 

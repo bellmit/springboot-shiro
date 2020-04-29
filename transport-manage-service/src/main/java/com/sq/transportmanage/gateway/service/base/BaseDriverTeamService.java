@@ -58,6 +58,63 @@ public class BaseDriverTeamService {
     }
 
 
+    public List<Integer>  queryServiceTeamIds(Integer merchantId, String  supplierIds, String cityIds){
+
+        List<Integer> supplierIdList = null;
+        if(StringUtils.isNotEmpty(supplierIds)){
+            supplierIdList = new ArrayList<>();
+            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            for(String id : supplierArr){
+                supplierIdList.add(Integer.valueOf(id));
+            }
+        }
+
+        List<Integer> cityIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(cityIds)){
+            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            for(String cityId : cityIdsArr){
+                cityIdList.add(Integer.valueOf(cityId));
+            }
+        }
+
+        List<Integer> teamIds = exMapper.queryIds(merchantId,supplierIdList,cityIdList, null,1);
+
+        return teamIds;
+    }
+
+
+    public List<Integer>  queryServiceGreoupIds(Integer merchantId, String  supplierIds, String cityIds, String teamIds){
+
+        List<Integer> supplierIdList = null;
+        if(StringUtils.isNotEmpty(supplierIds)){
+            supplierIdList = new ArrayList<>();
+            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            for(String id : supplierArr){
+                supplierIdList.add(Integer.valueOf(id));
+            }
+        }
+
+        List<Integer> cityIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(cityIds)){
+            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            for(String cityId : cityIdsArr){
+                cityIdList.add(Integer.valueOf(cityId));
+            }
+        }
+
+        List<Integer> teamIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(teamIds)){
+            String teamIdsArr[] = teamIds.split(Constants.SPLIT);
+            for(String teamId : teamIdsArr){
+                teamIdList.add(Integer.valueOf(teamId));
+            }
+        }
+
+        List<Integer> groupIds = exMapper.queryIds(merchantId,supplierIdList,cityIdList,teamIdList,2);
+        return groupIds;
+    }
+
+
 
 
 }
