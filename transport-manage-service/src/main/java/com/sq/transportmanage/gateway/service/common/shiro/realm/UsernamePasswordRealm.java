@@ -80,6 +80,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 				loginUser.setMerchantArea(adMUser.getMerchantArea());
 				Integer minUserId = myDataSourceService.queryMinUserId(adMUser.getMerchantId());
 				loginUser.setId(minUserId);
+				loginUser.setSuper(false);
 				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
 			}
 			loginUser = this.ssoLoginUser(loginUser,adMUser);
