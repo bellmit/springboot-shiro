@@ -57,6 +57,31 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
+<!--        <dependency>
+            <groupId>com.zhuanche</groupId>
+            <artifactId>mp-util</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>sq-arch</groupId>
+                    <artifactId>sq-okHttp</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.sq</groupId>
+            <artifactId>sq-component-log</artifactId>
+            <version>1.0.20</version>
+            <exclusions></exclusions>
+        </dependency>
+        <dependency>
+            <groupId>sq-arch</groupId>
+            <artifactId>spring-boot-starter2-sq-okhttp
+            </artifactId>
+            <version>1.0.3</version>
+        </dependency>-->
     </dependencies>
 
 

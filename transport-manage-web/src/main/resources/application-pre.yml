@@ -155,6 +155,9 @@ login.url: https://pre-saas-spark.guobindui.cn/signin
 
 #没有权限地址
 unauthorized.url: https://pre-saas.guobindui.cn/unauthorized
+#选择商户页面
+query.merchant.url: https://dev-saas.guobindui.cn/signin
+
 
 #短信发送相关
 short_message_url: http://pre-inside-mp.01zhuanche.com/api/v1/message/content/send

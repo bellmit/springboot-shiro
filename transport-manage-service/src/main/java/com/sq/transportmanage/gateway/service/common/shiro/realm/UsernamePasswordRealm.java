@@ -71,25 +71,18 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 				logger.info("=========清除session异常============");
 			}
 
-
 			SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
-			loginUser.setId( adMUser.getUserId() );                //用户ID
-			loginUser.setLoginName( adMUser.getAccount() );//登录名
-			loginUser.setMobile( adMUser.getPhone() );         //手机号码
-			loginUser.setName( adMUser.getUserName() );    //真实姓名
-			loginUser.setEmail(adMUser.getEmail()); //邮箱地址
-			loginUser.setType(null);   //
-			loginUser.setStatus( adMUser.getStatus() );           //状态
-			loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
-			loginUser.setLevel(adMUser.getLevel());
-			loginUser.setMerchantId(adMUser.getMerchantId());
-			loginUser.setSupplierIds(adMUser.getSuppliers());
-			loginUser.setCityIds(adMUser.getCities()); //城市
-			loginUser.setTeamIds(adMUser.getTeamId()); //车队
-			loginUser.setGroupIds(adMUser.getGroupIds()); //班组
-			loginUser.setDataLevel(adMUser.getDataLevel());
 
-
+			//如果是超级管理员
+			if(Constants.SUPER_MANAGE.equals(adMUser.getAccountType()) ){
+				logger.info( "[获取用户的身份认证信息]="+loginUser);
+				loginUser = this.ssoLoginUser(loginUser,adMUser);
+				loginUser.setMerchantArea(adMUser.getMerchantArea());
+				Integer minUserId = myDataSourceService.queryMinUserId(adMUser.getMerchantId());
+				loginUser.setId(minUserId);
+				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
+			}
+			loginUser = this.ssoLoginUser(loginUser,adMUser);
 			String md5= null;
 			try {
 				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());
@@ -210,4 +203,24 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
     public void clearCache(PrincipalCollection principals) {
         super.clearCache(principals);
     }
+
+
+    private SSOLoginUser ssoLoginUser (SSOLoginUser loginUser ,CarAdmUser adMUser){
+		loginUser.setId( adMUser.getUserId() );                //用户ID
+		loginUser.setLoginName( adMUser.getAccount() );//登录名
+		loginUser.setMobile( adMUser.getPhone() );         //手机号码
+		loginUser.setName( adMUser.getUserName() );    //真实姓名
+		loginUser.setEmail(adMUser.getEmail()); //邮箱地址
+		loginUser.setType(null);   //
+		loginUser.setStatus( adMUser.getStatus() );           //状态
+		loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
+		loginUser.setLevel(adMUser.getLevel());
+		loginUser.setMerchantId(adMUser.getMerchantId());
+		loginUser.setSupplierIds(adMUser.getSuppliers());
+		loginUser.setCityIds(adMUser.getCities()); //城市
+		loginUser.setTeamIds(adMUser.getTeamId()); //车队
+		loginUser.setGroupIds(adMUser.getGroupIds()); //班组
+		loginUser.setDataLevel(adMUser.getDataLevel());
+		return loginUser;
+	}
 }

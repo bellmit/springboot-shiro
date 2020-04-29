@@ -47,10 +47,12 @@ public class MyDataSourceService {
 
     @MyDataSource(value = DataSourceType.DRIVERSPARK_MASTER)
     public CarAdmUser queryByAccount(String account) {
-        //todo 此处uuid取值有问题，但是不知道怎么获取uuid
         return carAdmUserExMapper.queryByAccount(account,null);
     }
 
+    public Integer queryMinUserId(Integer merchantId){
+        return carAdmUserExMapper.queryMinUserId(merchantId);
+    }
 
     /**
      * 获取用户的身份认证信息
