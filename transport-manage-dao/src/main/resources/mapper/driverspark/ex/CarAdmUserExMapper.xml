@@ -195,4 +195,10 @@
         limit 1
     </select>
 
+    <update id="updateMerchantId" >
+        update auth_car_adm_user  SET  merchant_id = #{merchantId}
+
+        where account = #{account}
+    </update>
+
 </mapper>

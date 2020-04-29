@@ -427,11 +427,7 @@ public class MainController {
 		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
 		if(ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
 			ssoLoginUser.setMerchantId(merchantId);
-			CarAdmUser carAdmUser = new CarAdmUser();
-			carAdmUser.setUserId(ssoLoginUser.getId());
-			carAdmUser.setMerchantId(merchantId);
-			//更新用户的账号信息
-			carAdmUserMapper.updateByPrimaryKeySelective(carAdmUser);
+			carAdmUserExMapper.updateMerchantId(merchantId,ssoLoginUser.getLoginName());
 
 			String redis_login_key = "star_fire_login_key_"+ssoLoginUser.getLoginName();
 			String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+ssoLoginUser.getLoginName();
