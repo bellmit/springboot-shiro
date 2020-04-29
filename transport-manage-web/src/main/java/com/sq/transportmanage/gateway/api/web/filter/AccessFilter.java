@@ -90,16 +90,19 @@ public class AccessFilter extends ZuulFilter {
             data.put("merchantId",loginUser.getMerchantId()+"");//商户ID
             data.put("account",loginUser.getLoginName());//用户名
             BaseMerchant baseMerchant = baseMerchantMapper.selectByPrimaryKey(loginUser.getMerchantId());
-            String decodeStr = "";
-            String merchantNameStr = "";
-            try {
-                decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
-                merchantNameStr = URLEncoder.encode(baseMerchant.getMerchantName(),"UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if(baseMerchant != null){
+                String decodeStr = "";
+                String merchantNameStr = "";
+                try {
+                    decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
+                    merchantNameStr = URLEncoder.encode(baseMerchant.getMerchantName(),"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                data.put("name", decodeStr);//用户名中文
+                data.put("merchantName", merchantNameStr);//用户名中文
             }
-            data.put("name", decodeStr);//用户名中文
-            data.put("merchantName", merchantNameStr);//用户名中文
+
             //TODO  等1.3上线以后放到登录成功设置值的时候
             dataPermissionService.populateLoginUser(loginUser);
             data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
