@@ -3,14 +3,14 @@ package com.sq.transportmanage.gateway.api.web.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
-import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
+import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
+import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +20,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -41,6 +39,9 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
+
+    @Autowired
+    private BaseMerchantCityConfigExMapper baseMerchantCityConfigExMapper;
 
     @Override
     public String filterType() {
@@ -97,7 +98,8 @@ public class AccessFilter extends ZuulFilter {
             }
             data.put("name", decodeStr);//用户名中文
             data.put("merchantName", merchantNameStr);//用户名中文
-            if(1==loginUser.getLevel() && StringUtils.isEmpty(loginUser.getSupplierIds())){
+            /**运力商**/
+            if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getSupplierIds())){
                 List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
                 if(!CollectionUtils.isEmpty(supplierIds)){
                     data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
@@ -105,9 +107,33 @@ public class AccessFilter extends ZuulFilter {
             }else{
                 data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
             }
-            data.put("cityIds",loginUser.getCityIds());//城市数据权限
-            data.put("teamIds",loginUser.getTeamIds());//车队数据权限
-            data.put("groupIds",loginUser.getGroupIds());//班组数据权限
+            /**城市**/
+            if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getCityIds())){
+                List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
+                if(!CollectionUtils.isEmpty(cityIds)){
+                    data.put("cityIds", StringUtils.join(cityIds.toArray(), ","));
+                }
+            }else{
+                data.put("cityIds",loginUser.getCityIds());//城市数据权限
+            }
+            /**车队**/
+            if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getTeamIds())){
+                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
+                if(!CollectionUtils.isEmpty(supplierIds)){
+                    data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
+                }
+            }else{
+                data.put("teamIds",loginUser.getTeamIds());//车队数据权限
+            }
+            /**班组**/
+            if(DataLevelEnum.GROUP_LEVEL.getCode().equals(loginUser.getLevel()) && StringUtils.isEmpty(loginUser.getGroupIds())){
+                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
+                if(!CollectionUtils.isEmpty(supplierIds)){
+                    data.put("groupIds", StringUtils.join(supplierIds.toArray(), ","));
+                }
+            }else{
+                data.put("groupIds",loginUser.getGroupIds());//班组数据权限
+            }
             logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{

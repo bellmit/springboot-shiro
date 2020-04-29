@@ -8,4 +8,6 @@ import java.util.List;
 public interface BaseMerchantCityConfigExMapper {
 
     List<BaseMerchantCityConfig> queryServiceCity(@Param("merchantId") Integer merchantId);
+
+    List<Integer> queryServiceCityId(@Param("merchantId") Integer merchantId);
 }
