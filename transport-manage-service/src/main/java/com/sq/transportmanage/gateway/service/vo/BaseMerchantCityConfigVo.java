@@ -12,6 +12,8 @@ public class BaseMerchantCityConfigVo {
 
     private String cityName;
 
+    private Integer cityId;
+
     public Integer getId() {
         return id;
     }
@@ -26,5 +28,13 @@ public class BaseMerchantCityConfigVo {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 }
