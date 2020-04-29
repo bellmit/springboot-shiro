@@ -11,8 +11,8 @@ public enum DataLevelEnum {
     INIT_LEVEL(0,"初始无"),
     SUPPLIER_LEVEL(1,"运力商"),
     CITY_LEVEL(2,"城市"),
-    TEAM_LEVEL(3,"车队"),
-    GROUP_LEVEL(4,"班组");
+    TEAM_LEVEL(4,"车队"),
+    GROUP_LEVEL(8,"班组");
 
     private Integer code;
 
