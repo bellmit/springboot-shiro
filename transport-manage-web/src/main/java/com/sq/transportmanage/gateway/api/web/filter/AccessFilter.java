@@ -106,7 +106,7 @@ public class AccessFilter extends ZuulFilter {
             data.put("cityIds",loginUser.getCityIds());//城市商数据权限
             data.put("teamIds",loginUser.getTeamIds());//车队数据权限
             data.put("groupIds",loginUser.getGroupIds());//班组数据权限
-            data.put("dataLevl",loginUser.getDataLevel());//数据权限级别
+            data.put("dataLevel",loginUser.getDataLevel());//数据权限级别
             logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
