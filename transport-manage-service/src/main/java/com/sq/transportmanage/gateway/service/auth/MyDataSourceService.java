@@ -50,6 +50,9 @@ public class MyDataSourceService {
         return carAdmUserExMapper.queryByAccount(account,null);
     }
 
+    public Integer queryMinUserId(Integer merchantId){
+        return carAdmUserExMapper.queryMinUserId(merchantId);
+    }
 
     /**
      * 获取用户的身份认证信息
