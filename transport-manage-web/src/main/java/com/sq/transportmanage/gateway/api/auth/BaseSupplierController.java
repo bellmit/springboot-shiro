@@ -12,6 +12,7 @@ import com.sq.transportmanage.gateway.service.common.enums.TeamType;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
+import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.vo.BaseDriverTeamVo;
 import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import com.sq.transportmanage.gateway.service.vo.BaseSupplierVo;
@@ -89,12 +90,13 @@ public class BaseSupplierController {
     @RequestMapping("/queryAllTeams")
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-    public AjaxResponse queryAllTeams(String supplierIds){
+    public AjaxResponse queryAllTeams(@Verify(param = "supplierIds",rule = "required")String supplierIds,
+                                      @Verify(param = "cityIds",rule = "required")String cityIds){
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser != null){
 
-            List<BaseDriverTeamVo> voList = driverTeamService.queryServiceTeam(Integer.valueOf(ssoLoginUser.getMerchantId()),
-                    supplierIds,null, TeamType.TEAM.getCode());
+            List<BaseDriverTeamVo> voList = driverTeamService.queryServiceTeamIdsForVo(Integer.valueOf(ssoLoginUser.getMerchantId()),
+                    supplierIds,cityIds);
             return AjaxResponse.success(voList);
         }else {
             return AjaxResponse.success(null);
@@ -110,12 +112,13 @@ public class BaseSupplierController {
     @RequestMapping("/queryAllGroups")
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-    public AjaxResponse queryAllGroups(String supplierIds,
-                                      String teamIds){
+    public AjaxResponse queryAllGroups(@Verify(param = "supplierIds",rule = "required")String supplierIds,
+                                       @Verify(param = "cityIds",rule = "required")String cityIds,
+                                       @Verify(param = "teamIds",rule = "required")String teamIds){
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser != null){
-            List<BaseDriverTeamVo> voList = driverTeamService.queryServiceTeam(Integer.valueOf(ssoLoginUser.getMerchantId()),
-                    supplierIds,teamIds, TeamType.GROUP.getCode());
+            List<BaseDriverTeamVo> voList = driverTeamService.queryServiceGroupIdsForVo(Integer.valueOf(ssoLoginUser.getMerchantId()),
+                    supplierIds,cityIds,teamIds);
             return AjaxResponse.success(voList);
         }else {
             return AjaxResponse.success(null);

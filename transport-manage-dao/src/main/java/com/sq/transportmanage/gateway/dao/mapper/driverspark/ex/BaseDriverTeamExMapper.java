@@ -19,4 +19,11 @@ public interface BaseDriverTeamExMapper {
                                           @Param("cityIds") List<Integer> cityIds,
                                           @Param("teamIds") List<Integer> teamIds,
                                           @Param("type") Integer type);
+
+    /**查询车队或者班组id集合**/
+    List<BaseDriverTeam> queryForVos(@Param("merchantId") Integer merchantId,
+                           @Param("supplierIds") List<Integer> supplierIds,
+                           @Param("cityIds") List<Integer> cityIds,
+                           @Param("teamIds") List<Integer> teamIds,
+                           @Param("type") Integer type);
 }
