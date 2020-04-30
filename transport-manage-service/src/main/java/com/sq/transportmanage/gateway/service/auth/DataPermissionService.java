@@ -61,7 +61,7 @@ public class DataPermissionService {
             }else {
                 loginUser.setTeamIds("");
             }
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
             }else{
@@ -83,7 +83,7 @@ public class DataPermissionService {
             }else{
                 loginUser.setTeamIds("");
             }
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
             }else{
@@ -99,7 +99,7 @@ public class DataPermissionService {
             }else{
                 loginUser.setTeamIds("");
             }
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),null);
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
             }else{
@@ -109,7 +109,7 @@ public class DataPermissionService {
         }
         /**车队级别  则班组为车队集合下所有**/
         if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getDataLevel())){
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
             }else{
