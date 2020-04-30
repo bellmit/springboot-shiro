@@ -78,7 +78,7 @@ public class DataPermissionService {
             return loginUser;
         }
         /**城市级别  则车队为运力商城市集合下所有  班组为运力商城市集合下所有**/
-        if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getDataLevel()) && StringUtils.isEmpty(loginUser.getCityIds())){
+        if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getDataLevel())){
             List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds());
             if(!CollectionUtils.isEmpty(teamIds)){
                 loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
@@ -90,7 +90,7 @@ public class DataPermissionService {
             return loginUser;
         }
         /**车队级别  则班组为车队集合下所有**/
-        if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getDataLevel()) && StringUtils.isEmpty(loginUser.getTeamIds())){
+        if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getDataLevel())){
             List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
