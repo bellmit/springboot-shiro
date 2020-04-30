@@ -27,4 +27,8 @@
     from base_merchant_city_config
     where merchant_id = #{merchantId,jdbcType=INTEGER} and service_status = 1
   </select>
+
+  <select id="queryServiceCityId" resultType="java.lang.Integer" >
+    select city_id from base_merchant_city_config where merchant_id = #{merchantId,jdbcType=INTEGER} and service_status = 1
+  </select>
 </mapper>

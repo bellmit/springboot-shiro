@@ -538,6 +538,7 @@ public class MainController {
 			ajaxLoginUserDTO.setEmail(ssoLoginUser.getEmail());
 			ajaxLoginUserDTO.setStatus(ssoLoginUser.getStatus());
 			ajaxLoginUserDTO.setMerchantId(ssoLoginUser.getMerchantId());
+			ajaxLoginUserDTO.setDataLevel(ssoLoginUser.getDataLevel());
 			//二、用户的菜单信息      (  具有Session缓存机制 ，以提升性能   )
 			if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(menuDataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(menuDataFormat) ) {
                 menuDataFormat = SaasConst.PermissionDataFormat.TREE;//默认为树形

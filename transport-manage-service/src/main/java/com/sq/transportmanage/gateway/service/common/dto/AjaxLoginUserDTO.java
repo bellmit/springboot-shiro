@@ -21,6 +21,8 @@ public final class AjaxLoginUserDTO implements Serializable{
 	private Integer status;
 
 	private Integer merchantId;
+
+	private Integer dataLevel;
 	//---------------------------------------------------------------------------------------------------------用户基本信息END
 	
 	//---------------------------------------------------------------------------------------------------------用户的菜单信息BEGIN
@@ -154,5 +156,13 @@ public final class AjaxLoginUserDTO implements Serializable{
 
 	public void setMerchantId(Integer merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Integer getDataLevel() {
+		return dataLevel;
+	}
+
+	public void setDataLevel(Integer dataLevel) {
+		this.dataLevel = dataLevel;
 	}
 }

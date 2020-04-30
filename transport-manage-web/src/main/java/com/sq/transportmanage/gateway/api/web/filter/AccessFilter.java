@@ -7,14 +7,17 @@ import com.sq.transportmanage.gateway.api.util.IPv4Util2;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
-import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
-import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
+import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
+import com.sq.transportmanage.gateway.service.auth.DataPermissionService;
+import com.sq.transportmanage.gateway.service.base.BaseDriverTeamService;
+import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import mp.mvc.logger.entity.LoggerDto;
 import mp.mvc.logger.message.MpLoggerMessage;
+import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +48,10 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
+
+    @Autowired
+    private DataPermissionService dataPermissionService;
+
     @Override
     public String filterType() {
         return "pre";
@@ -90,27 +97,26 @@ public class AccessFilter extends ZuulFilter {
             data.put("merchantId",loginUser.getMerchantId()+"");//商户ID
             data.put("account",loginUser.getLoginName());//用户名
             BaseMerchant baseMerchant = baseMerchantMapper.selectByPrimaryKey(loginUser.getMerchantId());
-            String decodeStr = "";
-            String merchantNameStr = "";
-            try {
-                decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
-                merchantNameStr = URLEncoder.encode(baseMerchant.getMerchantName(),"UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            data.put("name", decodeStr);//用户名中文
-            data.put("merchantName", merchantNameStr);//用户名中文
-            if(1==loginUser.getLevel()){
-                List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
-                if(!CollectionUtils.isEmpty(supplierIds)){
-                    data.put("supplierIds", StringUtils.join(supplierIds.toArray(), ","));
+            if(baseMerchant != null){
+                String decodeStr = "";
+                String merchantNameStr = "";
+                try {
+                    decodeStr = URLEncoder.encode(loginUser.getName(),"UTF-8");
+                    merchantNameStr = URLEncoder.encode(baseMerchant.getMerchantName(),"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-            }else{
-                data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
+                data.put("name", decodeStr);//用户名中文
+                data.put("merchantName", merchantNameStr);//用户名中文
             }
-            data.put("cityIds",loginUser.getCityIds());//城市数据权限
+
+            //TODO  等1.3上线以后放到登录成功设置值的时候
+            dataPermissionService.populateLoginUser(loginUser);
+            data.put("supplierIds",loginUser.getSupplierIds());//运力商数据权限
+            data.put("cityIds",loginUser.getCityIds());//城市商数据权限
             data.put("teamIds",loginUser.getTeamIds());//车队数据权限
             data.put("groupIds",loginUser.getGroupIds());//班组数据权限
+            data.put("dataLevel",loginUser.getDataLevel());//数据权限级别
             logger.info("LOGINUSER :{}",data);
             ctx.addZuulRequestHeader("LOGINUSER",data.toJSONString());
         }else{
