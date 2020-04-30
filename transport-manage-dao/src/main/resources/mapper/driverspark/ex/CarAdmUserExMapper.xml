@@ -201,4 +201,11 @@
         where account = #{account}
     </update>
 
+    <select id="verifyRepeatWhenUpdate" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from auth_car_adm_user
+        where user_id != #{userId} and (email = #{email} or phone = #{phone}) limit 1
+    </select>
+
 </mapper>

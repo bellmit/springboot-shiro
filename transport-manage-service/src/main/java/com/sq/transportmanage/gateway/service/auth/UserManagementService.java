@@ -181,16 +181,14 @@ public class UserManagementService{
 		if( rawuser==null ) {
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST );
 		}
-		String checkResult = checkChaneUser(newUser);
-		if(StringUtils.isNotEmpty(checkResult)){
-			return AjaxResponse.fail(RestErrorCode.PARAMS_ERROR,checkResult);
-		}
-		//可以修改的字段
-		if( StringUtils.isEmpty(newUser.getUserName()) ) {
-			newUser.setUserName("");
-		}
-		if( StringUtils.isEmpty(newUser.getSuppliers()) ) {
-			newUser.setSuppliers("");
+		CarAdmUser po = carAdmUserExMapper.verifyRepeatWhenUpdate(newUser.getPhone(),newUser.getEmail(),newUser.getUserId());
+		if(po!=null) {
+			//邮箱、账号、手机号都不能重复
+			if(newUser.getPhone().equals(po.getPhone())){
+				return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
+			}else if (newUser.getEmail().equals(po.getEmail())){
+				return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
+			}
 		}
 		//执行
 		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
@@ -369,8 +367,23 @@ public class UserManagementService{
 		return carAdmUserExMapper.queryByAccount(null,merchantId);
 	}
 
-	/**八、查询用户列表**/
-	public String checkChaneUser(CarAdmUser newUser ) {
+	public 	AjaxResponse changeUserDataPermission( CarAdmUser newUser ) {
+		//用户不存在
+		CarAdmUser rawuser = carAdmUserMapper.selectByPrimaryKey(newUser.getUserId());
+		if( rawuser==null ) {
+			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST );
+		}
+		String checkResult = this.checkChaneUserDataPermission(newUser);
+		if(StringUtils.isNotEmpty(checkResult)){
+			return AjaxResponse.fail(RestErrorCode.PARAMS_ERROR,checkResult );
+		}
+		//执行
+		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
+		redisSessionDAO.clearRelativeSession(null, null , newUser.getUserId() );//自动清理用户会话
+		return AjaxResponse.success( null );
+	}
+
+	public String checkChaneUserDataPermission(CarAdmUser newUser ) {
 		if(null == newUser.getDataLevel()){
 			return null;
 		}

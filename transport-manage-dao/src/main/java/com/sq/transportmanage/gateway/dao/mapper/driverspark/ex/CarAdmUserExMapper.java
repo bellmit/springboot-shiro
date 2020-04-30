@@ -43,4 +43,9 @@ public interface CarAdmUserExMapper {
 
     int updateMerchantId(@Param("merchantId") Integer merchantId, @Param("account") String account);
 
+    CarAdmUser verifyRepeatWhenUpdate(@Param("phone")String phone,
+                            @Param("email")String email,
+                            @Param("userId")Integer userId
+    );
+
 }
