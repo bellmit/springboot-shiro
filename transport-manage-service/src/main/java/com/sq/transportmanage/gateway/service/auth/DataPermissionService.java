@@ -46,18 +46,26 @@ public class DataPermissionService {
             List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
             if(!CollectionUtils.isEmpty(supplierIds)){
                 loginUser.setSupplierIds(StringUtils.join(supplierIds.toArray(), ","));
+            }else{
+                loginUser.setSupplierIds("");
             }
             List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
             if(!CollectionUtils.isEmpty(cityIds)){
                 loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
+            }else{
+                loginUser.setCityIds("");
             }
             List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
             if(!CollectionUtils.isEmpty(teamIds)){
                 loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else {
+                loginUser.setTeamIds("");
             }
             List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
             }
             return loginUser;
         }
@@ -66,14 +74,20 @@ public class DataPermissionService {
             List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
             if(!CollectionUtils.isEmpty(cityIds)){
                 loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
+            }else {
+                loginUser.setCityIds("");
             }
             List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
             if(!CollectionUtils.isEmpty(teamIds)){
                 loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else{
+                loginUser.setTeamIds("");
             }
             List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
             }
             return loginUser;
         }
@@ -82,10 +96,14 @@ public class DataPermissionService {
             List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds());
             if(!CollectionUtils.isEmpty(teamIds)){
                 loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else{
+                loginUser.setTeamIds("");
             }
             List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),null);
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
             }
             return loginUser;
         }
@@ -94,6 +112,8 @@ public class DataPermissionService {
             List<Integer> groupIds = baseDriverTeamService.queryServiceGreoupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
             }
             return loginUser;
         }
