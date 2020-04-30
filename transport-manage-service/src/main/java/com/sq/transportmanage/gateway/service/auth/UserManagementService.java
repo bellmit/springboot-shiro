@@ -371,6 +371,9 @@ public class UserManagementService{
 
 	/**八、查询用户列表**/
 	public String checkChaneUser(CarAdmUser newUser ) {
+		if(null == newUser.getDataLevel()){
+			return null;
+		}
 		/**运力商级别  则城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
 		if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(newUser.getDataLevel())){
 			if(StringUtils.isEmpty(newUser.getSuppliers())){
