@@ -3,16 +3,20 @@ package com.sq.transportmanage.gateway.api.auth;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.util.StringUtil;
 import com.google.common.collect.Maps;
+import com.sq.transportmanage.gateway.api.common.AuthEnum;
 import com.sq.transportmanage.gateway.api.util.BeanUtil;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.base.Merchant;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.CarAdmUserExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.service.auth.SaasRoleService;
 import com.sq.transportmanage.gateway.service.auth.SaasUserRoleRalationService;
+import com.sq.transportmanage.gateway.service.base.BaseMerchantService;
 import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.cache.RedisUtil;
@@ -32,6 +36,8 @@ import com.sq.transportmanage.gateway.service.util.NumberUtil;
 import com.sq.transportmanage.gateway.service.util.PasswordUtil;
 import com.sq.transportmanage.gateway.service.util.SmsSendUtil;
 import com.sq.transportmanage.gateway.service.vo.BaseSupplierVo;
+import com.zhuanche.http.MpOkHttpUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -76,6 +82,12 @@ public class MainController {
 	@Value("${login.checkMsgCode.switch}")
 	private String loginCheckMsgCodeSwitch;//登录时是否进行短信验证的开关
 
+	@Value("${query.merchant.url}")
+	private String queryMerchantUrl;
+
+	@Value("${zuul.routes.mpapi.url}")
+	private String zuulMpApiUrl;
+
 
 	private static final String CACHE_PREFIX_MSGCODE_CONTROL = "mp_star_fire_login_cache_msgcode_control_";
 	private static final String CACHE_PREFIX_MSGCODE                   = "mp_star_fire_login_cache_msgcode_";
@@ -105,6 +117,9 @@ public class MainController {
 
 	@Autowired
 	private SaasRoleService saasRoleService;
+
+	@Autowired
+	private BaseMerchantService merchantService;
 
 
     /**运维监控心跳检测 **/
@@ -324,6 +339,16 @@ public class MainController {
 		if(user.getStatus()!=null && user.getStatus().intValue()==100 ){
 			return AjaxResponse.fail(RestErrorCode.USER_INVALID) ;
 		}
+
+
+		//TODO 添加超级管理员 如果是超级管理员 可以先选择用户赋值给那个商户
+		if(AuthEnum.SUPER_MANAGE.getAuthId().equals(user.getAccountType())){
+			logger.info("超级管理员登录" + JSONObject.toJSONString(user));
+			UsernamePasswordToken token = new UsernamePasswordToken( username, password.toCharArray() );
+			currentLoginUser.login(token);
+			//response.sendRedirect(queryMerchantUrl); 交给h5控制
+			return AjaxResponse.success( "superManager" );
+		}
 		//F: 执行登录
 		try {
 			//shiro登录
@@ -351,6 +376,95 @@ public class MainController {
 			return null;
 		}
 	}
+
+	/*如果是超级管理员，获取其下有哪些商户 */
+	@RequestMapping("/getAllMerchants")
+	@ResponseBody
+	public AjaxResponse getAllMerchants( HttpServletRequest request ,
+										 HttpServletResponse response,
+										 String merchantName,
+										 Integer status) throws Exception{
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+		if( ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
+ 			//获取该商户下的id和名称返回给h5
+			List<Merchant> merchantList = merchantService.queryMerchantNames(ssoLoginUser.getMerchantArea(),merchantName,status);
+			/*Map<String,Object> map = Maps.newHashMap();
+			map.put("merchantIds",ssoLoginUser.getMerchantArea());
+			String result  = MpOkHttpUtil.okHttpGet(zuulMpApiUrl + "/merchant/getMerchantNames",map,0,null);
+			logger.info("获取商户名称" + result);
+			if(StringUtils.isNotEmpty(result)){
+				JSONObject jsonObject = JSONObject.parseObject(result);
+				if(jsonObject.get("code") !=  null && jsonObject.getInteger("code") == 0){
+					return AjaxResponse.success(jsonObject.get("data"));
+				}
+			}*/
+			JSONArray jsonArray = new JSONArray();
+			if(!CollectionUtils.isEmpty(merchantList)){
+				merchantList.forEach(list ->{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("merchantId",list.getMerchantId());
+					jsonObject.put("merchantName",list.getMerchantName());
+					jsonObject.put("status",list.getStatus());
+					jsonArray.add(jsonObject);
+				});
+			}
+			return  AjaxResponse.success(jsonArray);
+		}else {
+			logger.info("用户未登录");
+			return  AjaxResponse.fail(RestErrorCode.USER_LOGIN_FAILED);
+		}
+	}
+
+
+	/*选择某个商户后id点击进入 */
+	@RequestMapping("/loginByMerchantId")
+	@ResponseBody
+	public AjaxResponse loginByMerchantId(HttpServletRequest request ,
+										  HttpServletResponse response,
+										  @Verify(param = "merchantId",rule = "required") Integer merchantId) throws Exception{
+
+
+		SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+		if(ssoLoginUser != null && AuthEnum.SUPER_MANAGE.getAuthId().equals(ssoLoginUser.getAccountType())){
+			ssoLoginUser.setMerchantId(merchantId);
+			carAdmUserExMapper.updateMerchantId(merchantId,ssoLoginUser.getLoginName());
+
+			String redis_login_key = "star_fire_login_key_"+ssoLoginUser.getLoginName();
+			String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+ssoLoginUser.getLoginName();
+			Subject currentLoginUser = SecurityUtils.getSubject();
+
+			//F: 执行登录
+			try {
+				//shiro登录
+				UsernamePasswordToken token = new UsernamePasswordToken( ssoLoginUser.getLoginName(), ssoLoginUser.getLoginName().toCharArray() );
+				currentLoginUser.login(token);
+				//记录登录用户的所有会话ID，以支持“系统管理”功能中的自动会话清理
+				String sessionId =  (String)currentLoginUser.getSession().getId() ;
+				//String sessionId = username;
+				redisSessionDAO.saveSessionIdOfLoginUser(ssoLoginUser.getLoginName(), sessionId);
+
+				redisTemplate.delete(redis_login_key);
+				redisTemplate.delete(redis_getmsgcode_key);
+
+			}catch(AuthenticationException aex) {
+				aex.getStackTrace();
+				logger.info(aex.getMessage());
+				return AjaxResponse.fail(RestErrorCode.USER_LOGIN_FAILED) ;
+			}
+			//返回登录成功
+			Boolean isAjax = (Boolean) request.getAttribute("X_IS_AJAX");
+			if(  isAjax  ) {
+				return AjaxResponse.success( null );
+			}else {
+				response.sendRedirect(homepageUrl);
+				return null;
+			}
+		}else {
+			logger.info("用户未登录");
+			return  null;
+		}
+ 	}
+
 
 	/*执行登出 */
 	@RequestMapping("/dologout")

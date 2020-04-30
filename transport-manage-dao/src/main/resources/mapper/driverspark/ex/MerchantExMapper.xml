@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.MerchantExMapper" >
+  <resultMap id="BaseResultMap" type="com.sq.transportmanage.gateway.dao.entity.driverspark.base.Merchant" >
+    <id column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
+    <result column="merchant_full_name" property="merchantFullName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="admin_user_name" property="adminUserName" jdbcType="VARCHAR" />
+    <result column="admin_user_account" property="adminUserAccount" jdbcType="VARCHAR" />
+    <result column="admin_user_password" property="adminUserPassword" jdbcType="VARCHAR" />
+    <result column="admin_user_phone" property="adminUserPhone" jdbcType="VARCHAR" />
+    <result column="admin_user_email" property="adminUserEmail" jdbcType="VARCHAR" />
+    <result column="service_fee" property="serviceFee" jdbcType="DECIMAL" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="business_scope" property="businessScope" jdbcType="VARCHAR" />
+    <result column="economic_type" property="economicType" jdbcType="VARCHAR" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="DECIMAL" />
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+    <result column="legal_person_name" property="legalPersonName" jdbcType="VARCHAR" />
+    <result column="legal_person_phone" property="legalPersonPhone" jdbcType="VARCHAR" />
+    <result column="legal_idcard" property="legalIdcard" jdbcType="VARCHAR" />
+    <result column="charge_person_name" property="chargePersonName" jdbcType="VARCHAR" />
+    <result column="charge_person_phone" property="chargePersonPhone" jdbcType="VARCHAR" />
+    <result column="company_date" property="companyDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    merchant_id, merchant_name, merchant_full_name, province_id, province_name, city_id,
+    city_name, area_id, area_name, admin_user_name, admin_user_account, admin_user_password,
+    admin_user_phone, admin_user_email, service_fee, address, business_scope, economic_type,
+    registered_capital, credit_code, legal_person_name, legal_person_phone, legal_idcard,
+    charge_person_name, charge_person_phone, company_date, status, create_by, create_time,
+    update_by, update_time, remark
+  </sql>
+
+  <select id="queryMerchantNames" resultMap="BaseResultMap" >
+    select merchant_id, merchant_name,status
+    from base_merchant where 1=1
+    <if test="merchantIds != null and merchantIds.size > 0">
+      and merchant_id in
+      <foreach collection="merchantIds" item="merchantId" index="index" open="(" separator="," close=")">
+        #{merchantId}
+      </foreach>
+    </if>
+
+    <if test="merchantName != null and merchantName != '' ">
+      and merchant_name LIKE  CONCAT(#{merchantName,jdbcType=VARCHAR},'%')
+    </if>
+
+    <if test="status != null  ">
+      and status = #{status}
+    </if>
+  </select>
+
+
+</mapper>

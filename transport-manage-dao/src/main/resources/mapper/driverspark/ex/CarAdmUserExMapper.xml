@@ -21,11 +21,14 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
     <result column="data_level" property="dataLevel" jdbcType="INTEGER" />
+    <result column="merchant_area" property="merchantArea" jdbcType="VARCHAR" />
+
 
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, account, user_name, password, role_id, account_type, status, remark, create_user, 
-    create_date, cities, suppliers, team_id, phone, group_ids,level,email,merchant_id,data_level
+    create_date, cities, suppliers, team_id, phone, group_ids,level,email,merchant_id,data_level,
+    merchant_area
   </sql>
   
   <!-- 根据账户查询 -->
@@ -63,7 +66,7 @@
     select 
     <include refid="Base_Column_List" />
     from auth_car_adm_user
-    where 1=1 
+    where account_type != 1000
     <if test="userIds!=null and userIds.size()>0">
 	    and user_id in 
 		<foreach collection="userIds" open="(" close=")" separator="," item="uid">
@@ -178,5 +181,24 @@
         </if>
         limit 1
     </select>
+
+    <!-- 查询某个商户下的userId -->
+    <select id="queryMinUserId" resultType="java.lang.Integer" >
+        select
+        min(user_id)
+        from auth_car_adm_user
+        where 1=1 and account_type != 1000
+
+        <if test="merchantId!=null">
+            and merchant_id = #{merchantId}
+        </if>
+        limit 1
+    </select>
+
+    <update id="updateMerchantId" >
+        update auth_car_adm_user  SET  merchant_id = #{merchantId}
+
+        where account = #{account}
+    </update>
 
 </mapper>

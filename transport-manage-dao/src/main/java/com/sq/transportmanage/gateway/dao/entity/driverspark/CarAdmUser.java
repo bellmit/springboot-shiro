@@ -45,6 +45,8 @@ public class CarAdmUser {
 
     private Integer dataLevel;
 
+    private String merchantArea;
+
     public Integer getUserId() {
         return userId;
     }
@@ -212,5 +214,13 @@ public class CarAdmUser {
 
     public void setDataLevel(Integer dataLevel) {
         this.dataLevel = dataLevel;
+    }
+
+    public String getMerchantArea() {
+        return merchantArea;
+    }
+
+    public void setMerchantArea(String merchantArea) {
+        this.merchantArea = merchantArea;
     }
 }

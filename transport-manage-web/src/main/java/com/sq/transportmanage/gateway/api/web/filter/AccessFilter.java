@@ -6,21 +6,27 @@ import com.netflix.zuul.context.RequestContext;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper;
+import com.sq.transportmanage.gateway.api.util.IPv4Util2;
+import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.auth.DataPermissionService;
 import com.sq.transportmanage.gateway.service.base.BaseDriverTeamService;
 import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
+import mp.mvc.logger.entity.LoggerDto;
+import mp.mvc.logger.message.MpLoggerMessage;
 import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -118,7 +124,31 @@ public class AccessFilter extends ZuulFilter {
             ctx.setResponseBody("{\"code\":0,\"result\":\"网关验证失败!请先登录\"}");// 返回错误内容
             ctx.set("isSuccess", false);
         }
+
+        //增加用户行为
+        if(loginUser != null && StringUtils.isNotBlank(loginUser.getLoginName()) && loginUser.getId() != null){
+            String tracId = MDC.get("reqId");
+            if(StringUtils.isBlank(tracId)){
+                tracId = request.getHeader("x_requestId");
+            }
+           //发送消息
+            LoggerDto dto = this.getBuiness(request,tracId,loginUser,request.getSession().getId());
+            MpLoggerMessage.sendLoggerMessage(dto,request);
+
+        }
+
         return ctx;
     }
 
+    private LoggerDto getBuiness(HttpServletRequest request , String traceId, SSOLoginUser loginUser, String sessionId) {
+        LoggerDto dto = new LoggerDto();
+        dto.setCreateTime(System.currentTimeMillis());
+        dto.setSessionId(StringUtils.isNotBlank(sessionId) ? sessionId : "");
+        dto.setUserAccount(StringUtils.isNotBlank(loginUser.getLoginName()) ? loginUser.getLoginName() : null);
+        dto.setUserIp(IPv4Util2.getClientIpAddr(request));
+        dto.setUserId(String.valueOf(loginUser.getId()));
+        dto.setRemark(StringUtils.isNotBlank(loginUser.getName()) ? loginUser.getName() : null);
+        dto.setTraceId(StringUtils.isNotBlank(traceId) ? traceId : "");
+        return dto;
+    }
 }

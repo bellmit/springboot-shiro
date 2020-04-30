@@ -153,6 +153,9 @@ login.url: https://saas-spark.guobindui.cn/signin
 
 #没有权限地址
 unauthorized.url: https://saas.guobindui.cn/unauthorized
+#选择商户页面
+query.merchant.url: https://dev-saas.guobindui.cn/signin
+
 
 #短信发送相关
 short_message_url: http://inside-mp.01zhuanche.com/api/v1/message/content/send
@@ -163,4 +166,16 @@ template_short_message_url: http://inside-mp.01zhuanche.com/api/v1/message/templ
 
 #h5找回密码域名
 reset.password.url: https://saas.guobindui.cn/forgot?email=
+
+kafka:
+  client:
+    services: 10.130.20.46:9092,10.130.20.64:9092,10.130.20.66:9092
+    kafkaKeySerializer: org.apache.kafka.common.serialization.StringSerializer
+    kafkaValueSerializer: org.apache.kafka.common.serialization.StringSerializer
+    retries: 1
+    batchSize: 4096
+    lingerMs: 10
+    bufferMemory: 40960
+    acks: all
+    defaultTopic: mp-kafka-user-logger
 

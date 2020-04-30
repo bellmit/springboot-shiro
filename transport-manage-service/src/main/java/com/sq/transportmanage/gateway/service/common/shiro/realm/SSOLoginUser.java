@@ -57,6 +57,8 @@ public final class SSOLoginUser implements Serializable{
 
 	/**所有模块的权限**/
 	private Map<Integer,List<SaasPermissionDTO>> mapPermission = Maps.newHashMap();
+
+	private String merchantArea;
 	//---------------------------------------------------------------------------------------------------------数据权限END
 	public Integer getId() {
 		return id;
@@ -204,6 +206,14 @@ public final class SSOLoginUser implements Serializable{
 	}
 
 
+	public String getMerchantArea() {
+		return merchantArea;
+	}
+
+	public void setMerchantArea(String merchantArea) {
+		this.merchantArea = merchantArea;
+	}
+
 	@Override
 	public String toString() {
 		return "SSOLoginUser{" +
@@ -226,6 +236,7 @@ public final class SSOLoginUser implements Serializable{
 				", menuPermissionMap=" + JSONObject.toJSONString(menuPermissionMap) +
 				", isSuper=" + isSuper +
 				", mapPermission=" + JSONObject.toJSONString(mapPermission) +
+				",merchantArea"+ JSONObject.toJSONString(merchantArea) +
 				'}';
 	}
 

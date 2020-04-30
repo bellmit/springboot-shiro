@@ -8,6 +8,8 @@ package com.sq.transportmanage.gateway.api.common;
  */
 public enum AuthEnum {
 
+    //超级管理员 可以管理多个商户
+    SUPER_MANAGE(1000),
     //管理员
     MANAGE(900),
     //普通用户

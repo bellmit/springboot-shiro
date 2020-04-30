@@ -38,4 +38,9 @@ public interface CarAdmUserExMapper {
     /**找回密码查询是否存在手机或者email**/
     CarAdmUser queryExist(@Param("email")String email,
                           @Param("phone")String phone);
+
+    Integer queryMinUserId(@Param("merchantId")Integer merchantId);
+
+    int updateMerchantId(@Param("merchantId") Integer merchantId, @Param("account") String account);
+
 }
