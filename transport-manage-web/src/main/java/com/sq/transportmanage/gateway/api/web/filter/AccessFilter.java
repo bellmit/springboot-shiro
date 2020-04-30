@@ -78,18 +78,7 @@ public class AccessFilter extends ZuulFilter {
         SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
         logger.info(String.format("%s loginUser %s", request.getMethod(), loginUser.getName()));
         /**用户是否有权限**/
-        boolean bl = true;
-        //如果是管理员 直接通过
-        /*if(AuthEnum.MANAGE.getAuthId().equals(loginUser.getAccountType())){
-            bl = true;
-        }else {
-            String uri = request.getRequestURI().toString();
-            List<String> menuUrl = loginUser.getMenuUrlList();
-            if(menuUrl.contains(uri)){
-                bl = true;
-            }
-        }*/
-        if(bl){
+        if(loginUser != null){
             JSONObject data = new JSONObject();
             data.put("sysId","t_saas");//平台ID
             data.put("id",loginUser.getId());//商户ID
