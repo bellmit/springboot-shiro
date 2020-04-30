@@ -375,7 +375,7 @@ public class UserManagementService{
 		}
 		String checkResult = this.checkChaneUserDataPermission(newUser);
 		if(StringUtils.isNotEmpty(checkResult)){
-			return AjaxResponse.fail(RestErrorCode.PARAMS_ERROR,checkResult );
+			return AjaxResponse.failMsg(RestErrorCode.PARAMS_ERROR,checkResult );
 		}
 		//执行
 		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
