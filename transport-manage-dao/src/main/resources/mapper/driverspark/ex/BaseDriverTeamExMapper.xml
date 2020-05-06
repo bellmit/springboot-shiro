@@ -83,7 +83,7 @@
 
 
   <select id="queryForVos"  resultMap="BaseResultMap">
-    select id from base_driver_team
+    select <include refid="Base_Column_List" /> from base_driver_team
     where merchant_id = #{merchantId,jdbcType=INTEGER} and status = 1 and type = #{type}
     <if test="supplierIds != null and supplierIds.size>0">
       and supplier_id in
