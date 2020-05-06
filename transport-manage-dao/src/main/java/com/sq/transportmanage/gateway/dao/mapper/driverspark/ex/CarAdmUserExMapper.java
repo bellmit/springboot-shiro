@@ -40,4 +40,7 @@ public interface CarAdmUserExMapper {
                           @Param("phone")String phone);
 
     Integer queryMinUserId(@Param("merchantId")Integer merchantId);
+
+    int updateMerchantId(@Param("merchantId") Integer merchantId, @Param("account") String account);
+
 }
