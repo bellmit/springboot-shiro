@@ -12,6 +12,7 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasUserRoleRala
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.CarAdmUserDTO;
 import com.sq.transportmanage.gateway.service.common.dto.PageDTO;
+import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -179,12 +181,14 @@ public class UserManagementService{
 		if( rawuser==null ) {
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST );
 		}
-		//可以修改的字段
-		if( StringUtils.isEmpty(newUser.getUserName()) ) {
-			newUser.setUserName("");
-		}
-		if( StringUtils.isEmpty(newUser.getSuppliers()) ) {
-			newUser.setSuppliers("");
+		CarAdmUser po = carAdmUserExMapper.verifyRepeatWhenUpdate(newUser.getPhone(),newUser.getEmail(),newUser.getUserId());
+		if(po!=null) {
+			//邮箱、账号、手机号都不能重复
+			if(newUser.getPhone().equals(po.getPhone())){
+				return AjaxResponse.fail(RestErrorCode.PHONE_EXIST);
+			}else if (newUser.getEmail().equals(po.getEmail())){
+				return AjaxResponse.fail(RestErrorCode.EMAIL_EXIST);
+			}
 		}
 		//执行
 		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
@@ -363,4 +367,68 @@ public class UserManagementService{
 		return carAdmUserExMapper.queryByAccount(null,merchantId);
 	}
 
+	public 	AjaxResponse changeUserDataPermission( CarAdmUser newUser ) {
+		//用户不存在
+		CarAdmUser rawuser = carAdmUserMapper.selectByPrimaryKey(newUser.getUserId());
+		if( rawuser==null ) {
+			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST );
+		}
+		String checkResult = this.checkChaneUserDataPermission(newUser);
+		if(StringUtils.isNotEmpty(checkResult)){
+			return AjaxResponse.failMsg(RestErrorCode.PARAMS_ERROR,checkResult );
+		}
+		//执行
+		carAdmUserMapper.updateByPrimaryKeySelective(newUser);
+		redisSessionDAO.clearRelativeSession(null, null , newUser.getUserId() );//自动清理用户会话
+		return AjaxResponse.success( null );
+	}
+
+	public String checkChaneUserDataPermission(CarAdmUser newUser ) {
+		if(null == newUser.getDataLevel()){
+			return null;
+		}
+		/**运力商级别  则城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
+		if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(newUser.getDataLevel())){
+			if(StringUtils.isEmpty(newUser.getSuppliers())){
+				return "运力商级别，运力商至少选择一个！";
+			}
+		}
+		/**城市级别  则车队为运力商城市集合下所有  班组为运力商城市集合下所有**/
+		if(DataLevelEnum.CITY_LEVEL.getCode().equals(newUser.getDataLevel())){
+			if(StringUtils.isEmpty(newUser.getSuppliers())){
+				return "城市级别，运力商必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getCities())){
+				return "城市级别，城市至少选择一个！";
+			}
+		}
+		/**车队级别  则班组为车队集合下所有**/
+		if(DataLevelEnum.TEAM_LEVEL.getCode().equals(newUser.getDataLevel())){
+			if(StringUtils.isEmpty(newUser.getSuppliers())){
+				return "车队级别，运力商必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getCities())){
+				return "车队级别，城市必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getTeamId())){
+				return "车队级别，车队至少选择一个！";
+			}
+		}
+
+		if(DataLevelEnum.GROUP_LEVEL.getCode().equals(newUser.getDataLevel())){
+			if(StringUtils.isEmpty(newUser.getSuppliers())){
+				return "班组级别，运力商必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getCities())){
+				return "班组级别，城市必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getTeamId())){
+				return "班组级别，车队必选！";
+			}
+			if(StringUtils.isEmpty(newUser.getGroupIds())){
+				return "班组级别，班组至少选择一个！";
+			}
+		}
+		return null;
+	}
 }

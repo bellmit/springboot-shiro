@@ -92,14 +92,9 @@ public class UserManagementController {
 	@RequestFunction(menu = USER_UPDATE)
 	public 	AjaxResponse changeUser(
 			@Verify(param="userId",rule="min(1)") Integer userId,
-			 String userName,
+			@Verify(param="userName",rule="required") String userName ,
 			@Verify(param="phone",rule="mobile") String phone,
-			 @Verify(param = "email",rule = "required")String email,
-			 String suppliers,
-			 @Verify(param = "dataLevel",rule="required") Integer dataLevel,
-			 String cities,
-			String teamIds,
-			String groupIds
+			 @Verify(param = "email",rule = "required")String email
   		) {
 		CarAdmUser newUser = new CarAdmUser();
 		if(userId != null){
@@ -111,23 +106,8 @@ public class UserManagementController {
 		if(StringUtils.isNotEmpty(phone)){
 			newUser.setPhone(phone);
 		}
-		if(StringUtils.isNotEmpty(suppliers)){
-			newUser.setSuppliers(suppliers);
-		}
-		if(dataLevel != null){
-			newUser.setDataLevel(dataLevel);
-		}
 		if(StringUtils.isNotEmpty(email)){
 			newUser.setEmail(email);
-		}
-		if(StringUtils.isNotEmpty(cities)){
-			newUser.setCities(cities);
-		}
-		if(StringUtils.isNotEmpty(teamIds)){
-			newUser.setTeamId(teamIds);
-		}
-		if(StringUtils.isNotEmpty(groupIds)){
-			newUser.setGroupIds(groupIds);
 		}
 		return userManagementService.changeUser(newUser);
 	}
@@ -199,6 +179,42 @@ public class UserManagementController {
 	public AjaxResponse queryUserById( @Verify(param="userId",rule="required|min(1)") Integer userId ) {
 		CarAdmUser carAdmUser = userManagementService.findByPrimaryKey(userId);
 		return AjaxResponse.success(carAdmUser);
+	}
+
+
+	/**四、修改一个用户**/
+
+	@RequestMapping("/changeUserDataPermission")
+	@RequiresPermissions(value = { "CHANGE_USER" } )
+	@RequestFunction(menu = USER_UPDATE)
+	public 	AjaxResponse changeUserDataPermission(
+			@Verify(param="userId",rule="min(1)") Integer userId,
+			@Verify(param = "dataLevel",rule="required") Integer dataLevel,
+			String suppliers,
+			String cities,
+			String teamIds,
+			String groupIds
+	) {
+		CarAdmUser newUser = new CarAdmUser();
+		if(userId != null){
+			newUser.setUserId(userId);
+		}
+		if(dataLevel != null){
+			newUser.setDataLevel(dataLevel);
+		}
+		if(StringUtils.isNotEmpty(suppliers)){
+			newUser.setSuppliers(suppliers);
+		}
+		if(StringUtils.isNotEmpty(cities)){
+			newUser.setCities(cities);
+		}
+		if(StringUtils.isNotEmpty(teamIds)){
+			newUser.setTeamId(teamIds);
+		}
+		if(StringUtils.isNotEmpty(groupIds)){
+			newUser.setGroupIds(groupIds);
+		}
+		return userManagementService.changeUserDataPermission(newUser);
 	}
 
 
