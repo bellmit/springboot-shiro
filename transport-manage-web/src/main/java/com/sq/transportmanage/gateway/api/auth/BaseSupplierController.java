@@ -7,7 +7,9 @@ import com.sq.transportmanage.gateway.service.base.BaseDriverTeamService;
 import com.sq.transportmanage.gateway.service.base.BaseMerchantCityConfigService;
 import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
+import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
+import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.enums.TeamType;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
@@ -16,10 +18,13 @@ import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.vo.BaseDriverTeamVo;
 import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import com.sq.transportmanage.gateway.service.vo.BaseSupplierVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -151,4 +156,51 @@ public class BaseSupplierController {
         }
 
     }
+
+
+    /**
+     * 查询当前商户下的所有的城市
+     * @return
+     */
+    @RequestMapping("/queryCurrentUserCities")
+    @ResponseBody
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+    public AjaxResponse queryCurrentUserCities(){
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+        if(ssoLoginUser != null){
+            List<BaseMerchantCityConfigVo> voList = configService.queryServiceCity(Integer.valueOf(ssoLoginUser.getMerchantId()));
+
+            if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(ssoLoginUser.getDataLevel())){
+                return AjaxResponse.success(voList);
+            }else if(DataLevelEnum.CITY_LEVEL.getCode().equals(ssoLoginUser.getDataLevel())
+                    || DataLevelEnum.TEAM_LEVEL.getCode().equals(ssoLoginUser.getDataLevel())
+                ||DataLevelEnum.GROUP_LEVEL.getCode().equals(ssoLoginUser.getDataLevel())){
+              String citys =  ssoLoginUser.getCityIds();
+              if(StringUtils.isNotEmpty(citys)){
+                  String[] cityStr = citys.split(",");
+                  List<Integer> cityList = new ArrayList<>();
+                  for(int k = 0;k<cityStr.length;k++){
+                      cityList.add(Integer.valueOf(cityStr[k].trim()));
+                  }
+
+                  List<BaseMerchantCityConfigVo> newVoList =  new ArrayList<>();
+                  voList.forEach(vo ->{
+                              if(cityList.contains(vo.getCityId())){
+                                  newVoList.add(vo);
+                              }
+                          }
+                  );
+                  return AjaxResponse.success(newVoList);
+              }
+            }else {
+                //如果是0  判断是否是管理员
+                if(Constants.SUPER_MANAGE.equals(ssoLoginUser.getAccountType())
+                        || Constants.MANAGE.equals(ssoLoginUser.getAccountType())){
+                    return AjaxResponse.success(voList);
+                }
+            }
+        }
+        return AjaxResponse.success(null);
+    }
+
 }

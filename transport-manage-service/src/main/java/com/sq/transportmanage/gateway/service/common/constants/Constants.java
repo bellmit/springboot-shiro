@@ -57,4 +57,7 @@ public final class Constants {
     /**超级管理员**/
     public static final Integer SUPER_MANAGE = 1000;
 
+    /**管理员**/
+    public static final Integer MANAGE = 900;
+
 }
