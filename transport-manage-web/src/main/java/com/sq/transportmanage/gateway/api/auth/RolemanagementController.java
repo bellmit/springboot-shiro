@@ -236,4 +236,24 @@ public class RolemanagementController{
 		return AjaxResponse.success(saasRole);
 	}
 
+
+	/**接口专用 保存一个角色中的权限ID**/
+	@RequestMapping("/saveAnyPermissionIds")
+	@RequiresPermissions(value = { "GET_ALL_ROLE_PERMISSIONS" } )
+	@RequestFunction(menu = ROLE_PERMISSION_SAVE)
+	public AjaxResponse saveAnyPermissionIds(@Verify(param="roleId",rule="required|min(1)") Integer roleId,
+										  @Verify(param="permissionIds",rule="required") String permissionIds) {
+		List<Integer> newPermissionIds = new ArrayList<Integer>();
+		if(StringUtils.isNotEmpty(permissionIds) ) {
+			String[]  ids = permissionIds.split(",");
+			if(ids.length > 0){
+				for(String str : ids){
+					if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
+						newPermissionIds.add(Integer.valueOf(str));
+					}
+				}
+			}
+		}
+		return roleManagementService.savePermissionIds(roleId, newPermissionIds);
+	}
 }
