@@ -28,4 +28,6 @@ public interface SaasRoleExMapper{
 	int insert(SaasRole record);
 	/**根据merchantId获取角色id**/
 	Integer getRoleId(@Param("merchantId") Integer merchantId);
+	/**根据merchantId获取最小角色id**/
+	Integer getMinRoleId(@Param("merchantId") Integer merchantId);
 }

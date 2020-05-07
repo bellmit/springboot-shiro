@@ -204,8 +204,14 @@ public class UserManagementService{
 	
 	/**七、保存一个用户中的角色ID**/
 	public AjaxResponse saveRoleIds( Integer userId, List<Integer> roleIds) {
+		SSOLoginUser loginUser = WebSessionUtil.getCurrentLoginUser();
+		if (loginUser == null){
+			logger.info("用户未登录");
+			return AjaxResponse.success(null);
+		}
+		Integer minRoleId = saasRoleExMapper.getMinRoleId(loginUser.getMerchantId());
 		//先删除
-		saasUserRoleRalationExMapper.deleteRoleIdsOfUser(userId);
+		saasUserRoleRalationExMapper.deleteRoleIdsOfUser(userId,minRoleId);
 		//再插入
 		if( roleIds!=null && roleIds.size()>0 ) {
 			List<SaasUserRoleRalation> records = new ArrayList<SaasUserRoleRalation>(  roleIds.size() );

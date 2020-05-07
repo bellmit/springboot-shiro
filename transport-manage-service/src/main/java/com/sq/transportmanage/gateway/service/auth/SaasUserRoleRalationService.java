@@ -30,9 +30,9 @@ public class SaasUserRoleRalationService {
         return saasUserRoleRalationExMapper.queryRoleIdsOfUser(userId);
     }
     /**删除一个用户的所有角色ID**/
-    public int deleteRoleIdsOfUser(Integer userId){
+/*    public int deleteRoleIdsOfUser(Integer userId){
         return saasUserRoleRalationExMapper.deleteRoleIdsOfUser(userId);
-    }
+    }*/
     /**保存一个用户的所有角色ID(批量插入)**/
     public int insertBatch(List<SaasUserRoleRalation> records){
         return  saasUserRoleRalationExMapper.insertBatch(records);

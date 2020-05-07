@@ -186,4 +186,8 @@
         select role_id FROM  auth_saas_role  WHERE  merchant_id = #{merchantId} limit 1
     </select>
 
+    <select id="getMinRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select min(role_id) FROM  auth_saas_role  WHERE  merchant_id = #{merchantId}
+    </select>
+
 </mapper>
