@@ -41,6 +41,15 @@ public final class SaasConst {
 		public static final String TREE  = "tree";
 	}
 
+	/**有效无效**/
+	public static final class IsValid{
+		/**无效**/
+		public static final Byte VALID_FALSE    = 0;
+		/**有效**/
+		public static final Byte VALID_TRUE            = 1;
+	}
+
+
 	/**系统预置角色**/
 	public static String           SYSTEM_ROLE             = "mp_driver_spark_super_admin";
 	/**系统预置权限**/

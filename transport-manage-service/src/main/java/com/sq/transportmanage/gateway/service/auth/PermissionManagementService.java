@@ -164,7 +164,7 @@ public class PermissionManagementService {
 	 * 返回的数据格式：列表
 	 **/
 	private List<SaasPermissionDTO> getAllPermissions_list() {
-		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(null, null, null, null, null, null);
+		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(null, null, null, null, null, SaasConst.IsValid.VALID_TRUE);
 		List<SaasPermissionDTO> saasPermissionDTOs = BeanUtil.copyList(allPos, SaasPermissionDTO.class);
 		saasPermissionDTOs.stream().forEach(p -> {
 			if (SaasConst.SYSTEM_PERMISSIONS.contains(p.getPermissionCode())) {
@@ -182,7 +182,7 @@ public class PermissionManagementService {
 	}
 
 	private List<SaasPermissionDTO> getChildren(Integer parentPermissionId) {
-		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(null, parentPermissionId, null, null, null, null);
+		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(null, parentPermissionId, null, null, null, SaasConst.IsValid.VALID_TRUE);
 		if (childrenPos == null || childrenPos.size() == 0) {
 			return null;
 		}
