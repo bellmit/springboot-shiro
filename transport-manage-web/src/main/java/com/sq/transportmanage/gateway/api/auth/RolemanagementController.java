@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 
@@ -76,12 +74,10 @@ public class RolemanagementController{
 	@RequiresPermissions(value = { "CHANGE_SAAS_ROLE" } )
 	@RequestFunction(menu = ROLE_UPDATE)
 	public 	AjaxResponse changeRole( @Verify(param="roleId",rule="required|min(1)") Integer roleId ,
-									 @Verify(param="roleCode",rule="required")  String roleCode,
 									 @Verify(param="roleName",rule="required") String roleName,
 									  String roleDesc ) {
 		SaasRole roleForupdate = new SaasRole();
 		roleForupdate.setRoleId(roleId);
-		roleForupdate.setRoleCode(roleCode.trim());
 		roleForupdate.setRoleName(roleName.trim());
 		roleForupdate.setRoleDesc(roleDesc);
 		return roleManagementService.changeRole(roleForupdate);
@@ -177,11 +173,12 @@ public class RolemanagementController{
 	@RequestMapping("/addAndSaveSaasRole")
 	@RequiresPermissions(value = { "ADD_SAAS_ROLE" } )
 	@RequestFunction(menu = ROLE_ADD)
-	public AjaxResponse addAndSaveSaasRole(@Verify(param="roleCode",rule="required") String roleCode,
+	public AjaxResponse addAndSaveSaasRole(
 									@Verify(param="roleName",rule="required") String roleName,
 									String roleDesc,
 									@Verify(param="permissionIds",rule="required") String permissionIds) {
 		SaasRole role = new SaasRole();
+		String	roleCode = UUID.randomUUID().toString().replaceAll("-","").toUpperCase()+ System.currentTimeMillis();
 		role.setRoleCode(roleCode.trim());
 		role.setRoleName(roleName.trim());
 		role.setMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
