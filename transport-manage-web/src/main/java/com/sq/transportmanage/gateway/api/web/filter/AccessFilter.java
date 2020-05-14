@@ -101,8 +101,8 @@ public class AccessFilter extends ZuulFilter {
                 }
                 data.put("supplierIds", loginUser.getSupplierIds());//运力商数据权限
                 data.put("cityIds", loginUser.getCityIds());//城市商数据权限
-                data.put("teamIds", DataLevelEnum.TEAM_LEVEL.getCode()<loginUser.getDataLevel() ?"":loginUser.getTeamIds());//车队数据权限
-                data.put("groupIds", DataLevelEnum.GROUP_LEVEL.getCode()<loginUser.getDataLevel() ?"":loginUser.getGroupIds());//班组数据权限
+                data.put("teamIds", loginUser.getDataLevel()<DataLevelEnum.TEAM_LEVEL.getCode() ?"":loginUser.getTeamIds());//车队数据权限
+                data.put("groupIds", loginUser.getDataLevel()<DataLevelEnum.GROUP_LEVEL.getCode() ?"":loginUser.getGroupIds());//班组数据权限
                 data.put("dataLevel", loginUser.getDataLevel());//数据权限级别
                 logger.info("LOGINUSER :{}", data);
                 ctx.addZuulRequestHeader("LOGINUSER", data.toJSONString());
