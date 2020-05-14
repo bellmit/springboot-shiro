@@ -5,6 +5,7 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionExMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRoleExMapper;
+import com.sq.transportmanage.gateway.service.auth.DataPermissionService;
 import com.sq.transportmanage.gateway.service.auth.MyDataSourceService;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
@@ -48,6 +49,9 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 	@Autowired
 	@Qualifier("sessionDAO")
 	private RedisSessionDAO redisSessionDAO;
+
+	@Autowired
+	private DataPermissionService dataPermissionService;
 	
     /**重写：获取用户的身份认证信息**/
 	@Override
@@ -78,6 +82,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
 			}
 			loginUser = this.ssoLoginUser(loginUser,adMUser);
+			dataPermissionService.populateLoginUser(loginUser);
 			String md5= null;
 			try {
 				md5 = MD5Utils.getMD5DigestBase64(loginUser.getMerchantId().toString());

@@ -8,6 +8,7 @@ import com.sq.transportmanage.gateway.dao.entity.driverspark.BaseMerchant;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.base.BaseMerchantMapper;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SupplierExtMapper;
 import com.sq.transportmanage.gateway.service.auth.DataPermissionService;
+import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import mp.mvc.logger.entity.LoggerDto;
@@ -39,9 +40,6 @@ public class AccessFilter extends ZuulFilter {
 
     @Autowired
     private SupplierExtMapper supplierExtMapper;
-
-    @Autowired
-    private DataPermissionService dataPermissionService;
 
     @Override
     public String filterType() {
@@ -101,13 +99,10 @@ public class AccessFilter extends ZuulFilter {
                     data.put("name", decodeStr);//用户名中文
                     data.put("merchantName", merchantNameStr);//用户名中文
                 }
-
-                //TODO  等1.3上线以后放到登录成功设置值的时候
-                dataPermissionService.populateLoginUser(loginUser);
                 data.put("supplierIds", loginUser.getSupplierIds());//运力商数据权限
                 data.put("cityIds", loginUser.getCityIds());//城市商数据权限
-                data.put("teamIds", loginUser.getTeamIds());//车队数据权限
-                data.put("groupIds", loginUser.getGroupIds());//班组数据权限
+                data.put("teamIds", DataLevelEnum.TEAM_LEVEL.getCode()<loginUser.getDataLevel() ?"":loginUser.getTeamIds());//车队数据权限
+                data.put("groupIds", DataLevelEnum.GROUP_LEVEL.getCode()<loginUser.getDataLevel() ?"":loginUser.getGroupIds());//班组数据权限
                 data.put("dataLevel", loginUser.getDataLevel());//数据权限级别
                 logger.info("LOGINUSER :{}", data);
                 ctx.addZuulRequestHeader("LOGINUSER", data.toJSONString());
