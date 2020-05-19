@@ -15,10 +15,10 @@ import java.util.Map;
 public final class RestErrorCode{
 
 	private static final Logger log = LoggerFactory.getLogger(RestErrorCode.class);
+	/**错误码与错误文字的映射关系*/
+	private static Map<Integer,String> codeMsgMappings  = new HashMap<Integer,String>();
 
-	private static Map<Integer,String> codeMsgMappings  = new HashMap<Integer,String>();//错误码与错误文字的映射关系
-
-	//-----------------------------------------------系统参数
+	/**-----------------------------------------------系统参数*/
 	@ResultMessage("成功")
 	public static final int SUCCESS                                   = 0;
 	@ResultMessage("获得互斥锁超时")
@@ -46,7 +46,7 @@ public final class RestErrorCode{
 
 
 
-	//-----------------------------------------------用户
+	/**-----------------------------------------------用户*/
 	@ResultMessage("获取验证码太频繁,请{0}分钟后重试")
 	public static final int GET_MSGCODE_EXCEED           = 1000;
 	@ResultMessage("用户不存在")
@@ -88,7 +88,7 @@ public final class RestErrorCode{
 	@ResultMessage("用户未登录")
 	public static final int USER_NOT_LOGIN                      = 1301;
 
-	//----------------------------------------------权限管理
+	/**----------------------------------------------权限管理*/
 	@ResultMessage("父权限不存在")
 	public static final int PARENT_PERMISSION_NOT_EXIST           = 10001;
 	@ResultMessage("权限代码已经存在")
@@ -104,10 +104,9 @@ public final class RestErrorCode{
 	@ResultMessage("{0}为系统预置权限，不能禁用、修改")
 	public static final int SYSTEM_PERMISSION_CANOT_CHANGE  = 10007;
 
-	//---------------------------------------------------------------------------------------------------------------------------------------------
 
 
-	//---------------------------邮件发送异常参数---------------------
+	/**---------------------------邮件发送异常参数---------------------*/
 	@ResultMessage("邮箱不存在")
 	public static final int EMAIL_UNEXIST                    = 2000;
 
@@ -133,9 +132,8 @@ public final class RestErrorCode{
 	@ResultMessage("通过密码找回类型不匹配")
 	public static final int RESET_TYPE_UNEXIST                    = 2020;
 
-	//-------------------------------------------
 
-	//----------------------------------------------角色管理
+	/**----------------------------------------------角色管理*/
 	@ResultMessage("角色不存在")
 	public static final int ROLE_NOT_EXIST                                      = 10100;
 	@ResultMessage("角色代码已经存在")
@@ -153,10 +151,9 @@ public final class RestErrorCode{
 					continue;
 				}
 				int resultCode = field.getInt(null);
-				if (codeMsgMappings.containsKey(resultCode)) {//错误码定义发生冲突
+				if (codeMsgMappings.containsKey(resultCode)) {
 					String text = "["+ RestErrorCode.class.getName()+"]错误码定义发生冲突，应用进程已经退出，请解决冲突并重启服务！";
 					log.error(text);
-					//System.exit(-1);
 				}
 				String resultMsg = annotation.value();
 				if (null != resultMsg && !"".equals(resultMsg.trim())) {
