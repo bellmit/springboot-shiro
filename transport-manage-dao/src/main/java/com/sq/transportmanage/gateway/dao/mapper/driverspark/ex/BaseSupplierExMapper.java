@@ -5,9 +5,23 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @Author  fanht
+ */
 public interface BaseSupplierExMapper {
+    /**
+     * 根据商户获取商户下的运力商
+     * @param merchantId
+     * @return
+     */
     List<BaseSupplier> queryALlSupplerByMerchantId(Integer merchantId);
 
+    /**
+     * 查询运力商名称
+     * @param merchantId
+     * @param supplierIdList
+     * @return
+     */
     List<BaseSupplier> querySupplierNames(@Param("merchantId")Integer merchantId,
                                           @Param("supplierIdList") List<Integer> supplierIdList);
 }
