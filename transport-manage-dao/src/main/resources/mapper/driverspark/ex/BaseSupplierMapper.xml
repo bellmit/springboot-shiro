@@ -46,4 +46,12 @@
 
     and status = 0
   </select>
+
+  <select id="querySupplierNames" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from base_supplier
+    where supplier_id in (#{supplierIds})
+
+  </select>
 </mapper>

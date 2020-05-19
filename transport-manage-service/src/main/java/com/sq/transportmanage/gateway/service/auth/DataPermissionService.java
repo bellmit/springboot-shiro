@@ -107,9 +107,22 @@ public class DataPermissionService {
             }
             return loginUser;
         }
-        /**车队级别  则班组为车队集合下所有**/
-        if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getDataLevel())){
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
+
+        /**车队级别  则车队为车队集合下所有**/
+        if(DataLevelEnum.GROUP_LEVEL.getCode().equals(loginUser.getDataLevel())){
+            List<Integer> teamIds = baseDriverTeamService.queryTeamsLevel(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
+            if(!CollectionUtils.isEmpty(teamIds)){
+                loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else{
+                loginUser.setTeamIds("");
+            }
+            return loginUser;
+        }
+
+        /**班组级别  则班组为车队下所有**/
+        if(DataLevelEnum.GROUP_LEVEL.getCode().equals(loginUser.getDataLevel())){
+            List<Integer> groupIds = baseDriverTeamService.queryGroupLevel(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds(),
+                    loginUser.getGroupIds());
             if(!CollectionUtils.isEmpty(groupIds)){
                 loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
             }else{

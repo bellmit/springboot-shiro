@@ -85,7 +85,8 @@ public final class RestErrorCode{
 	@ResultMessage("原密码不正确")
 	public static final int OLD_PASSWORD_WRONG      = 1210;
 
-
+	@ResultMessage("用户未登录")
+	public static final int USER_NOT_LOGIN                      = 1301;
 
 	//----------------------------------------------权限管理
 	@ResultMessage("父权限不存在")

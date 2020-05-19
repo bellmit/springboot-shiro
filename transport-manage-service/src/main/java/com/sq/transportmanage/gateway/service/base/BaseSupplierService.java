@@ -39,4 +39,14 @@ public class BaseSupplierService {
         List<BaseSupplierVo> voList = BeanUtil.copyList(baseSupplierList,BaseSupplierVo.class);
         return voList;
     }
+
+    public List<BaseSupplierVo> querySupplierNames(String supplierIds){
+        List<BaseSupplier> baseSupplierList  = baseSupplierExMapper.querySupplierNames(supplierIds);
+        if(CollectionUtils.isEmpty(baseSupplierList)){
+            return null;
+        }
+
+        List<BaseSupplierVo> voList = BeanUtil.copyList(baseSupplierList,BaseSupplierVo.class);
+        return voList;
+    }
 }

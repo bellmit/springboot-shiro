@@ -26,4 +26,21 @@ public interface BaseDriverTeamExMapper {
                            @Param("cityIds") List<Integer> cityIds,
                            @Param("teamIds") List<Integer> teamIds,
                            @Param("type") Integer type);
+
+    List<BaseDriverTeam> queryTeamIdAndNames(@Param("teamIds") String teamIds);
+
+    /**查询车队级别的*/
+    List<Integer> queryTeamsLevel(@Param("merchantId") Integer merchantId,
+                                     @Param("supplierIds") List<Integer> supplierIds,
+                                     @Param("cityIds") List<Integer> cityIds,
+                                     @Param("teamIds") List<Integer> teamIds,
+                                     @Param("type") Integer type);
+
+    /**查询班组级别的*/
+    List<Integer> queryGroupsLevel(@Param("merchantId") Integer merchantId,
+                                  @Param("supplierIds") List<Integer> supplierIds,
+                                  @Param("cityIds") List<Integer> cityIds,
+                                   @Param("teamIds") List<Integer> teamIds,
+                                   @Param("groupIds") List<Integer> groupIds,
+                                   @Param("type") Integer type);
 }

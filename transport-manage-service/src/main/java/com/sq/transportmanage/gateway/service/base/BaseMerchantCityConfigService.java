@@ -42,4 +42,23 @@ public class BaseMerchantCityConfigService {
         return  voList;
 
     }
+
+    public List<BaseMerchantCityConfigVo> queryServiceCityIdAndNames(String cityIds){
+        List<BaseMerchantCityConfig> configList = exMapper.queryServiceCityIdAndNames(cityIds);
+
+        if(CollectionUtils.isEmpty(configList)){
+            return null;
+        }
+
+        List<BaseMerchantCityConfigVo> voList = new ArrayList<>();
+        configList.forEach(list ->{
+            BaseMerchantCityConfigVo vo = new BaseMerchantCityConfigVo();
+            vo.setId(list.getCityId());
+            vo.setCityName(list.getCityName());
+            vo.setCityId(list.getCityId());
+            voList.add(vo);
+        });
+        return  voList;
+
+    }
 }

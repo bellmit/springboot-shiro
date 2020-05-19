@@ -1,26 +1,32 @@
 package com.sq.transportmanage.gateway.api.auth;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.CarAdmUser;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.CarAdmUserMapper;
 import com.sq.transportmanage.gateway.service.base.BaseDriverTeamService;
 import com.sq.transportmanage.gateway.service.base.BaseMerchantCityConfigService;
+import com.sq.transportmanage.gateway.service.base.BaseMerchantService;
 import com.sq.transportmanage.gateway.service.base.BaseSupplierService;
 import com.sq.transportmanage.gateway.service.common.annotation.MyDataSource;
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.datasource.DataSourceType;
 import com.sq.transportmanage.gateway.service.common.enums.DataLevelEnum;
-import com.sq.transportmanage.gateway.service.common.enums.TeamType;
 import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
+import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
+import com.sq.transportmanage.gateway.service.vo.BaseDriverGroupVo;
 import com.sq.transportmanage.gateway.service.vo.BaseDriverTeamVo;
 import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
 import com.sq.transportmanage.gateway.service.vo.BaseSupplierVo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -37,6 +43,7 @@ import java.util.Map;
 @Controller
 public class BaseSupplierController {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private BaseSupplierService baseSupplierService;
@@ -49,6 +56,10 @@ public class BaseSupplierController {
 
     @Autowired
     private BaseDriverTeamService driverTeamService;
+
+    @Autowired
+    private BaseMerchantService baseMerchantService;
+
 
     /**
      * 查询当前商户所拥有的数据权限-运力商
@@ -134,7 +145,7 @@ public class BaseSupplierController {
 
 
     /**
-     * 查询当前用户所有的运力商
+     * 查询当前用户所有的权限
      * @return
      */
     @RequestMapping("/queryDataPermissions")
@@ -201,6 +212,126 @@ public class BaseSupplierController {
             }
         }
         return AjaxResponse.success(null);
+    }
+
+
+
+
+    /**
+     * 联动获取当前用户的运力商权限
+     * @return
+     */
+    @RequestMapping("/querySuppliersPermission")
+    @ResponseBody
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+    public AjaxResponse querySuppliersPermission(){
+        logger.info("=======联动获取当前用户的运力商权限start======");
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+        if(ssoLoginUser == null){
+            logger.info("用户未登录");
+            return AjaxResponse.fail(RestErrorCode.USER_NOT_LOGIN);
+        }
+
+        List<BaseSupplierVo> supplierVoList = null;
+
+        if(StringUtils.isEmpty(ssoLoginUser.getSupplierIds())){
+            supplierVoList    = baseSupplierService.querySupplierNames(ssoLoginUser.getSupplierIds());
+        }else {
+            supplierVoList = baseSupplierService.listAllBaseSupplier(ssoLoginUser.getMerchantId());
+        }
+
+        logger.info("=======联动获取当前用户的运力商权限end======" + JSONObject.toJSONString(supplierVoList));
+        return AjaxResponse.success(supplierVoList);
+    }
+
+
+    /**
+     * 联动获取当前用户的城市权限
+     * @return
+     */
+    @RequestMapping("/queryCitiesPermission")
+    @ResponseBody
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+    public AjaxResponse queryCitiesPermission(){
+        logger.info("=======联动获取当前用户的城市权限start======");
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+        if(ssoLoginUser == null){
+            logger.info("用户未登录");
+            return AjaxResponse.fail(RestErrorCode.USER_NOT_LOGIN);
+        }
+
+        List<BaseMerchantCityConfigVo> cityVoList = null;
+
+        if(StringUtils.isEmpty(ssoLoginUser.getCityIds())){
+            cityVoList    = configService.queryServiceCityIdAndNames(ssoLoginUser.getCityIds());
+        }else {
+            cityVoList = configService.queryServiceCity(ssoLoginUser.getMerchantId());
+        }
+
+        logger.info("=======联动获取当前用户的城市权限end======" + JSONObject.toJSONString(cityVoList));
+        return AjaxResponse.success(cityVoList);
+    }
+
+
+
+    /**
+     * 联动获取当前用户的车队权限
+     * @return
+     */
+    @RequestMapping("/queryTeamsPermission")
+    @ResponseBody
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+    public AjaxResponse queryTeamsPermission(){
+        logger.info("=======联动获取当前用户的车队权限start======");
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+        if(ssoLoginUser == null){
+            logger.info("用户未登录");
+            return AjaxResponse.fail(RestErrorCode.USER_NOT_LOGIN);
+        }
+
+        List<BaseDriverTeamVo> teamVoList = null;
+
+        if(StringUtils.isEmpty(ssoLoginUser.getTeamIds())){
+            teamVoList = driverTeamService.queryTeamIdAndNames(ssoLoginUser.getTeamIds());
+        }else {
+            teamVoList = driverTeamService.queryServiceTeamIdsForVo(ssoLoginUser.getMerchantId(),null,null);
+        }
+        logger.info("=======联动获取当前用户的车队权限end======" + JSONObject.toJSONString(teamVoList));
+        return AjaxResponse.success(teamVoList);
+    }
+
+
+    /**
+     * 联动获取当前用户的班组权限
+     * @return
+     */
+    @RequestMapping("/queryGroupsPermission")
+    @ResponseBody
+    @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
+    public AjaxResponse queryGroupsPermission(){
+        logger.info("=======联动获取当前用户的班组权限start======");
+        SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
+        if(ssoLoginUser == null){
+            logger.info("用户未登录");
+            return AjaxResponse.fail(RestErrorCode.USER_NOT_LOGIN);
+        }
+
+        List<BaseDriverGroupVo> groupVoList = null;
+
+        if(StringUtils.isEmpty(ssoLoginUser.getGroupIds())){
+            groupVoList = driverTeamService.queryGroupIdAndNames(ssoLoginUser.getGroupIds());
+        }else {
+            List<BaseDriverTeamVo> teamVoList = driverTeamService.queryServiceGroupIdsForVo(ssoLoginUser.getMerchantId(),ssoLoginUser.getSupplierIds(),ssoLoginUser.getCityIds(),ssoLoginUser.getTeamIds());
+            if(!CollectionUtils.isEmpty(teamVoList)){
+                teamVoList.forEach(vo ->{
+                    BaseDriverGroupVo  groupVo = new BaseDriverGroupVo();
+                    groupVo.setId(vo.getId());
+                    groupVo.setGroupName(vo.getTeamName());
+                });
+            }
+        }
+        logger.info("=======联动获取当前用户的班组权限end======" + JSONObject.toJSONString(groupVoList));
+        return AjaxResponse.success(groupVoList);
     }
 
 }

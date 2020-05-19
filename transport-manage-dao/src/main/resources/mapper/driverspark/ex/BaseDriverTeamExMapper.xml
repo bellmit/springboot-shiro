@@ -104,4 +104,75 @@
       </foreach>
     </if>
   </select>
+
+
+
+  <select id="queryTeamsLevel" >
+    select id
+    from base_driver_team
+    where merchant_id = #{merchantId,jdbcType=INTEGER} and status = 1 and type = #{type}
+    <if test="supplierIds != null and supplierIds.size>0">
+      and supplier_id in
+      <foreach collection="supplierIds" open="(" close=")" item="supplierId" separator=",">
+        #{supplierId}
+      </foreach>
+    </if>
+    <if test="cityIds != null and cityIds.size>0">
+      and city_id in
+      <foreach collection="cityIds" open="(" close=")" item="cityId" separator=",">
+        #{cityId}
+      </foreach>
+    </if>
+    <if test="teamIds != null and teamIds.size>0">
+      and id in
+      <foreach collection="teamIds" open="(" close=")" item="teamId" separator=",">
+        #{teamId}
+      </foreach>
+    </if>
+  </select>
+
+
+
+  <select id="queryGroupsLevel" >
+    select id
+    from base_driver_team
+    where merchant_id = #{merchantId,jdbcType=INTEGER} and status = 1 and type = #{type}
+    <if test="supplierIds != null and supplierIds.size>0">
+      and supplier_id in
+      <foreach collection="supplierIds" open="(" close=")" item="supplierId" separator=",">
+        #{supplierId}
+      </foreach>
+    </if>
+    <if test="cityIds != null and cityIds.size>0">
+      and city_id in
+      <foreach collection="cityIds" open="(" close=")" item="cityId" separator=",">
+        #{cityId}
+      </foreach>
+    </if>
+
+    <if test="teamIds != null and teamIds.size>0">
+      and p_id in
+      <foreach collection="teamIds" open="(" close=")" item="teamId" separator=",">
+        #{teamId}
+      </foreach>
+    </if>
+
+
+    <if test="groupIds != null and groupIds.size>0">
+      and id in
+      <foreach collection="groupIds" open="(" close=")" item="groupId" separator=",">
+        #{groupId}
+      </foreach>
+    </if>
+  </select>
+
+
+  <select id="queryTeamIdAndNames" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_driver_team
+    where id in (#{teamIds})
+
+  </select>
+
 </mapper>

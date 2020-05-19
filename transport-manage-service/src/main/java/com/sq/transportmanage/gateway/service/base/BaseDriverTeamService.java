@@ -5,10 +5,12 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseDriverTeamEx
 import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.common.enums.TeamType;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
+import com.sq.transportmanage.gateway.service.vo.BaseDriverGroupVo;
 import com.sq.transportmanage.gateway.service.vo.BaseDriverTeamVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,5 +173,115 @@ public class BaseDriverTeamService {
         List<BaseDriverTeamVo> voList = BeanUtil.copyList(baseDriverTeamList,BaseDriverTeamVo.class);
         return voList;
     }
+
+
+
+    /**根据车队id获取车队名称*/
+    public List<BaseDriverTeamVo>  queryTeamIdAndNames(String teamIds){
+        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(teamIds);
+        if(CollectionUtils.isEmpty(baseDriverTeamList)){
+            return null;
+        }
+        List<BaseDriverTeamVo> voList = BeanUtil.copyList(baseDriverTeamList,BaseDriverTeamVo.class);
+        return voList;
+    }
+
+
+
+    /**根据班组id获取班组名称*/
+    public List<BaseDriverGroupVo>  queryGroupIdAndNames(String groupIds){
+        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(groupIds);
+        if(CollectionUtils.isEmpty(baseDriverTeamList)){
+            return null;
+        }
+        List<BaseDriverGroupVo> voList = new ArrayList<>();
+        baseDriverTeamList.forEach(team ->{
+            BaseDriverGroupVo vo = new BaseDriverGroupVo();
+            vo.setId(team.getId());
+            vo.setGroupName(team.getTeamName());
+        });
+        return voList;
+    }
+
+
+
+
+    /**查询车队级别的*/
+    public List<Integer>  queryTeamsLevel(Integer merchantId, String  supplierIds, String cityIds,String teamIdsStr){
+
+        List<Integer> supplierIdList = null;
+        if(StringUtils.isNotEmpty(supplierIds)){
+            supplierIdList = new ArrayList<>();
+            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            for(String id : supplierArr){
+                supplierIdList.add(Integer.valueOf(id));
+            }
+        }
+
+        List<Integer> cityIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(cityIds)){
+            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            for(String cityId : cityIdsArr){
+                cityIdList.add(Integer.valueOf(cityId));
+            }
+        }
+
+
+        List<Integer> teamIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(teamIdsStr)){
+            String[] teamArr = teamIdsStr.split(Constants.SPLIT);
+            for(String team : teamArr){
+                teamIdList.add(Integer.valueOf(team));
+            }
+        }
+        List<Integer> teamIds = exMapper.queryTeamsLevel(merchantId,supplierIdList,cityIdList, teamIdList, TeamType.TEAM.getCode());
+
+        return teamIds;
+    }
+
+
+    /**查询车队级别的*/
+    public List<Integer>  queryGroupLevel(Integer merchantId, String  supplierIds, String cityIds,String teamIdsStr,
+                                          String groupIdsStr){
+
+        List<Integer> supplierIdList = null;
+        if(StringUtils.isNotEmpty(supplierIds)){
+            supplierIdList = new ArrayList<>();
+            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            for(String id : supplierArr){
+                supplierIdList.add(Integer.valueOf(id));
+            }
+        }
+
+        List<Integer> cityIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(cityIds)){
+            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            for(String cityId : cityIdsArr){
+                cityIdList.add(Integer.valueOf(cityId));
+            }
+        }
+
+
+        List<Integer> teamIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(teamIdsStr)){
+            String[] teamArr = teamIdsStr.split(Constants.SPLIT);
+            for(String team : teamArr){
+                teamIdList.add(Integer.valueOf(team));
+            }
+        }
+
+
+        List<Integer> groupList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(groupIdsStr)){
+            String[] groupArr = groupIdsStr.split(Constants.SPLIT);
+            for(String group : groupArr){
+                groupList.add(Integer.valueOf(group));
+            }
+        }
+        List<Integer> groupIds = exMapper.queryGroupsLevel(merchantId,supplierIdList,cityIdList, teamIdList,groupList, TeamType.GROUP.getCode());
+
+        return groupIds;
+    }
+
 
 }

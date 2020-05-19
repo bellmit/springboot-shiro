@@ -21,7 +21,6 @@ import org.springframework.web.filter.CorsFilter;
  * @create: 2020-02-15 23:06
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}, scanBasePackages = {"com.sq.transportmanage.gateway","mp.mvc.logger"})
-//@ServletComponentScan(basePackageClasses = {TraceIdFilter.class})
 @ServletComponentScan(basePackageClasses = {LoginoutListener.class})
 @EnableZuulProxy
 @MapperScan("com.sq.transportmanage.gateway.dao.mapper")
