@@ -2,8 +2,10 @@ package com.sq.transportmanage.gateway.service.base;
 
 import com.sq.transportmanage.gateway.dao.entity.driverspark.base.BaseMerchantCityConfig;
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.BaseMerchantCityConfigExMapper;
+import com.sq.transportmanage.gateway.service.common.constants.Constants;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
 import com.sq.transportmanage.gateway.service.vo.BaseMerchantCityConfigVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -34,7 +36,7 @@ public class BaseMerchantCityConfigService {
         List<BaseMerchantCityConfigVo> voList = new ArrayList<>();
         configList.forEach(list ->{
             BaseMerchantCityConfigVo vo = new BaseMerchantCityConfigVo();
-            vo.setId(list.getCityId());
+            vo.setId(list.getId());
             vo.setCityName(list.getCityName());
             vo.setCityId(list.getCityId());
             voList.add(vo);
@@ -43,8 +45,18 @@ public class BaseMerchantCityConfigService {
 
     }
 
-    public List<BaseMerchantCityConfigVo> queryServiceCityIdAndNames(String cityIds){
-        List<BaseMerchantCityConfig> configList = exMapper.queryServiceCityIdAndNames(cityIds);
+    public List<BaseMerchantCityConfigVo> queryServiceCityIdAndNames(String cityIds,Integer merchantId){
+
+        List<Integer> cityIdList = new ArrayList<>();
+
+        if(StringUtils.isNotEmpty(cityIds)){
+            String[] cityArr = cityIds.split(Constants.SPLIT);
+            for(int i = 0;i<cityArr.length;i++){
+                cityIdList.add(Integer.valueOf(cityArr[i].trim()));
+            }
+        }
+
+        List<BaseMerchantCityConfig> configList = exMapper.queryServiceCityIdAndNames(cityIdList,merchantId);
 
         if(CollectionUtils.isEmpty(configList)){
             return null;
@@ -53,7 +65,7 @@ public class BaseMerchantCityConfigService {
         List<BaseMerchantCityConfigVo> voList = new ArrayList<>();
         configList.forEach(list ->{
             BaseMerchantCityConfigVo vo = new BaseMerchantCityConfigVo();
-            vo.setId(list.getCityId());
+            vo.setId(list.getId());
             vo.setCityName(list.getCityName());
             vo.setCityId(list.getCityId());
             voList.add(vo);

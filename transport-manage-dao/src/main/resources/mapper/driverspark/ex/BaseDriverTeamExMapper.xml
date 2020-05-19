@@ -171,7 +171,28 @@
     select
     <include refid="Base_Column_List" />
     from base_driver_team
-    where id in (#{teamIds})
+    where merchant_id = #{merchantId,jdbcType=INTEGER}
+    and supplier_id = #{supplierId}
+    and city_id = #{cityId}
+
+    <if test="teamId != null and teamId != ''">
+      and p_id = #{teamId}
+    </if>
+
+    <if test="teamIdList != null and teamIdList.size()>0">
+      and id in
+      <foreach collection="teamIdList" open="(" close=")" item="teamId" separator=",">
+        #{teamId}
+      </foreach>
+    </if>
+
+    <if test="groupList != null and groupList.size() > 0">
+      and id in
+      <foreach collection="groupList" open="(" close=")" item="groupId" separator=",">
+        #{groupId}
+      </foreach>
+    </if>
+
 
   </select>
 

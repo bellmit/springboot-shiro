@@ -51,7 +51,13 @@
     select
     <include refid="Base_Column_List" />
     from base_supplier
-    where supplier_id in (#{supplierIds})
+    where  merchant_id = #{merchantId,jdbcType=INTEGER}
 
+    <if test="supplierIdList != null and supplierIdList.size() > 0">
+      AND  supplier_id in
+      <foreach collection="supplierIdList" open="(" close=")" separator="," item="supplierId">
+        #{supplierId}
+      </foreach>
+    </if>
   </select>
 </mapper>

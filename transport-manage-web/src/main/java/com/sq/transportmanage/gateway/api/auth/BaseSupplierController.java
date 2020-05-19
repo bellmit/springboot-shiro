@@ -235,7 +235,7 @@ public class BaseSupplierController {
         List<BaseSupplierVo> supplierVoList = null;
 
         if(StringUtils.isEmpty(ssoLoginUser.getSupplierIds())){
-            supplierVoList    = baseSupplierService.querySupplierNames(ssoLoginUser.getSupplierIds());
+            supplierVoList    = baseSupplierService.querySupplierNames(ssoLoginUser.getMerchantId(),ssoLoginUser.getSupplierIds());
         }else {
             supplierVoList = baseSupplierService.listAllBaseSupplier(ssoLoginUser.getMerchantId());
         }
@@ -253,7 +253,7 @@ public class BaseSupplierController {
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
     public AjaxResponse queryCitiesPermission(){
-        logger.info("=======联动获取当前用户的城市权限start======");
+        logger.info("=======联动获取当前用户的城市权限start======" );
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser == null){
             logger.info("用户未登录");
@@ -262,8 +262,8 @@ public class BaseSupplierController {
 
         List<BaseMerchantCityConfigVo> cityVoList = null;
 
-        if(StringUtils.isEmpty(ssoLoginUser.getCityIds())){
-            cityVoList    = configService.queryServiceCityIdAndNames(ssoLoginUser.getCityIds());
+        if(StringUtils.isNotEmpty(ssoLoginUser.getCityIds())){
+            cityVoList    = configService.queryServiceCityIdAndNames(ssoLoginUser.getCityIds(),ssoLoginUser.getMerchantId());
         }else {
             cityVoList = configService.queryServiceCity(ssoLoginUser.getMerchantId());
         }
@@ -281,8 +281,9 @@ public class BaseSupplierController {
     @RequestMapping("/queryTeamsPermission")
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-    public AjaxResponse queryTeamsPermission(){
-        logger.info("=======联动获取当前用户的车队权限start======");
+    public AjaxResponse queryTeamsPermission(@Verify(param = "supplierId",rule = "required")Integer supplierId,
+                                             @Verify(param = "cityId",rule = "required")Integer cityId){
+        logger.info("=======联动获取当前用户的车队权限start======supplierId:{},cityId:{}",supplierId,cityId);
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser == null){
             logger.info("用户未登录");
@@ -291,10 +292,10 @@ public class BaseSupplierController {
 
         List<BaseDriverTeamVo> teamVoList = null;
 
-        if(StringUtils.isEmpty(ssoLoginUser.getTeamIds())){
-            teamVoList = driverTeamService.queryTeamIdAndNames(ssoLoginUser.getTeamIds());
+        if(StringUtils.isNotEmpty(ssoLoginUser.getTeamIds())){
+            teamVoList = driverTeamService.queryTeamIdAndNames(ssoLoginUser.getMerchantId(),ssoLoginUser.getTeamIds(),supplierId,cityId);
         }else {
-            teamVoList = driverTeamService.queryServiceTeamIdsForVo(ssoLoginUser.getMerchantId(),null,null);
+            teamVoList = driverTeamService.queryServiceTeamIdsForVo(ssoLoginUser.getMerchantId(),supplierId.toString(),cityId.toString());
         }
         logger.info("=======联动获取当前用户的车队权限end======" + JSONObject.toJSONString(teamVoList));
         return AjaxResponse.success(teamVoList);
@@ -308,8 +309,10 @@ public class BaseSupplierController {
     @RequestMapping("/queryGroupsPermission")
     @ResponseBody
     @MyDataSource(value = DataSourceType.DRIVERSPARK_SLAVE)
-    public AjaxResponse queryGroupsPermission(){
-        logger.info("=======联动获取当前用户的班组权限start======");
+    public AjaxResponse queryGroupsPermission(@Verify(param = "supplierId",rule = "required")Integer supplierId,
+                                              @Verify(param = "cityId",rule = "required")Integer cityId,
+                                              @Verify(param = "teamId",rule = "required")Integer teamId){
+        logger.info("=======联动获取当前用户的班组权限start======supplierId,{},cityId:{},teamId:{}",supplierId,cityId,teamId);
         SSOLoginUser ssoLoginUser = WebSessionUtil.getCurrentLoginUser();
         if(ssoLoginUser == null){
             logger.info("用户未登录");
@@ -318,8 +321,8 @@ public class BaseSupplierController {
 
         List<BaseDriverGroupVo> groupVoList = null;
 
-        if(StringUtils.isEmpty(ssoLoginUser.getGroupIds())){
-            groupVoList = driverTeamService.queryGroupIdAndNames(ssoLoginUser.getGroupIds());
+        if(StringUtils.isNotEmpty(ssoLoginUser.getGroupIds())){
+            groupVoList = driverTeamService.queryGroupIdAndNames(ssoLoginUser.getMerchantId(),supplierId,cityId,teamId,ssoLoginUser.getGroupIds());
         }else {
             List<BaseDriverTeamVo> teamVoList = driverTeamService.queryServiceGroupIdsForVo(ssoLoginUser.getMerchantId(),ssoLoginUser.getSupplierIds(),ssoLoginUser.getCityIds(),ssoLoginUser.getTeamIds());
             if(!CollectionUtils.isEmpty(teamVoList)){

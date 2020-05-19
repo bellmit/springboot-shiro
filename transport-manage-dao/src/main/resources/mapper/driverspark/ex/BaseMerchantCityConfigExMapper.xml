@@ -33,10 +33,16 @@
   </select>
 
 
-  <select id="queryServiceCityIdAndNames" parameterType="java.lang.String" >
+  <select id="queryServiceCityIdAndNames" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from base_merchant_city_config where city_id in (#{cityIds,jdbcType=varchar})
-  </select>
-
+    from base_merchant_city_config where
+    merchant_id = #{merchantId,jdbcType=INTEGER}
+    <if test="cityIdList != null and cityIdList.size() > 0">
+     AND  city_id in
+      <foreach collection="cityIdList" open="(" close=")" separator="," item="cityId">
+        #{cityId}
+      </foreach>
+    </if>
+    </select>
 </mapper>

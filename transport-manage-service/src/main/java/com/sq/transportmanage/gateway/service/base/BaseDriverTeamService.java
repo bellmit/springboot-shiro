@@ -38,7 +38,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -46,7 +46,7 @@ public class BaseDriverTeamService {
 
         List<Integer> teamIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(teamIds)){
-            String teamIdsArr[] = teamIds.split(Constants.SPLIT);
+            String[] teamIdsArr = teamIds.split(Constants.SPLIT);
             for(String teamId : teamIdsArr){
                 teamIdList.add(Integer.valueOf(teamId));
             }
@@ -66,7 +66,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -74,7 +74,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }
@@ -90,7 +90,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -98,7 +98,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }
@@ -115,7 +115,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -123,7 +123,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }
@@ -131,7 +131,7 @@ public class BaseDriverTeamService {
 
         List<Integer> teamIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(teamIds)){
-            String teamIdsArr[] = teamIds.split(Constants.SPLIT);
+            String[] teamIdsArr = teamIds.split(Constants.SPLIT);
             for(String teamId : teamIdsArr){
                 teamIdList.add(Integer.valueOf(teamId));
             }
@@ -147,7 +147,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[]  supplierArr= supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -155,7 +155,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }
@@ -163,7 +163,7 @@ public class BaseDriverTeamService {
 
         List<Integer> teamIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(teamIds)){
-            String teamIdsArr[] = teamIds.split(Constants.SPLIT);
+            String[] teamIdsArr = teamIds.split(Constants.SPLIT);
             for(String teamId : teamIdsArr){
                 teamIdList.add(Integer.valueOf(teamId));
             }
@@ -177,8 +177,17 @@ public class BaseDriverTeamService {
 
 
     /**根据车队id获取车队名称*/
-    public List<BaseDriverTeamVo>  queryTeamIdAndNames(String teamIds){
-        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(teamIds);
+    public List<BaseDriverTeamVo>  queryTeamIdAndNames(Integer merchantId,String teamIds,Integer supplierId,Integer cityId){
+        List<Integer> teamIdList = new ArrayList<>();
+
+        if(StringUtils.isNotEmpty(teamIds)){
+            String[] teamIdsArr = teamIds.split(Constants.SPLIT);
+            for(String teamId : teamIdsArr){
+                teamIdList.add(Integer.valueOf(teamId));
+            }
+        }
+
+        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(merchantId,supplierId,cityId,null,teamIdList,null);
         if(CollectionUtils.isEmpty(baseDriverTeamList)){
             return null;
         }
@@ -189,8 +198,21 @@ public class BaseDriverTeamService {
 
 
     /**根据班组id获取班组名称*/
-    public List<BaseDriverGroupVo>  queryGroupIdAndNames(String groupIds){
-        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(groupIds);
+    public List<BaseDriverGroupVo>  queryGroupIdAndNames(Integer merchantId,
+                                                         Integer supplierId,
+                                                         Integer cityId,
+                                                         Integer teamId,
+                                                         String groupIds){
+        List<Integer> groupIdList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(groupIds)){
+            String[] groupIdArr = groupIds.split(Constants.SPLIT);
+            for(String id : groupIdArr){
+                groupIdList.add(Integer.valueOf(id));
+            }
+        }
+
+
+        List<BaseDriverTeam> baseDriverTeamList = exMapper.queryTeamIdAndNames(merchantId,supplierId,cityId,teamId,null,groupIdList);
         if(CollectionUtils.isEmpty(baseDriverTeamList)){
             return null;
         }
@@ -199,6 +221,7 @@ public class BaseDriverTeamService {
             BaseDriverGroupVo vo = new BaseDriverGroupVo();
             vo.setId(team.getId());
             vo.setGroupName(team.getTeamName());
+            voList.add(vo);
         });
         return voList;
     }
@@ -212,7 +235,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -220,7 +243,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }
@@ -247,7 +270,7 @@ public class BaseDriverTeamService {
         List<Integer> supplierIdList = null;
         if(StringUtils.isNotEmpty(supplierIds)){
             supplierIdList = new ArrayList<>();
-            String supplierArr[] = supplierIds.split(Constants.SPLIT);
+            String[] supplierArr = supplierIds.split(Constants.SPLIT);
             for(String id : supplierArr){
                 supplierIdList.add(Integer.valueOf(id));
             }
@@ -255,7 +278,7 @@ public class BaseDriverTeamService {
 
         List<Integer> cityIdList = new ArrayList<>();
         if(StringUtils.isNotEmpty(cityIds)){
-            String cityIdsArr[] = cityIds.split(Constants.SPLIT);
+            String[] cityIdsArr = cityIds.split(Constants.SPLIT);
             for(String cityId : cityIdsArr){
                 cityIdList.add(Integer.valueOf(cityId));
             }

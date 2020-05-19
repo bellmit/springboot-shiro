@@ -8,5 +8,6 @@ import java.util.List;
 public interface BaseSupplierExMapper {
     List<BaseSupplier> queryALlSupplerByMerchantId(Integer merchantId);
 
-    List<BaseSupplier> querySupplierNames(@Param("supplierIds") String supplierIds);
+    List<BaseSupplier> querySupplierNames(@Param("merchantId")Integer merchantId,
+                                          @Param("supplierIdList") List<Integer> supplierIdList);
 }

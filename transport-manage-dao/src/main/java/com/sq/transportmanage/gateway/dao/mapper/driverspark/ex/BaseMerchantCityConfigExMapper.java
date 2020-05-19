@@ -11,5 +11,6 @@ public interface BaseMerchantCityConfigExMapper {
 
     List<Integer> queryServiceCityId(@Param("merchantId") Integer merchantId);
 
-    List<BaseMerchantCityConfig> queryServiceCityIdAndNames(@Param("cityIds") String cityIds);
+    List<BaseMerchantCityConfig> queryServiceCityIdAndNames(@Param("cityIdList") List<Integer> cityIdList,
+                                                            @Param("merchantId") Integer merchantId);
 }
