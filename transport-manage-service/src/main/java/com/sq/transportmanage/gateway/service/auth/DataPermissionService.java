@@ -42,54 +42,13 @@ public class DataPermissionService {
 
     public SSOLoginUser populateLoginUser(SSOLoginUser loginUser){
         /**商户管理员或者超级管理员  则运力商为商户下所有运力商   城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
-        if(AccountTypeEnum.MERCHANT_ADM.getCode().equals(loginUser.getAccountType()) || AccountTypeEnum.SUPER_ADM.getCode().equals(loginUser.getAccountType())){
-            List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
-            if(!CollectionUtils.isEmpty(supplierIds)){
-                loginUser.setSupplierIds(StringUtils.join(supplierIds.toArray(), ","));
-            }else{
-                loginUser.setSupplierIds("");
-            }
-            List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
-            if(!CollectionUtils.isEmpty(cityIds)){
-                loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
-            }else{
-                loginUser.setCityIds("");
-            }
-            List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
-            if(!CollectionUtils.isEmpty(teamIds)){
-                loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
-            }else {
-                loginUser.setTeamIds("");
-            }
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
-            if(!CollectionUtils.isEmpty(groupIds)){
-                loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
-            }else{
-                loginUser.setGroupIds("");
-            }
-            return loginUser;
+        if(AccountTypeEnum.MERCHANT_ADM.getCode().equals(loginUser.getAccountType()) || AccountTypeEnum.SUPER_ADM.getCode().equals(loginUser.getAccountType())) {
+            loginUser = superLoginUser(loginUser);
         }
+
         /**运力商级别  则城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
         if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(loginUser.getDataLevel())){
-            List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
-            if(!CollectionUtils.isEmpty(cityIds)){
-                loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
-            }else {
-                loginUser.setCityIds("");
-            }
-            List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
-            if(!CollectionUtils.isEmpty(teamIds)){
-                loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
-            }else{
-                loginUser.setTeamIds("");
-            }
-            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
-            if(!CollectionUtils.isEmpty(groupIds)){
-                loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
-            }else{
-                loginUser.setGroupIds("");
-            }
-            return loginUser;
+            loginUser = supplierLevel(loginUser);
         }
         /**城市级别  则车队为运力商城市集合下所有  班组为运力商城市集合下所有**/
         if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getDataLevel())){
@@ -136,4 +95,54 @@ public class DataPermissionService {
 
 
 
+    private SSOLoginUser superLoginUser(SSOLoginUser loginUser){
+            List<Integer> supplierIds = supplierExtMapper.selectListByMerchantId(loginUser.getMerchantId());
+            if(!CollectionUtils.isEmpty(supplierIds)){
+                loginUser.setSupplierIds(StringUtils.join(supplierIds.toArray(), ","));
+            }else{
+                loginUser.setSupplierIds("");
+            }
+            List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
+            if(!CollectionUtils.isEmpty(cityIds)){
+                loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
+            }else{
+                loginUser.setCityIds("");
+            }
+            List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
+            if(!CollectionUtils.isEmpty(teamIds)){
+                loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else {
+                loginUser.setTeamIds("");
+            }
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
+            if(!CollectionUtils.isEmpty(groupIds)){
+                loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
+            }
+            return loginUser;
+        }
+
+
+        private SSOLoginUser supplierLevel(SSOLoginUser loginUser){
+            List<Integer> cityIds = baseMerchantCityConfigExMapper.queryServiceCityId(loginUser.getMerchantId());
+            if(!CollectionUtils.isEmpty(cityIds)){
+                loginUser.setCityIds(StringUtils.join(cityIds.toArray(), ","));
+            }else {
+                loginUser.setCityIds("");
+            }
+            List<Integer> teamIds = baseDriverTeamService.queryServiceTeamIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null);
+            if(!CollectionUtils.isEmpty(teamIds)){
+                loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
+            }else{
+                loginUser.setTeamIds("");
+            }
+            List<Integer> groupIds = baseDriverTeamService.queryServiceGroupIds(loginUser.getMerchantId(),loginUser.getSupplierIds(),null,null);
+            if(!CollectionUtils.isEmpty(groupIds)){
+                loginUser.setGroupIds(StringUtils.join(groupIds.toArray(), ","));
+            }else{
+                loginUser.setGroupIds("");
+            }
+            return loginUser;
+        }
 }

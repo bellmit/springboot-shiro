@@ -14,7 +14,7 @@ public interface BaseSupplierExMapper {
      * @param merchantId
      * @return
      */
-    List<BaseSupplier> queryALlSupplerByMerchantId(Integer merchantId);
+    List<BaseSupplier> queryAllSupplerByMerchantId(Integer merchantId);
 
     /**
      * 查询运力商名称

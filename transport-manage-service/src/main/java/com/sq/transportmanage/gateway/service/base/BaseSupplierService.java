@@ -35,7 +35,7 @@ public class BaseSupplierService {
      */
     public List<BaseSupplierVo> listAllBaseSupplier(Integer merchantId){
 
-        List<BaseSupplier> baseSupplierList  = baseSupplierExMapper.queryALlSupplerByMerchantId(merchantId);
+        List<BaseSupplier> baseSupplierList  = baseSupplierExMapper.queryAllSupplerByMerchantId(merchantId);
         if(CollectionUtils.isEmpty(baseSupplierList)){
             return null;
         }
