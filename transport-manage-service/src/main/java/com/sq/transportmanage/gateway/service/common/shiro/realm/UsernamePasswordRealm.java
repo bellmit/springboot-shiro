@@ -30,7 +30,7 @@ import java.util.*;
 
 /**认证  与  权限  **/
 
-/**
+/**@Author fanht
  * 这个就是shiro SSOLogin 的用户获取的属性配置
  */
 @Component
@@ -59,29 +59,30 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 		logger.info( "[获取用户的身份认证信息开始]authenticationToken="+authenticationToken);
 		try {
 			UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
-			CarAdmUser adMUser = myDataSourceService.queryByAccount(token.getUsername());
+			CarAdmUser carAdmUser = myDataSourceService.queryByAccount(token.getUsername());
 
 
 			//处理session 防止一个账号多处登录
 			try {
-				redisSessionDAO.clearRelativeSession(null,null,adMUser.getUserId());
+				redisSessionDAO.clearRelativeSession(null,null,carAdmUser.getUserId());
 			} catch (Exception e) {
 				logger.info("=========清除session异常============");
 			}
 
-			SSOLoginUser loginUser = new SSOLoginUser();  //当前登录的用户
+			/***当前登录的用户*/
+			SSOLoginUser loginUser = new SSOLoginUser();
 
 			//如果是超级管理员
-			if(Constants.SUPER_MANAGE.equals(adMUser.getAccountType()) ){
+			if(Constants.SUPER_MANAGE.equals(carAdmUser.getAccountType()) ){
 				logger.info( "[获取用户的身份认证信息]="+loginUser);
-				loginUser = this.ssoLoginUser(loginUser,adMUser);
-				loginUser.setMerchantArea(adMUser.getMerchantArea());
-				Integer minUserId = myDataSourceService.queryMinUserId(adMUser.getMerchantId());
+				loginUser = this.ssoLoginUser(loginUser,carAdmUser);
+				loginUser.setMerchantArea(carAdmUser.getMerchantArea());
+				Integer minUserId = myDataSourceService.queryMinUserId(carAdmUser.getMerchantId());
 				loginUser.setId(minUserId);
 				loginUser.setSuper(false);
 				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
 			}
-			loginUser = this.ssoLoginUser(loginUser,adMUser);
+			loginUser = this.ssoLoginUser(loginUser,carAdmUser);
 			dataPermissionService.populateLoginUser(loginUser);
 			String md5= null;
 			try {
@@ -94,10 +95,10 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 			}else {
 				loginUser.setSuper(false);
 			}
-			List<String> menuUrlList = saasPermissionExMapper.queryPermissionMenussOfUser(adMUser.getUserId());
+			List<String> menuUrlList = saasPermissionExMapper.queryPermissionMenussOfUser(carAdmUser.getUserId());
 			loginUser.setMenuUrlList(menuUrlList);
 			/**当前用户所拥有的菜单权限**/
-			List<Integer> permissionIds = saasPermissionExMapper.queryPermissionIdsOfUser(adMUser.getUserId());
+			List<Integer> permissionIds = saasPermissionExMapper.queryPermissionIdsOfUser(carAdmUser.getUserId());
 
 			List<Byte> permissionTypes =  Arrays.asList( new Byte[] { SaasConst.PermissionType.MENU });
 
@@ -165,19 +166,19 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 		SSOLoginUser loginUser = (SSOLoginUser) principalCollection.getPrimaryPrincipal();
-		String account = loginUser.getLoginName(); //登录名
+		String account = loginUser.getLoginName();
 
 
 
-		List<String> perms_string = saasPermissionExMapper.queryPermissionCodesOfUser(  loginUser.getId() );
-		List<String> roles_string   = saasRoleExMapper.queryRoleCodesOfUser( loginUser.getId() );
+		List<String> permString = saasPermissionExMapper.queryPermissionCodesOfUser(  loginUser.getId() );
+		List<String> rolesString   = saasRoleExMapper.queryRoleCodesOfUser( loginUser.getId() );
 
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		Set<String> roles = new HashSet<String>( roles_string );
+		Set<String> roles = new HashSet<String>( rolesString );
 		authorizationInfo.setRoles( roles );
 		logger.info( "[获取用户授权信息(角色)] "+account+"="+roles);
 
-		Set<String> perms = new HashSet<String>( perms_string );
+		Set<String> perms = new HashSet<String>( permString );
 		authorizationInfo.setStringPermissions(perms);
 		logger.info( "[获取用户授权信息(权限)] "+account+"="+perms);
 		return authorizationInfo;
@@ -186,7 +187,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 	@Override
     public Object getAuthorizationCacheKey(PrincipalCollection principals) {
 		SSOLoginUser loginUser = (SSOLoginUser) principals.getPrimaryPrincipal();
-		String account = loginUser.getLoginName(); //登录名
+		String account = loginUser.getLoginName();
         return "-AuthInfo-"+account;
     }
 	
@@ -205,22 +206,24 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
     }
 
 
-    private SSOLoginUser ssoLoginUser (SSOLoginUser loginUser ,CarAdmUser adMUser){
-		loginUser.setId( adMUser.getUserId() );                //用户ID
-		loginUser.setLoginName( adMUser.getAccount() );//登录名
-		loginUser.setMobile( adMUser.getPhone() );         //手机号码
-		loginUser.setName( adMUser.getUserName() );    //真实姓名
-		loginUser.setEmail(adMUser.getEmail()); //邮箱地址
-		loginUser.setType(null);   //
-		loginUser.setStatus( adMUser.getStatus() );           //状态
-		loginUser.setAccountType( adMUser.getAccountType() );   //自有的帐号类型：[100 普通用户]、[900 管理员]
-		loginUser.setLevel(adMUser.getLevel());
-		loginUser.setMerchantId(adMUser.getMerchantId());
-		loginUser.setSupplierIds(adMUser.getSuppliers());
-		loginUser.setCityIds(adMUser.getCities()); //城市
-		loginUser.setTeamIds(adMUser.getTeamId()); //车队
-		loginUser.setGroupIds(adMUser.getGroupIds()); //班组
-		loginUser.setDataLevel(adMUser.getDataLevel());
+    private SSOLoginUser ssoLoginUser (SSOLoginUser loginUser ,CarAdmUser admUser){
+		/** 用户ID*/
+		loginUser.setId( admUser.getUserId() );
+		loginUser.setLoginName( admUser.getAccount() );
+		loginUser.setMobile( admUser.getPhone() );
+		loginUser.setName( admUser.getUserName() );
+		loginUser.setEmail(admUser.getEmail());
+		loginUser.setType(null);
+		loginUser.setStatus( admUser.getStatus() );
+		/**自有的帐号类型：[100 普通用户]、[900 管理员]*/
+		loginUser.setAccountType( admUser.getAccountType() );
+		loginUser.setLevel(admUser.getLevel());
+		loginUser.setMerchantId(admUser.getMerchantId());
+		loginUser.setSupplierIds(admUser.getSuppliers());
+		loginUser.setCityIds(admUser.getCities());
+		loginUser.setTeamIds(admUser.getTeamId());
+		loginUser.setGroupIds(admUser.getGroupIds());
+		loginUser.setDataLevel(admUser.getDataLevel());
 		return loginUser;
 	}
 }

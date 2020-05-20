@@ -43,12 +43,12 @@ public class DataPermissionService {
     public SSOLoginUser populateLoginUser(SSOLoginUser loginUser){
         /**商户管理员或者超级管理员  则运力商为商户下所有运力商   城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
         if(AccountTypeEnum.MERCHANT_ADM.getCode().equals(loginUser.getAccountType()) || AccountTypeEnum.SUPER_ADM.getCode().equals(loginUser.getAccountType())) {
-            loginUser = superLoginUser(loginUser);
+            return superLoginUser(loginUser);
         }
 
         /**运力商级别  则城市为运力商集合下所有  车队为运力商集合下所有  班组为运力商集合下所有**/
         if(DataLevelEnum.SUPPLIER_LEVEL.getCode().equals(loginUser.getDataLevel())){
-            loginUser = supplierLevel(loginUser);
+            return supplierLevel(loginUser);
         }
         /**城市级别  则车队为运力商城市集合下所有  班组为运力商城市集合下所有**/
         if(DataLevelEnum.CITY_LEVEL.getCode().equals(loginUser.getDataLevel())){
