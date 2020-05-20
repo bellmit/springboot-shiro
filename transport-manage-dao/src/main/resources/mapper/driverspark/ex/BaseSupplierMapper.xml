@@ -38,7 +38,7 @@
     charge_person_phone, company_date, status, email, create_by, create_time, update_by, 
     update_time, remark
   </sql>
-  <select id="queryALlSupplerByMerchantId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="queryAllSupplerByMerchantId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from base_supplier
