@@ -68,7 +68,7 @@ public class DataPermissionService {
         }
 
         /**车队级别  则车队为车队集合下所有**/
-        if(DataLevelEnum.GROUP_LEVEL.getCode().equals(loginUser.getDataLevel())){
+        if(DataLevelEnum.TEAM_LEVEL.getCode().equals(loginUser.getDataLevel())){
             List<Integer> teamIds = baseDriverTeamService.queryTeamsLevel(loginUser.getMerchantId(),loginUser.getSupplierIds(),loginUser.getCityIds(),loginUser.getTeamIds());
             if(!CollectionUtils.isEmpty(teamIds)){
                 loginUser.setTeamIds(StringUtils.join(teamIds.toArray(), ","));
