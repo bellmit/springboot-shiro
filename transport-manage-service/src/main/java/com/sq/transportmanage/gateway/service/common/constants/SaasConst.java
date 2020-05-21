@@ -5,7 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/**常量定义**/
+/**
+ * @Author fanht
+ * 常量定义
+ */
 public final class SaasConst {
 	/**默认的初始密码**/
 	public static final String INITIAL_PASSWORD             = "12345678";
