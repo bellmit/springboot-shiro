@@ -234,7 +234,7 @@ public class BaseSupplierController {
 
         List<BaseSupplierVo> supplierVoList = null;
 
-        if(StringUtils.isEmpty(ssoLoginUser.getSupplierIds())){
+        if(StringUtils.isNotEmpty(ssoLoginUser.getSupplierIds())){
             supplierVoList    = baseSupplierService.querySupplierNames(ssoLoginUser.getMerchantId(),ssoLoginUser.getSupplierIds());
         }else {
             supplierVoList = baseSupplierService.listAllBaseSupplier(ssoLoginUser.getMerchantId());
