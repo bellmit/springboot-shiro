@@ -1,6 +1,5 @@
 package com.sq.transportmanage.gateway.api.common;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 public interface Constants {
 
@@ -8,4 +7,7 @@ public interface Constants {
     String MANAGE_MD5 = "xMpCOKC5I4INzFCab3WEmw==";
 
     String SPLIT = ",";
+
+    /**上传图片接口*/
+    String URL = "common/upload";
 }
