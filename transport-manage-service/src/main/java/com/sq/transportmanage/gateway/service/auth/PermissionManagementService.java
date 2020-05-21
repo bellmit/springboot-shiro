@@ -20,7 +20,10 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.*;
 
-/**权限管理功能**/
+/**
+ * @Author fanht
+ * 权限管理功能
+ */
 @Service
 public class PermissionManagementService {
 	@Autowired
@@ -36,25 +39,25 @@ public class PermissionManagementService {
 	 * 一、增加一个权限
 	 **/
 	public AjaxResponse addSaasPermission(SaasPermission pemission) {
-		//父权限不存在
+		/**父权限不存在*/
 		if (pemission.getParentPermissionId() != null && pemission.getParentPermissionId().intValue() > 0) {
 			SaasPermission parentPermission = saasPermissionMapper.selectByPrimaryKey(pemission.getParentPermissionId());
 			if (parentPermission == null) {
 				return AjaxResponse.fail(RestErrorCode.PARENT_PERMISSION_NOT_EXIST);
 			}
 		}
-		//权限代码已经存在
+		/***权限代码已经存在*/
 		List<SaasPermission> pos = saasPermissionExMapper.queryPermissions(null, null, pemission.getPermissionCode(), null, null, null);
 		if (pos != null && pos.size() > 0) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_CODE_EXIST);
 		}
-		//权限类型不合法
+		/**权限类型不合法*/
 		List<Byte> permTypes = Arrays.asList(new Byte[]{SaasConst.PermissionType.MENU, SaasConst.PermissionType.BUTTON, SaasConst.PermissionType.DATA_AREA});
 		if (!permTypes.contains(pemission.getPermissionType())) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_TYPE_WRONG);
 		}
-
-		int sortSeq = saasPermissionExMapper.selectMaxSortSeq(pemission.getParentPermissionId()).intValue() + 1;//自动生成排序的序号
+		/**自动生成排序的序号*/
+		int sortSeq = saasPermissionExMapper.selectMaxSortSeq(pemission.getParentPermissionId()).intValue() + 1;
 		pemission.setValid(true);
 		pemission.setSortSeq(sortSeq);
 		saasPermissionMapper.insertSelective(pemission);
@@ -65,26 +68,27 @@ public class PermissionManagementService {
 	 * 二、禁用一个权限
 	 **/
 	public AjaxResponse disableSaasPermission(Integer permissionId) {
-		//权限不存在
+		/**权限不存在*/
 		SaasPermission thisPermission = saasPermissionMapper.selectByPrimaryKey(permissionId);
 		if (thisPermission == null) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_NOT_EXIST);
 		}
-		//系统预置权限，不能禁用、修改
+		/**系统预置权限，不能禁用、修改*/
 		if (SaasConst.SYSTEM_PERMISSIONS.contains(thisPermission.getPermissionCode())) {
 			return AjaxResponse.fail(RestErrorCode.SYSTEM_PERMISSION_CANOT_CHANGE, thisPermission.getPermissionCode());
 		}
-		//存在已经生效的子权限，请先禁用子权限
+		/**存在已经生效的子权限，请先禁用子权限*/
 		List<SaasPermission> validChildren = saasPermissionExMapper.queryPermissions(null, permissionId, null, null, null, (byte) 1);
 		if (validChildren != null && validChildren.size() > 0) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_DISABLE_CANT);
 		}
-		//执行禁用此权限
+		/**执行禁用此权限*/
 		SaasPermission pemissionForUpdate = new SaasPermission();
 		pemissionForUpdate.setPermissionId(permissionId);
 		pemissionForUpdate.setValid(false);
 		saasPermissionMapper.updateByPrimaryKeySelective(pemissionForUpdate);
-		redisSessionDAO.clearRelativeSession(permissionId, null, null);//自动清理用户会话
+		/**自动清理用户会话*/
+		redisSessionDAO.clearRelativeSession(permissionId, null, null);
 		return AjaxResponse.success(null);
 	}
 
@@ -92,25 +96,26 @@ public class PermissionManagementService {
 	 * 三、启用一个权限
 	 **/
 	public AjaxResponse enableSaasPermission(Integer permissionId) {
-		//权限不存在
+		/**权限不存在*/
 		SaasPermission thisPermission = saasPermissionMapper.selectByPrimaryKey(permissionId);
 		if (thisPermission == null) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_NOT_EXIST);
 		}
-		//查询其父权限，判断父权限状态
-		//父权限已经被禁用，请先启用父权限
+		/**查询其父权限，判断父权限状态*/
+		/**父权限已经被禁用，请先启用父权限*/
 		if (thisPermission.getParentPermissionId() != null && thisPermission.getParentPermissionId().intValue() > 0) {
 			SaasPermission parentPermission = saasPermissionMapper.selectByPrimaryKey(thisPermission.getParentPermissionId());
 			if (parentPermission != null && parentPermission.getValid() == false) {
 				return AjaxResponse.fail(RestErrorCode.PERMISSION_ENABLE_CANT);
 			}
 		}
-		//执行启用此权限
+		/**执行启用此权限**/
 		SaasPermission pemissionForUpdate = new SaasPermission();
 		pemissionForUpdate.setPermissionId(permissionId);
 		pemissionForUpdate.setValid(true);
 		saasPermissionMapper.updateByPrimaryKeySelective(pemissionForUpdate);
-		redisSessionDAO.clearRelativeSession(permissionId, null, null);//自动清理用户会话
+		/**自动清理用户会话*/
+		redisSessionDAO.clearRelativeSession(permissionId, null, null);
 		return AjaxResponse.success(null);
 	}
 
@@ -118,23 +123,23 @@ public class PermissionManagementService {
 	 * 四、修改一个权限
 	 **/
 	public AjaxResponse changeSaasPermission(SaasPermission pemission) {
-		//权限不存在
+		/**权限不存在*/
 		SaasPermission thisPermission = saasPermissionMapper.selectByPrimaryKey(pemission.getPermissionId());
 		if (thisPermission == null) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_NOT_EXIST);
 		}
-		//系统预置权限，不能禁用、修改
+		/**系统预置权限，不能禁用、修改*/
 		if (SaasConst.SYSTEM_PERMISSIONS.contains(thisPermission.getPermissionCode())) {
 			return AjaxResponse.fail(RestErrorCode.SYSTEM_PERMISSION_CANOT_CHANGE, thisPermission.getPermissionCode());
 		}
-		//权限代码已经存在   (如果发生变化时 )
+		/**权限代码已经存在   (如果发生变化时 )*/
 		if (pemission.getPermissionCode() != null && pemission.getPermissionCode().length() > 0 && !pemission.getPermissionCode().equalsIgnoreCase(thisPermission.getPermissionCode())) {
 			List<SaasPermission> pos = saasPermissionExMapper.queryPermissions(null, null, pemission.getPermissionCode(), null, null, null);
 			if (pos != null && pos.size() > 0) {
 				return AjaxResponse.fail(RestErrorCode.PERMISSION_CODE_EXIST);
 			}
 		}
-		//权限类型不合法
+		/**权限类型不合法*/
 		if (pemission.getPermissionType() != null) {
 			List<Byte> permTypes = Arrays.asList(new Byte[]{SaasConst.PermissionType.MENU, SaasConst.PermissionType.BUTTON, SaasConst.PermissionType.DATA_AREA});
 			if (!permTypes.contains(pemission.getPermissionType())) {
@@ -143,7 +148,8 @@ public class PermissionManagementService {
 		}
 		pemission.setParentPermissionId(null);
 		saasPermissionMapper.updateByPrimaryKeySelective(pemission);
-		redisSessionDAO.clearRelativeSession(pemission.getPermissionId(), null, null);//自动清理用户会话
+		/**自动清理用户会话*/
+		redisSessionDAO.clearRelativeSession(pemission.getPermissionId(), null, null);
 		return AjaxResponse.success(null);
 	}
 
@@ -153,9 +159,9 @@ public class PermissionManagementService {
 	 **/
 	public List<SaasPermissionDTO> getAllPermissions(String dataFormat) {
 		if (SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(dataFormat)) {
-			return this.getAllPermissions_list();
+			return this.getAllPermissionsList();
 		} else if (SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(dataFormat)) {
-			return this.getAllPermissions_tree();
+			return this.getAllPermissionsTree();
 		}
 		return null;
 	}
@@ -163,21 +169,22 @@ public class PermissionManagementService {
 	/**
 	 * 返回的数据格式：列表
 	 **/
-	private List<SaasPermissionDTO> getAllPermissions_list() {
+	private List<SaasPermissionDTO> getAllPermissionsList() {
 		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(null, null, null, null, null, SaasConst.IsValid.VALID_TRUE);
-		List<SaasPermissionDTO> saasPermissionDTOs = BeanUtil.copyList(allPos, SaasPermissionDTO.class);
-		saasPermissionDTOs.stream().forEach(p -> {
+		List<SaasPermissionDTO> saasPerList = BeanUtil.copyList(allPos, SaasPermissionDTO.class);
+		saasPerList.stream().forEach(p -> {
+			/**设置是否为系统预置权限*/
 			if (SaasConst.SYSTEM_PERMISSIONS.contains(p.getPermissionCode())) {
 				p.setPresetPerm(true);
 			}
-		});//设置是否为系统预置权限
-		return saasPermissionDTOs;
+		});
+		return saasPerList;
 	}
 
 	/**
 	 * 返回的数据格式：树形
 	 **/
-	private List<SaasPermissionDTO> getAllPermissions_tree() {
+	private List<SaasPermissionDTO> getAllPermissionsTree() {
 		return this.getChildren(0);
 	}
 
@@ -186,13 +193,14 @@ public class PermissionManagementService {
 		if (childrenPos == null || childrenPos.size() == 0) {
 			return null;
 		}
-		//递归
+		/**递归*/
 		List<SaasPermissionDTO> childrenDtos = BeanUtil.copyList(childrenPos, SaasPermissionDTO.class);
 		childrenDtos.stream().forEach(p -> {
+			/**设置是否为系统预置权限*/
 			if (SaasConst.SYSTEM_PERMISSIONS.contains(p.getPermissionCode())) {
 				p.setPresetPerm(true);
 			}
-		});//设置是否为系统预置权限
+		});
 		for (SaasPermissionDTO childrenDto : childrenDtos) {
 			List<SaasPermissionDTO> childs = this.getChildren(childrenDto.getPermissionId());
 			childrenDto.setChildPermissions(childs);
@@ -204,21 +212,22 @@ public class PermissionManagementService {
 	 * 六、删除一个权限
 	 **/
 	public AjaxResponse deleteSaasPermission(Integer permissionId) {
-		//权限不存在
+		/**权限不存在*/
 		SaasPermission thisPermission = saasPermissionMapper.selectByPrimaryKey(permissionId);
 		if (thisPermission == null) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_NOT_EXIST);
 		}
-		//系统预置权限，不能禁用、修改
+		/**系统预置权限，不能禁用、修改*/
 		if (SaasConst.SYSTEM_PERMISSIONS.contains(thisPermission.getPermissionCode())) {
 			return AjaxResponse.fail(RestErrorCode.SYSTEM_PERMISSION_CANOT_CHANGE, thisPermission.getPermissionCode());
 		}
-		//执行
-		redisSessionDAO.clearRelativeSession(permissionId, null, null); //自动清理用户会话
+		/**自动清理用户会话*/
+		redisSessionDAO.clearRelativeSession(permissionId, null, null);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
-		}//目的是等待一会儿，因会话清理也要查表的
+		}
+		/**目的是等待一会儿，因会话清理也要查表的*/
 		saasRolePermissionRalationExMapper.deleteRoleIdsOfPermission(permissionId);
 		saasPermissionMapper.deleteByPrimaryKey(permissionId);
 		return AjaxResponse.success(null);
@@ -229,23 +238,23 @@ public class PermissionManagementService {
 	 * 七、修改一个权限 包含父菜单
 	 **/
 	public AjaxResponse changeSaasPermissionContainParent(SaasPermission pemission) {
-		//权限不存在
+		/**权限不存在*/
 		SaasPermission thisPermission = saasPermissionMapper.selectByPrimaryKey(pemission.getPermissionId());
 		if (thisPermission == null) {
 			return AjaxResponse.fail(RestErrorCode.PERMISSION_NOT_EXIST);
 		}
-		//系统预置权限，不能禁用、修改
+		/**系统预置权限，不能禁用、修改*/
 		if (SaasConst.SYSTEM_PERMISSIONS.contains(thisPermission.getPermissionCode())) {
 			return AjaxResponse.fail(RestErrorCode.SYSTEM_PERMISSION_CANOT_CHANGE, thisPermission.getPermissionCode());
 		}
-		//权限代码已经存在   (如果发生变化时 )
+		/**权限代码已经存在   (如果发生变化时 )*/
 		if (pemission.getPermissionCode() != null && pemission.getPermissionCode().length() > 0 && !pemission.getPermissionCode().equalsIgnoreCase(thisPermission.getPermissionCode())) {
 			List<SaasPermission> pos = saasPermissionExMapper.queryPermissions(null, null, pemission.getPermissionCode(), null, null, null);
 			if (pos != null && pos.size() > 0) {
 				return AjaxResponse.fail(RestErrorCode.PERMISSION_CODE_EXIST);
 			}
 		}
-		//权限类型不合法
+		/**权限类型不合法*/
 		if (pemission.getPermissionType() != null) {
 			List<Byte> permTypes = Arrays.asList(new Byte[]{SaasConst.PermissionType.MENU, SaasConst.PermissionType.BUTTON, SaasConst.PermissionType.DATA_AREA});
 			if (!permTypes.contains(pemission.getPermissionType())) {
@@ -253,7 +262,8 @@ public class PermissionManagementService {
 			}
 		}
 		saasPermissionMapper.updateByPrimaryKeySelective(pemission);
-		redisSessionDAO.clearRelativeSession(pemission.getPermissionId(), null, null);//自动清理用户会话
+		/**自动清理用户会话*/
+		redisSessionDAO.clearRelativeSession(pemission.getPermissionId(), null, null);
 		return AjaxResponse.success(null);
 	}
 
@@ -280,27 +290,6 @@ public class PermissionManagementService {
 					strPermissionIds.add(newStr);
 				}
 			});
-			/*permissionList.forEach(permission->{
-				StringBuffer sb = getKey(map,permission.getPermissionId());
-				try {
-					if(sb != null && sb.length() > 0){
-                        String value = sb.substring(0,sb.length()-1);
-                        String newStr = replaceStr(value);
-                        if(newStr != null){
-                            String[] splitStr = newStr.split("-");
-                            if(splitStr.length > 2){
-                                if(!stringJoiner.toString().contains(newStr)){
-                                    strPermissionIds.add(newStr);
-                                    stringJoiner.add(newStr+",");
-                                    System.out.println(stringJoiner);
-                                }
-                            }
-                        }
-                    }
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});*/
 		}
 		return strPermissionIds;
 	}

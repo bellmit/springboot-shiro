@@ -1,7 +1,6 @@
 package com.sq.transportmanage.gateway.api.auth;
 
 
-import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasPermission;
 import com.sq.transportmanage.gateway.dao.entity.driverspark.SaasRole;
 import com.sq.transportmanage.gateway.service.auth.PermissionManagementService;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
@@ -14,7 +13,6 @@ import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.common.web.Verify;
 import com.sq.transportmanage.gateway.service.auth.RoleManagementService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,10 @@ import java.util.*;
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.*;
 
 
-/**角色管理**/
+/**
+ * @Author fanht
+ * 角色管理
+ */
 @RestController
 public class RolemanagementController{
 	@Autowired
@@ -89,7 +90,8 @@ public class RolemanagementController{
 	@RequestFunction(menu = ROLE_PERMISSION_LIST)
 	public AjaxResponse getAllPermissions( @Verify(param="roleId",rule="required|min(1)") Integer roleId,  String dataFormat ){
 		if( !SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(dataFormat) && !SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(dataFormat) ) {
-			dataFormat = SaasConst.PermissionDataFormat.TREE;//默认为树形
+			/**默认为树形*/
+			dataFormat = SaasConst.PermissionDataFormat.TREE;
 		}
 		List<SaasPermissionDTO> permissionDtos = roleManagementService.getAllPermissions(roleId, dataFormat);
 		return AjaxResponse.success(permissionDtos);
@@ -128,7 +130,7 @@ public class RolemanagementController{
 				for(String id : ids ) {
 					if(StringUtils.isNotEmpty(id)) {
 						try {
-							String strs[] = id.split("-");
+							String[] strs = id.split("-");
 							if(strs.length > 0){
 								for(String str : strs){
 									if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
@@ -198,7 +200,7 @@ public class RolemanagementController{
 					for(String id : ids ) {
 						if(StringUtils.isNotEmpty(id)) {
 							try {
-								String strs[] = id.split("-");
+								String[] strs = id.split("-");
 								if(strs.length > 0){
 									for(String str : strs){
 										if(StringUtils.isNotEmpty(str) && !newPermissionIds.contains(Integer.valueOf(str))){
