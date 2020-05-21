@@ -1,6 +1,8 @@
 package com.sq.transportmanage.gateway.api.common;
 
-
+/***
+ * @Author fanht
+ */
 public interface Constants {
 
     /**超级管理员md5加密**/
