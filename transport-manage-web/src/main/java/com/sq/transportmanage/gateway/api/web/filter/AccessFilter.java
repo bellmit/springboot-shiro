@@ -93,9 +93,9 @@ public class AccessFilter extends ZuulFilter {
                 /**城市商数据权限*/
                 data.put("cityIds", loginUser.getCityIds());
                 /**车队数据权限*/
-                data.put("teamIds", loginUser.getDataLevel()<DataLevelEnum.TEAM_LEVEL.getCode() ?"":loginUser.getTeamIds());
+                data.put("teamIds", loginUser.getTeamIds());
                 /**班组数据权限*/
-                data.put("groupIds", loginUser.getDataLevel()<DataLevelEnum.GROUP_LEVEL.getCode() ?"":loginUser.getGroupIds());
+                data.put("groupIds", loginUser.getGroupIds());
                 /**数据权限级别*/
                 data.put("dataLevel", loginUser.getDataLevel());
                 logger.info("LOGINUSER :{}", data);
