@@ -80,6 +80,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
 				Integer minUserId = myDataSourceService.queryMinUserId(carAdmUser.getMerchantId());
 				loginUser.setId(minUserId);
 				loginUser.setSuper(false);
+				dataPermissionService.populateLoginUser(loginUser);
 				return new SimpleAuthenticationInfo(loginUser, authenticationToken.getCredentials()  ,  this.getName() );
 			}
 			loginUser = this.ssoLoginUser(loginUser,carAdmUser);
