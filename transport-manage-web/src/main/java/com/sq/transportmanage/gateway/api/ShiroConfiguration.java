@@ -49,14 +49,6 @@ public class ShiroConfiguration {
     @Resource(name = "ncdsSerRedisTemplate")
     private RedisTemplate ncdsSerRedisTemplate;
 
-    /*@Bean(name = "shiroCacheManager")
-    public RedisCacheManager shiroCacheManager() {
-        RedisCacheManager shiroCacheManager = new RedisCacheManager();
-        shiroCacheManager.setRedisTemplate(ncdsSerRedisTemplate);
-        shiroCacheManager.setExpireSeconds(1800);
-        return shiroCacheManager;
-    }*/
-
 
 
     @Bean(name = "redisCache")
@@ -102,11 +94,10 @@ public class ShiroConfiguration {
     @Bean
     public UsernamePasswordRealm shiroRealm() {
         UsernamePasswordRealm shiroRealm = new UsernamePasswordRealm();
-        //shiroRealm.setName("authorizingRealm");
         shiroRealm.setName("ConferenceUsernamePasswordRealm");
-        //<!-- 是否启用授权缓存（生产环境可调节此参数进行调优） -->
+        /**<!-- 是否启用授权缓存（生产环境可调节此参数进行调优） -->
         //此属性如果设置为true，为用shiro默认的30min缓存，退出或者修改角色权限导致
-        //的删除缓存不生效 fht 2020-02-28
+        //的删除缓存不生效 fht 2020-02-28*/
         shiroRealm.setAuthenticationCachingEnabled(false);
         return shiroRealm;
     }
@@ -117,16 +108,14 @@ public class ShiroConfiguration {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         //session存活时间60分钟
         sessionManager.setGlobalSessionTimeout(Constants.SESSION_REPIRE_TIME);
-       // sessionManager.setDeleteInvalidSessions(true);
-        //是否开启删除无效的session对象  默认为true 此处改为不开启
+        /**是否开启删除无效的session对象  默认为true 此处改为不开启*/
         sessionManager.setDeleteInvalidSessions(false);
-        //是否开启定时调度器进行检测过期session 默认为true 此处改为不检测
+        /**是否开启定时调度器进行检测过期session 默认为true 此处改为不检测*/
         sessionManager.setSessionValidationSchedulerEnabled(false);
          //自定义监听 fht 不能使用@WebListern的 HttpSessionListerner 因为shiro重写了session 2020-03-05
         Collection<SessionListener> sessionListeners = new ArrayList<>();
         sessionListeners.add(sessionListener());
         sessionManager.setSessionListeners(sessionListeners);
-         //sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
         sessionManager.setSessionDAO(sessionDAO);
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(sessionIdCookie);
@@ -139,7 +128,6 @@ public class ShiroConfiguration {
         SimpleCookie simpleCookie = new SimpleCookie();
         simpleCookie.setName("sqRememberMe");
         simpleCookie.setHttpOnly(true);
-       // simpleCookie.setMaxAge(432000);
         return simpleCookie;
     }
 
@@ -164,12 +152,11 @@ public class ShiroConfiguration {
         securityManager.setCacheManager(shiroCacheManager);
         securityManager.setSessionManager(sessionManager);
         // 指定 SubjectFactory,如果要实现cas的remember me的功能，需要用到下面这个CasSubjectFactory，并设置到securityManager的subjectFactory中
-        //securityManager.setSubjectFactory(new CasSubjectFactory());
         securityManager.setRememberMeManager(rememberMeManager);
         return securityManager;
     }
 
-    //
+    /**
     //@Bean
     //public FilterRegistrationBean delegatingFilterProxy(){
     //    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
@@ -178,7 +165,7 @@ public class ShiroConfiguration {
     //    proxy.setTargetBeanName("shiroFilter");
     //    filterRegistrationBean.setFilter(proxy);
     //    return filterRegistrationBean;
-    //}
+    //}*/
 
 
     @Bean(name = "shiroFilter")
@@ -203,6 +190,9 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/updateLevel", "anon");
         filterChainDefinitionMap.put("/permission/levelList", "anon");
         filterChainDefinitionMap.put("/mp/car/batchImport", "anon");
+        filterChainDefinitionMap.put("/mp/index/merchantIdstatisticsinfo", "anon");
+        filterChainDefinitionMap.put("/mp/index/driverrankdaylist", "anon");
+        filterChainDefinitionMap.put("/mp/index/statisticsinfo", "anon");
         //注意此处：如果是h5放开的话 会出现跨域问题
         filterChainDefinitionMap.put("/unauthorized", "anon");
         filterChainDefinitionMap.put("/getMsgCode", "anon");
