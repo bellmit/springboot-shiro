@@ -1,7 +1,7 @@
 package com.sq.transportmanage.gateway.api.common;
 
 /***
- * @Author fanht
+ * @author fanht
  */
 public interface Constants {
 
@@ -12,4 +12,6 @@ public interface Constants {
 
     /**上传图片接口*/
     String URL = "common/upload";
+
+    String ISTRUE = "true";
 }

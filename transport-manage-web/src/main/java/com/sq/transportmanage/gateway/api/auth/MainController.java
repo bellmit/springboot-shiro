@@ -73,6 +73,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.sq.transportmanage.gateway.service.common.enums.MenuEnum.USER_RESET_PASSWORD;
 
+/**
+ * @author fanht
+ */
 @Controller
 public class MainController {
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
@@ -209,18 +212,18 @@ public class MainController {
 	public AjaxResponse getMsgCode( @Verify(param="username",rule="required") String username,
 									@Verify(param="password",rule="required") String password ){
 		/**A: 频率检查 */
-		String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+username;
+		String redisGetmsgcodeKey = "star_fire_getmsgcode_key_"+username;
 		long score = System.currentTimeMillis();
 		/**zset内部是按分数来排序的，这里用当前时间做分数*/
-		redisTemplate.opsForZSet().add(redis_getmsgcode_key, String.valueOf(score), score);
+		redisTemplate.opsForZSet().add(redisGetmsgcodeKey, String.valueOf(score), score);
 		/**统计30分钟内获取验证码次数*/
 		int statistics = 30;
-		redisTemplate.expire(redis_getmsgcode_key, statistics, TimeUnit.MINUTES);
+		redisTemplate.expire(redisGetmsgcodeKey, statistics, TimeUnit.MINUTES);
 
 		/**统计用户30分钟内获取验证码次数*/
 		long max = score;
 		long min = max - (statistics * 60 * 1000);
-		long count = redisTemplate.opsForZSet().count(redis_getmsgcode_key, min, max);
+		long count = redisTemplate.opsForZSet().count(redisGetmsgcodeKey, min, max);
 		logger.info("获取验证码-用户"+username+"在"+statistics+"分钟内第"+count+"次进行获取验证码操作");
 		String flag = redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username) ==null? null: redisTemplate.opsForValue().get(CACHE_PREFIX_MSGCODE_CONTROL+username).toString();
 
@@ -233,8 +236,8 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
 		/**C:密码不正确*/
-		String enc_pwd = PasswordUtil.md5(password, user.getAccount());
-		if(!enc_pwd.equalsIgnoreCase(user.getPassword())) {
+		String encPwd = PasswordUtil.md5(password, user.getAccount());
+		if(!encPwd.equalsIgnoreCase(user.getPassword())) {
 			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
 		}
 		/**D: 查询验证码，或新生成验证码，而后发送验证码短信*/
@@ -247,7 +250,7 @@ public class MainController {
 		SmsSendUtil.send(mobile, content);
 		/**E: 写入缓存*/
 		redisUtil.set(CACHE_PREFIX_MSGCODE+username, msgcode,  msgcodeTimeoutMinutes * 60 );
-		Map<String,Object> result = new HashMap<String,Object>();
+		Map<String,Object> result = new HashMap<String,Object>(4);
 		/**验证码有效的秒数*/
 		result.put("timeout",  60 );
 		result.put("tipText", "短信验证码已成功发送至尾号为"+mobile.substring(7)+"的手机上。" );
@@ -264,8 +267,8 @@ public class MainController {
 								@Verify(param="msgcode",rule="required") String msgcode,
 								HttpSession session) throws IOException{
 
-		String redis_login_key = "star_fire_login_key_"+username;
-		String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+username;
+		String redisLoginKey = "star_fire_login_key_"+username;
+		String redisGetmsgcodeKey = "star_fire_getmsgcode_key_"+username;
 
 		Subject currentLoginUser = SecurityUtils.getSubject();
 		/**A:是否已经登录*/
@@ -284,23 +287,23 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
 		/**C:密码不正确*/
-		String enc_pwd = PasswordUtil.md5(password, user.getAccount());
-		if(!enc_pwd.equalsIgnoreCase(user.getPassword())) {
+		String encPwd = PasswordUtil.md5(password, user.getAccount());
+		if(!encPwd.equalsIgnoreCase(user.getPassword())) {
 			return AjaxResponse.fail(RestErrorCode.USER_PASSWORD_WRONG) ;
 		}
 		/**D: 查询验证码，并判断是否正确*/
-		if("true".equalsIgnoreCase(loginCheckMsgCodeSwitch)) {
+		if(com.sq.transportmanage.gateway.api.common.Constants.ISTRUE.equalsIgnoreCase(loginCheckMsgCodeSwitch)) {
 			long score = System.currentTimeMillis();
 			/**zset内部是按分数来排序的，这里用当前时间做分数*/
-			redisTemplate.opsForZSet().add(redis_login_key, String.valueOf(score), score);
+			redisTemplate.opsForZSet().add(redisLoginKey, String.valueOf(score), score);
 			/**统计30分钟内用户登录次数*/
 			int statistics = 30;
-			redisTemplate.expire(redis_login_key, statistics, TimeUnit.MINUTES);
+			redisTemplate.expire(redisLoginKey, statistics, TimeUnit.MINUTES);
 
 			/**统计用户30分钟内登录的次数*/
 			long max = score;
 			long min = max - (statistics * 60 * 1000);
-			long count = redisTemplate.opsForZSet().count(redis_login_key, min, max);
+			long count = redisTemplate.opsForZSet().count(redisLoginKey, min, max);
 			logger.info("登录-用户"+username+"在"+statistics+"分钟内第"+count+"次登录");
 			/**验证验证码是否正确*/
 			String  msgcodeInCache = redisUtil.get(CACHE_PREFIX_MSGCODE+username);
@@ -314,7 +317,7 @@ public class MainController {
 
 		}
 		/**E: 用户状态*/
-		if(user.getStatus()!=null && user.getStatus().intValue()==100 ){
+		if(user.getStatus()!=null && user.getStatus().intValue()==Constants.USER_STATUS ){
 			return AjaxResponse.fail(RestErrorCode.USER_INVALID) ;
 		}
 		//TODO 添加超级管理员 如果是超级管理员 可以先选择用户赋值给那个商户
@@ -332,8 +335,8 @@ public class MainController {
 			String sessionId =  (String)currentLoginUser.getSession().getId() ;
 			redisSessionDAO.saveSessionIdOfLoginUser(username, sessionId);
 
-			redisTemplate.delete(redis_login_key);
-			redisTemplate.delete(redis_getmsgcode_key);
+			redisTemplate.delete(redisLoginKey);
+			redisTemplate.delete(redisGetmsgcodeKey);
 
 		}catch(AuthenticationException aex) {
 			aex.getStackTrace();
@@ -392,8 +395,8 @@ public class MainController {
 			ssoLoginUser.setMerchantId(merchantId);
 			carAdmUserExMapper.updateMerchantId(merchantId,ssoLoginUser.getLoginName());
 
-			String redis_login_key = "star_fire_login_key_"+ssoLoginUser.getLoginName();
-			String redis_getmsgcode_key = "star_fire_getmsgcode_key_"+ssoLoginUser.getLoginName();
+			String redisLoginKey = "star_fire_login_key_"+ssoLoginUser.getLoginName();
+			String redisGetmsgcodeKey = "star_fire_getmsgcode_key_"+ssoLoginUser.getLoginName();
 			Subject currentLoginUser = SecurityUtils.getSubject();
 			try {
 				/**shiro登录*/
@@ -403,8 +406,8 @@ public class MainController {
 				String sessionId =  (String)currentLoginUser.getSession().getId() ;
 				redisSessionDAO.saveSessionIdOfLoginUser(ssoLoginUser.getLoginName(), sessionId);
 
-				redisTemplate.delete(redis_login_key);
-				redisTemplate.delete(redis_getmsgcode_key);
+				redisTemplate.delete(redisLoginKey);
+				redisTemplate.delete(redisGetmsgcodeKey);
 
 			}catch(AuthenticationException aex) {
 				aex.getStackTrace();
@@ -453,15 +456,15 @@ public class MainController {
 			return AjaxResponse.fail(RestErrorCode.USER_NOT_EXIST) ;
 		}
 		/**B:密码不正确*/
-		String enc_pwd = PasswordUtil.md5(oldPassword, carAdmUser.getAccount());
-		if(!enc_pwd.equalsIgnoreCase(carAdmUser.getPassword())) {
+		String encPwd = PasswordUtil.md5(oldPassword, carAdmUser.getAccount());
+		if(!encPwd.equalsIgnoreCase(carAdmUser.getPassword())) {
 			return AjaxResponse.fail(RestErrorCode.OLD_PASSWORD_WRONG) ;
 		}
 		/**C:执行*/
-		String new_enc_pwd = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
+		String newEncPwd = PasswordUtil.md5(newPassword, carAdmUser.getAccount());
 		CarAdmUser   carAdmUserForUpdate = new  CarAdmUser();
 		carAdmUserForUpdate.setUserId(carAdmUser.getUserId());
-		carAdmUserForUpdate.setPassword(new_enc_pwd);
+		carAdmUserForUpdate.setPassword(newEncPwd);
 		carAdmUserMapper.updateByPrimaryKeySelective(carAdmUserForUpdate);
 		redisSessionDAO.clearRelativeSession(null,null,carAdmUser.getUserId());
 		return AjaxResponse.success( null );
@@ -510,7 +513,7 @@ public class MainController {
 
 			/**三、用户的权限信息 ( 参照shiro原码中的逻辑 )*/
 			Subject subject = SecurityUtils.getSubject();
-			subject.isPermitted("XXXX-XXXXXXXXX-XXXXXXXX-123456");//这里随意调用一下，确保shiro授权缓存已经被加载！！！
+			subject.isPermitted("XXXX-XXXXXXXXX-XXXXXXXX-123456");
 			PrincipalCollection principalCollection =subject.getPrincipals();
 			if(principalCollection!=null) {
                 Cache<Object, AuthorizationInfo> cache = usernamePasswordRealm.getAuthorizationCache();
@@ -532,7 +535,7 @@ public class MainController {
 			ajaxLoginUserDTO.setSupplierIds(ssoLoginUser.getSupplierIds());
 
 			/**五、配置信息*/
-			Map<String, Object > configs = new HashMap<String,Object>();
+			Map<String, Object > configs = new HashMap<String,Object>(4);
 			/**手机号码正则式*/
 			configs.put("mobileRegex",  SaasConst.MOBILE_REGEX);
 			/**账号的正则表达式*/
@@ -549,25 +552,26 @@ public class MainController {
 
 	/**五、查询一个用户的菜单（返回的数据格式：列表、树形）*/
 	private List<SaasPermissionDTO> getAllPermissions( Integer userId,  List<Byte> permissionTypes,  String dataFormat ){
-		List<Integer> validPermissionIdsOfCurrentLoginUser =  saasPermissionExMapper.queryPermissionIdsOfUser( userId ); //查询用户所拥有的所有有效的权限ID
+		/**查询用户所拥有的所有有效的权限ID*/
+		List<Integer> validPermissionIdsOfCurrentLoginUser =  saasPermissionExMapper.queryPermissionIdsOfUser( userId );
 		if(validPermissionIdsOfCurrentLoginUser==null || validPermissionIdsOfCurrentLoginUser.size()==0) {
 			return null;
 		}
 		if(  SaasConst.PermissionDataFormat.LIST.equalsIgnoreCase(dataFormat) ) {
-			return this.getAllPermissions_list( validPermissionIdsOfCurrentLoginUser, permissionTypes );
+			return this.getAllPermissionsList( validPermissionIdsOfCurrentLoginUser, permissionTypes );
 		}else if( SaasConst.PermissionDataFormat.TREE.equalsIgnoreCase(dataFormat) ) {
-			return this.getAllPermissions_tree( validPermissionIdsOfCurrentLoginUser, permissionTypes );
+			return this.getAllPermissionsTree( validPermissionIdsOfCurrentLoginUser, permissionTypes );
 		}
 		return null;
 	}
 	/**返回的数据格式：列表*/
-	private List<SaasPermissionDTO> getAllPermissions_list( List<Integer> permissionIds,  List<Byte> permissionTypes ){
+	private List<SaasPermissionDTO> getAllPermissionsList( List<Integer> permissionIds,  List<Byte> permissionTypes ){
 		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(permissionIds, null, null, permissionTypes, null, null);
 		List<SaasPermissionDTO> allDtos = BeanUtil.copyList(allPos, SaasPermissionDTO.class);
 		return allDtos;
 	}
 	/**返回的数据格式：树形*/
-	private List<SaasPermissionDTO> getAllPermissions_tree( List<Integer> permissionIds,  List<Byte> permissionTypes ){
+	private List<SaasPermissionDTO> getAllPermissionsTree( List<Integer> permissionIds,  List<Byte> permissionTypes ){
 		return this.getChildren(permissionIds,  0 , permissionTypes);
 	}
 	private List<SaasPermissionDTO> getChildren( List<Integer> permissionIds,  Integer parentPermissionId,  List<Byte> permissionTypes ){
@@ -743,7 +747,7 @@ public class MainController {
 			ajaxLoginUserDTO.setSupplierIds(ssoLoginUser.getSupplierIds());
 
 			/**五、配置信息*/
-			Map<String, Object > configs = new HashMap<String,Object>();
+			Map<String, Object > configs = new HashMap<String,Object>(4);
 			configs.put("mobileRegex",  SaasConst.MOBILE_REGEX);
 			configs.put("accountRegex", SaasConst.ACCOUNT_REGEX);
 			configs.put("emailRegex",    SaasConst.EMAIL_REGEX);

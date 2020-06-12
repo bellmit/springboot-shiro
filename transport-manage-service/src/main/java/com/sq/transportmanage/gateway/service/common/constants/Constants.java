@@ -60,4 +60,7 @@ public final class Constants {
     /**管理员**/
     public static final Integer MANAGE = 900;
 
+    /**用户可用*/
+    public static final Integer USER_STATUS = 100;
+
 }
