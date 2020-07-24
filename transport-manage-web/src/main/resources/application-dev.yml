@@ -76,8 +76,8 @@ zuul:
     lbs:
       path: /lbs/**
       url: http://dev-inside-spark-base-lbs.guobindui.cn/lbs/
-    sparkUsercenter:
-      path: /sparkUsercenter/**
+    usercenter:
+      path: /usercenter/admin/**
       url: http://dev-inside-spark-mp-usercenter.guobindui.cn/admin/
 #钉钉报警开关
 ding.ding.switch: false
