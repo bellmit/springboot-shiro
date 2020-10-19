@@ -42,16 +42,16 @@ zuul:
   routes:
     chargeapi:
       path: /charge/**
-      url: http://dev-inside-saas-charge.guobindui.cn/charge/
+      url: http://dev-inside-saas-charge.yongxinchuxing.com/charge/
     orderapi:
       path: /order/**
-      url: http://dev-inside-order-spark.guobindui.cn/order/
+      url: http://dev-inside-order-spark.yongxinchuxing.com/order/
     dispatchapi:
       path: /dispatch/**
-      url: http://dev-inside-spark-dispatch-cms.guobindui.cn/
+      url: http://dev-inside-spark-dispatch-cms.yongxinchuxing.com/
     mpapi:
       path: /mp/**
-      url: http://dev-inside-mp-spark-manage.guobindui.cn/
+      url: http://dev-inside-mp-spark-manage.yongxinchuxing.com/
     uploadPhoto:
       path: /common/uploadPhoto/**
       url: http://dev-inside-mp.01zhuanche.com/v1/driver/uploadPhoto/
@@ -60,22 +60,22 @@ zuul:
       url: http://dev-inside-third-api.01zhuanche.com/file/upload
     shareapi:
       path: /share/**
-      url: http://dev-inside-saas-share.guobindui.cn/share/
+      url: http://dev-inside-saas-share.yongxinchuxing.com/share/
     kfapi:
       path: /kefu/**
-      url: http://dev-inside-cs-spark-manage.guobindui.cn/api/web/
+      url: http://dev-inside-cs-spark-manage.yongxinchuxing.com/api/web/
     company:
       path: /api/inside/**
       url: http://test-inside-bigdata-athena.01zhuanche.com/api/inside/
     activity:
       path: /sparkActivity/**
-      url: http://dev-inside-spark-activity.guobindui.cn/sparkActivity/
+      url: http://dev-inside-spark-activity.yongxinchuxing.com/sparkActivity/
     pay:
       path: /pay/**
       url: http://dev-inside-pay.01zhuanche.com/pay/
     lbs:
       path: /lbs/**
-      url: http://dev-inside-spark-base-lbs.guobindui.cn/lbs/
+      url: http://dev-inside-spark-base-lbs.yongxinchuxing.com/lbs/
 #钉钉报警开关
 ding.ding.switch: false
 #钉钉报警url
@@ -92,17 +92,17 @@ resetpassword.msgnotify.switch: false
 user.password.indexOfPhone: 9,5,3,7,1,4,8,2
 login.checkMsgCode.switch: false
 
-loginpage.url: https://dev-saas.guobindui.cn/
+loginpage.url: https://dev-saas.yongxinchuxing.com/
 
-homepage.url: https://dev-saas.guobindui.cn/#/Manage
+homepage.url: https://dev-saas.yongxinchuxing.com/#/Manage
 
-login.url: https://dev-saas.guobindui.cn/signin
+login.url: https://dev-saas.yongxinchuxing.com/signin
 
 #选择商户页面
-query.merchant.url: https://dev-saas.guobindui.cn/signin
+query.merchant.url: https://dev-saas.yongxinchuxing.com/signin
 
 #没有权限地址
-unauthorized.url: https://dev-saas.guobindui.cn/unauthorized
+unauthorized.url: https://dev-saas.yongxinchuxing.com/unauthorized
 
 #短信发送相关
 short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/content/send
@@ -112,7 +112,7 @@ template_short_message_url: http://test-inside-mp.01zhuanche.com/api/v1/message/
 
 
 #h5找回密码域名
-reset.password.url: https://dev-saas.guobindui.cn/forgot?email=
+reset.password.url: https://dev-saas.yongxinchuxing.com/forgot?email=
 
 kafka:
   client:
