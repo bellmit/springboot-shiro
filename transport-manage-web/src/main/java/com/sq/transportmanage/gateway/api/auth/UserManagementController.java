@@ -202,18 +202,10 @@ public class UserManagementController {
 		if(dataLevel != null){
 			newUser.setDataLevel(dataLevel);
 		}
-		if(StringUtils.isNotEmpty(suppliers)){
-			newUser.setSuppliers(suppliers);
-		}
-		if(StringUtils.isNotEmpty(cities)){
-			newUser.setCities(cities);
-		}
-		if(StringUtils.isNotEmpty(teamIds)){
-			newUser.setTeamId(teamIds);
-		}
-		if(StringUtils.isNotEmpty(groupIds)){
-			newUser.setGroupIds(groupIds);
-		}
+		newUser.setSuppliers(suppliers);
+		newUser.setCities(cities);
+		newUser.setTeamId(teamIds);
+		newUser.setGroupIds(groupIds);
 		return userManagementService.changeUserDataPermission(newUser);
 	}
 
