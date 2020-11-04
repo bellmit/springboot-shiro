@@ -98,6 +98,8 @@ public class AccessFilter extends ZuulFilter {
                 data.put("groupIds", loginUser.getGroupIds());
                 /**数据权限级别*/
                 data.put("dataLevel", loginUser.getDataLevel());
+                /**是否是超级管理员*/
+                data.put("accountType",loginUser.getAccountType());
                 logger.info("LOGINUSER :{}", data);
                 ctx.addZuulRequestHeader("LOGINUSER", data.toJSONString());
             } else {
