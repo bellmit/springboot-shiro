@@ -189,11 +189,13 @@ public class PermissionManagementService {
 	 * 返回的数据格式：树形
 	 **/
 	private List<SaasPermissionDTO> getAllPermissionsTree() {
-		return this.getChildren(0);
+		/**查询商户最小的角色时候 查询一次即可*/
+		List<Integer> minRolePermissionList = saasRolePermissionRalationExMapper.queryPermissionByMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
+		return this.getChildren(0,minRolePermissionList);
 	}
 
-	private List<SaasPermissionDTO> getChildren(Integer parentPermissionId) {
-		List<Integer> minRolePermissionList = saasRolePermissionRalationExMapper.queryPermissionByMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
+	private List<SaasPermissionDTO> getChildren(Integer parentPermissionId,List<Integer> minRolePermissionList) {
+
 		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(minRolePermissionList, parentPermissionId, null, null, null, SaasConst.IsValid.VALID_TRUE);
 		if (childrenPos == null || childrenPos.size() == 0) {
 			return null;
@@ -207,7 +209,7 @@ public class PermissionManagementService {
 			}
 		});
 		for (SaasPermissionDTO childrenDto : childrenDtos) {
-			List<SaasPermissionDTO> childs = this.getChildren(childrenDto.getPermissionId());
+			List<SaasPermissionDTO> childs = this.getChildren(childrenDto.getPermissionId(),minRolePermissionList);
 			childrenDto.setChildPermissions(childs);
 		}
 		return childrenDtos;
