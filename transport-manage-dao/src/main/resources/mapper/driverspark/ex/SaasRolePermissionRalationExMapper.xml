@@ -42,4 +42,10 @@
     LEFT JOIN saas_role sr ON surr.role_id = sr.role_id
     WHERE sr.valid = 1 and user_id = #{userId}
   </select>
+
+  <select id="queryPermissionByMerchantId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT permission_id  FROM auth_saas_role_permission_ralation t WHERE t.role_id =
+    (SELECT min(role_id)
+    FROM auth_saas_role t WHERE t.merchant_id = #{merchantId})
+  </select>
 </mapper>

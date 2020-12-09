@@ -8,7 +8,9 @@ import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasPermissionEx
 import com.sq.transportmanage.gateway.dao.mapper.driverspark.ex.SaasRolePermissionRalationExMapper;
 import com.sq.transportmanage.gateway.service.common.constants.SaasConst;
 import com.sq.transportmanage.gateway.service.common.dto.SaasPermissionDTO;
+import com.sq.transportmanage.gateway.service.common.shiro.realm.SSOLoginUser;
 import com.sq.transportmanage.gateway.service.common.shiro.session.RedisSessionDAO;
+import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUtil;
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
@@ -170,7 +172,9 @@ public class PermissionManagementService {
 	 * 返回的数据格式：列表
 	 **/
 	private List<SaasPermissionDTO> getAllPermissionsList() {
-		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(null, null, null, null, null, SaasConst.IsValid.VALID_TRUE);
+		//查询当前商户最小的角色所有的权限
+		List<Integer> minRolePermissionList = saasRolePermissionRalationExMapper.queryPermissionByMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
+		List<SaasPermission> allPos = saasPermissionExMapper.queryPermissions(minRolePermissionList, null, null, null, null, SaasConst.IsValid.VALID_TRUE);
 		List<SaasPermissionDTO> saasPerList = BeanUtil.copyList(allPos, SaasPermissionDTO.class);
 		saasPerList.stream().forEach(p -> {
 			/**设置是否为系统预置权限*/
@@ -189,7 +193,8 @@ public class PermissionManagementService {
 	}
 
 	private List<SaasPermissionDTO> getChildren(Integer parentPermissionId) {
-		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(null, parentPermissionId, null, null, null, SaasConst.IsValid.VALID_TRUE);
+		List<Integer> minRolePermissionList = saasRolePermissionRalationExMapper.queryPermissionByMerchantId(WebSessionUtil.getCurrentLoginUser().getMerchantId());
+		List<SaasPermission> childrenPos = saasPermissionExMapper.queryPermissions(minRolePermissionList, parentPermissionId, null, null, null, SaasConst.IsValid.VALID_TRUE);
 		if (childrenPos == null || childrenPos.size() == 0) {
 			return null;
 		}
