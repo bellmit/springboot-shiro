@@ -14,6 +14,7 @@ import com.sq.transportmanage.gateway.service.common.shiro.session.WebSessionUti
 import com.sq.transportmanage.gateway.service.common.web.AjaxResponse;
 import com.sq.transportmanage.gateway.service.common.web.RestErrorCode;
 import com.sq.transportmanage.gateway.service.util.BeanUtil;
+import com.sq.transportmanage.gateway.service.util.Lazy;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -283,19 +284,17 @@ public class PermissionManagementService {
 		List<SaasPermission> permissionList = saasPermissionExMapper.queryPermissionsOfRoleId(roleId);
 		List<String> strPermissionIds = new ArrayList<>();
 		if(!CollectionUtils.isEmpty(permissionList)){
-			String varble = "";
-			StringJoiner stringJoiner = new StringJoiner(varble);
 			Map<Integer,Integer> map = Maps.newHashMap();
-			permissionList.forEach(permission ->{
-				map.put(permission.getPermissionId(),permission.getParentPermissionId());
-			});
+			permissionList.forEach(permission -> map.put(permission.getPermissionId(),permission.getParentPermissionId()));
 			permissionList.forEach(permission->{
-				StringBuffer sb = getKey(map,permission.getPermissionId());
-				if(sb != null && sb.length() > 0){
-					String value = sb.substring(0,sb.length()-1);
-					String newStr = replaceStr(value);
-					strPermissionIds.add(newStr);
-				}
+				Optional.ofNullable(permission.getPermissionId()).ifPresent(n->{
+					StringBuffer sb = getKey(map, permission.getPermissionId());
+					if(sb != null && sb.length() > 0){
+						String value = sb.substring(0,sb.length()-1);
+						String newStr = replaceStr(value);
+						strPermissionIds.add(newStr);
+					}
+				});
 			});
 		}
 		return strPermissionIds;
