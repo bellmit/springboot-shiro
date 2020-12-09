@@ -309,10 +309,12 @@ public class PermissionManagementService {
 	 */
 	public StringBuffer getKey(Map<Integer,Integer> map,Integer permissionId){
 		StringBuffer sb = new StringBuffer();
-		if(permissionId != 0 && permissionId > 0){
-			sb.append(permissionId).append("-");
-			sb.append(getKey(map,map.get(permissionId)));
-		}
+		Optional.ofNullable(permissionId).ifPresent(t->{
+			if(permissionId != 0 && permissionId > 0){
+				sb.append(permissionId).append("-");
+				sb.append(getKey(map,map.get(permissionId)));
+			}
+		});
 		return sb;
 	}
 
