@@ -210,7 +210,7 @@ public class PermissionManagementService {
 			}
 		});
 		for (SaasPermissionDTO childrenDto : childrenDtos) {
-			List<SaasPermissionDTO> childs = this.getChildren(childrenDto.getPermissionId(),minRolePermissionList);
+			List<SaasPermissionDTO> childs = this.getChildren(childrenDto.getPermissionId(),null);
 			childrenDto.setChildPermissions(childs);
 		}
 		return childrenDtos;
